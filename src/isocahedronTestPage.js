@@ -59,14 +59,17 @@ const IsocahedronTest = props => {
     // Grab the WebGL rendering context.
     const fiddleverse = new Fiddleverse(canvas, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
-    const shaderProgram = fiddleverse.shaderProgram
 
     const isocahedron = new testThing(gl)
     isocahedron.wireframe = false
 
+    const blueColor = {r: 0.18, g: 0.62, b: 0.82}
+    const isocahedronFrame = new testThing(gl, blueColor)
+
     // Build the objects to display.
     const objectsToDraw = [
-    isocahedron.meshThing(gl)
+    isocahedron.meshThing(gl),
+    isocahedronFrame.meshThing(gl)
     ]
 
     // Pass the vertices to WebGL.
