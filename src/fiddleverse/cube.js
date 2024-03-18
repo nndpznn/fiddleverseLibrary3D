@@ -1,10 +1,10 @@
 import fiddle3D from "./fiddle3D"
 
-class cube extends fiddle3D {
+class cubeShape extends fiddle3D {
   constructor(gl, color, size, position) {
     // The core icosahedron coordinates.
-    const SIZE = size                 // Provided in the form of "double". How far the faces are from the center. 
-    const POSITION = position         // Provided in the form of {x: , y: , z: }, for the center.
+    const SIZE = 0.5                 // Provided in the form of "double". How far the faces are from the center. 
+    // const POSITION = position         // Provided in the form of {x: , y: , z: }, for the center.
 
     super(
       gl,
@@ -40,4 +40,4 @@ class cube extends fiddle3D {
   }
 }
 
-export { cube }
+export { cubeShape }

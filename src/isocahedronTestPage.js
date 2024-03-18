@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
 import { dondiShape } from './fiddleverse/dondiShape'
-import { cube } from './fiddleverse/cube'
+import { cubeShape } from './fiddleverse/cube'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -67,8 +67,8 @@ const IsocahedronTest = props => {
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    const cubeTest = new cube(gl, 0.5)
-    cubeTest.wireframe = false
+    const cubeTest = new cubeShape(gl, blueColor)
+    cubeTest.wireframe = true
 
     // Pass the vertices to WebGL.
     // fiddleverse.add(isocahedron.meshThing(gl))
@@ -76,8 +76,6 @@ const IsocahedronTest = props => {
     fiddleverse.add(cubeTest.meshThing(gl))
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
-
-
     
     fiddleverse.process()
 
