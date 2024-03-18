@@ -1,6 +1,6 @@
 import fiddle3D from "./fiddle3D"
 
-class testThing extends fiddle3D {
+class dondiShape extends fiddle3D {
   constructor(gl, color) {
     // The core icosahedron coordinates.
     const X = 0.525731112119133606
@@ -52,4 +52,4 @@ class testThing extends fiddle3D {
   }
 }
 
-export { testThing }
+export { dondiShape }

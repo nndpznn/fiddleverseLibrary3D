@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
-import { testThing } from './fiddleverse/testThing'
+import { dondiShape } from './fiddleverse/dondiShape'
+import { cube } from './fiddleverse/cube'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -60,21 +61,24 @@ const IsocahedronTest = props => {
     const fiddleverse = new Fiddleverse(canvas, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
 
-    const isocahedron = new testThing(gl)
+    const isocahedron = new dondiShape(gl)
     isocahedron.wireframe = false
 
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
-    const isocahedronFrame = new testThing(gl, blueColor)
+    const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    // Build the objects to display.
-    const objectsToDraw = [
-    isocahedron.meshThing(gl),
-    isocahedronFrame.meshThing(gl)
-    ]
+    const cubeTest = new cube(gl, 0.5)
+    cubeTest.wireframe = false
 
     // Pass the vertices to WebGL.
-    fiddleverse.add(objectsToDraw)
-    // fiddleverse.remove(objectsToDraw)
+    // fiddleverse.add(isocahedron.meshThing(gl))
+    // fiddleverse.add(isocahedronFrame.meshThing(gl))
+    fiddleverse.add(cubeTest.meshThing(gl))
+
+    // fiddleverse.remove(isocahedron.meshThing(gl))
+
+
+    
     fiddleverse.process()
 
     /*

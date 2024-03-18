@@ -96,16 +96,12 @@ class Fiddleverse {
         gl.flush()
     }
 
-    add = (objectsToAdd) => {
-      objectsToAdd.forEach(object => {
-        this.cast.add(object)
-      })
+    add = (object) => {
+      this.cast.add(object)
     }
 
-    remove = (objectsToRemove) => {
-      objectsToRemove.forEach(object => {
-        this.cast.delete(object)
-      })
+    remove = (object) => {
+      this.cast.delete(object)
     }
 
     process = () => {
