@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
-// import { FiddleGroup } from './fiddleverse/fiddle3D'
 import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
 
@@ -19,13 +18,11 @@ const VERTEX_SHADER = `
   varying vec4 finalVertexColor;
   uniform mat4 rotationMatrix;
 
-  uniform vec3 translation;
-
   void main(void) {
     gl_Position = rotationMatrix * vec4(
-      vertexPosition.x + translation.x,
-      vertexPosition.y + translation.y,
-      vertexPosition.z + translation.z, 
+      vertexPosition.x,
+      vertexPosition.y,
+      vertexPosition.z, 
       1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
@@ -70,15 +67,13 @@ const IsocahedronTest = props => {
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    isocahedron.children.push(isocahedronFrame.meshThing(gl))
-
     const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
     cubeTest.wireframe = true
 
     // Pass the vertices to WebGL.
     fiddleverse.add(isocahedron.meshThing(gl))
-    // fiddleverse.add(isocahedronFrame.meshThing(gl))
-    // fiddleverse.add(cubeTest.meshThing(gl))
+    fiddleverse.add(isocahedronFrame.meshThing(gl))
+    fiddleverse.add(cubeTest.meshThing(gl))
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
     
@@ -125,12 +120,7 @@ const IsocahedronTest = props => {
 
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-      fiddleverse.translationVector[0] += 0.00
       fiddleverse.drawScene(currentRotation)
-
-      if (fiddleverse.translationVector[0] > 1.0) {
-        fiddleverse.translationVector[0] = -1.0
-      }
 
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE

@@ -11,10 +11,7 @@ class Fiddleverse {
         // No WebGL, no use going on...
           return
         }
-
-        // Set up settings that will not change.  This is not "canned" into a
-        // utility function because these settings really can vary from program
-        // to program.
+        
         gl.enable(gl.DEPTH_TEST)
         gl.clearColor(0.0, 0.0, 0.0, 0.0)
         gl.viewport(0, 0, canvas.width, canvas.height)
@@ -60,13 +57,18 @@ class Fiddleverse {
         gl.enableVertexAttribArray(this.vertexColor)
         this.rotationMatrix = gl.getUniformLocation(this.shaderProgram, 'rotationMatrix')
 
+        this.translation = gl.getUniformLocation(shaderProgram, 'translation')
+        this.translationVector = [0, 0, 0]
+
     }
 
     /*
     * Displays an individual object.
     */
     drawMesh(fiddle3Dmesh) {
-        const gl = this.gl
+      const gl = this.gl
+
+      if (fiddle3Dmesh.children.length === 0 ) { // THEN NO CHILDREN!
 
         // console.log(object)
         // Set the varying colors.
@@ -76,8 +78,28 @@ class Fiddleverse {
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
         gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
+
         gl.drawArrays(fiddle3Dmesh.mode, 0, fiddle3Dmesh.vertices.length / 3)
+
+      } else { // THEN CHILDREN!
+
+        // Set the varying colors.
+        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
+        gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
+
+        // Set the varying vertex coordinates.
+        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
+        gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
+
+        gl.drawArrays(fiddle3Dmesh.mode, 0, fiddle3Dmesh.vertices.length / 3)
+
+        fiddle3Dmesh.children.forEach(child => {
+          this.drawMesh(child)
+        })
+
+      }
     }
+
 
     drawScene(currentRotation) {
         const gl = this.gl
@@ -86,6 +108,8 @@ class Fiddleverse {
   
         // Set up the rotation matrix.
         gl.uniformMatrix4fv(this.rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
+
+        gl.uniform3fv(this.translation, this.translationVector)
   
         // Display the objects.
         this.cast.forEach(mesh => {
@@ -124,10 +148,6 @@ class Fiddleverse {
   
         objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
       })
-    }
-
-    initializeShader = () => {
-      
     }
 }
 

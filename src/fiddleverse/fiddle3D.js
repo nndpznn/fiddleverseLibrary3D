@@ -8,6 +8,8 @@ class fiddle3D {
         this.facesByIndex = facesByIndex ?? []
         this.color = color ?? { r: 0.5, g: 0.5, b: 0.5 }
 
+        this.children = []
+
         this.wireframeValue = true
         this.rawVertices = toRawLineArray(this)
 
@@ -38,19 +40,28 @@ class fiddle3D {
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
     }
 
+    add(fiddle3D) {
+        this.children.push(fiddle3D)
+    }
+
+    remove(fiddle3D) {
+        this.children = this.children.filter(item => item !== fiddle3D)
+    }
+
     meshThing() {
         return {
             color: this.color,
             vertices: this.rawVertices,
             mode: this.wireframeValue ? this.gl.LINES : this.gl.TRIANGLES,
             verticesBuffer: this.verticesBuffer,
-            colorsBuffer: this.colorsBuffer
+            colorsBuffer: this.colorsBuffer,
+            children: this.children
         }
     }
 
 }
 
-// class ThingGroup {
+// class FiddleGroup {
 //     constructor() {
 //         this.children = []
 //     }
@@ -59,13 +70,11 @@ class fiddle3D {
 //         this.children.push(fiddle3D)
 //     }
 
-//     remove(fiddle3D) {
-//         this.children = this.children.filter(item => item !== fiddle3D)
-//     }
+
 
 //     draw(gl) {
 //         this.children.forEach(child => child.draw(gl))
 //     }
 // }
 
-export default fiddle3D
+export default fiddle3D 
