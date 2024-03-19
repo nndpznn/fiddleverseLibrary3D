@@ -6,6 +6,7 @@ import { Fiddleverse } from './fiddleverse/fiddleverse'
 import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
 import FiddlewingThing from './fiddleverse/FiddlewingThing'
+import { AsteroidThing } from './fiddleverse/AsteroidThing'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -82,11 +83,14 @@ const WingTest = props => {
     const wingFrame = new FiddlewingThing(gl, blueColor)
     fiddlewingTest.children.push(wingFrame.meshThing())
 
+    const asteroidTest = new AsteroidThing(gl, blueColor, 0.1, {x: 0.25, y: -0.25, z: 0})
+
     // Pass the vertices to WebGL.
     //fiddleverse.add(isocahedron.meshThing(gl))
     // fiddleverse.add(isocahedronFrame.meshThing(gl))
     // fiddleverse.add(cubeTest.meshThing(gl))
     fiddleverse.add(fiddlewingTest.meshThing())
+    fiddleverse.add(asteroidTest.meshThing())
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
     
