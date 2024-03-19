@@ -7,6 +7,7 @@ import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
 import FiddlewingThing from './fiddleverse/FiddlewingThing'
 import { AsteroidThing } from './fiddleverse/AsteroidThing'
+import IcosphereThing from './fiddleverse/IcosphereThing'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -70,6 +71,7 @@ const WingTest = props => {
     isocahedron.wireframe = false
 
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
+    const grayColor = {r: 0.25, g: 0.25, b: 0.25}
     const isocahedronFrame = new dondiShape(gl, blueColor)
 
     isocahedron.children.push(isocahedronFrame.meshThing(gl))
@@ -85,12 +87,18 @@ const WingTest = props => {
 
     const asteroidTest = new AsteroidThing(gl, blueColor, 0.1, {x: 0.25, y: -0.25, z: 0})
 
+    const icosphereTest = new IcosphereThing(gl, grayColor)
+    icosphereTest.wireframe = false
+    const icosphereFrame = new IcosphereThing(gl, blueColor)
+
     // Pass the vertices to WebGL.
     //fiddleverse.add(isocahedron.meshThing(gl))
     // fiddleverse.add(isocahedronFrame.meshThing(gl))
     // fiddleverse.add(cubeTest.meshThing(gl))
-    fiddleverse.add(fiddlewingTest.meshThing())
-    fiddleverse.add(asteroidTest.meshThing())
+    //fiddleverse.add(fiddlewingTest.meshThing())
+    //fiddleverse.add(asteroidTest.meshThing())
+    fiddleverse.add(icosphereTest.meshThing())
+    fiddleverse.add(icosphereFrame.meshThing())
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
     
