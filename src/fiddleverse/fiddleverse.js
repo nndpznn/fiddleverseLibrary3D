@@ -55,10 +55,10 @@ class Fiddleverse {
         gl.enableVertexAttribArray(this.vertexPosition)
         this.vertexColor = gl.getAttribLocation(this.shaderProgram, 'vertexColor')
         gl.enableVertexAttribArray(this.vertexColor)
-        this.rotationMatrix = gl.getUniformLocation(this.shaderProgram, 'rotationMatrix')
+        this.rotationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
 
-        this.translation = gl.getUniformLocation(shaderProgram, 'translation')
         this.translationVector = [0, 0, 0]
+        this.scaleVector = [1, 1, 1]
 
     }
 
@@ -106,10 +106,9 @@ class Fiddleverse {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   
+        const transformMatrix = [this.scaleVector[0], 0, 0, 0, 0, this.scaleVector[1], 0, 0, 0, 0, this.scaleVector[2], 0, ...this.translationVector, 1]
         // Set up the rotation matrix.
-        gl.uniformMatrix4fv(this.rotationMatrix, gl.FALSE, new Float32Array(getRotationMatrix(currentRotation, 0, 1, 0)))
-
-        gl.uniform3fv(this.translation, this.translationVector)
+        gl.uniformMatrix4fv(this.rotationMatrix, gl.FALSE, new Float32Array(transformMatrix))
   
         // Display the objects.
         this.cast.forEach(mesh => {
