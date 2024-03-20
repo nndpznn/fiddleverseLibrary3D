@@ -11,27 +11,22 @@ import IcosphereThing from './fiddleverse/IcosphereThing'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
+#ifdef GL_ES
+precision highp float;
+#endif
 
-  attribute vec3 vertexPosition;
+attribute vec3 vertexPosition;
 
-  // Note this new additional output.
-  attribute vec3 vertexColor;
-  varying vec4 finalVertexColor;
-  uniform mat4 rotationMatrix;
+// Note this new additional output.
+attribute vec3 vertexColor;
+varying vec4 finalVertexColor;
 
-  uniform vec3 translation;
+uniform mat4 transform;
 
-  void main(void) {
-    gl_Position = rotationMatrix * vec4(
-      vertexPosition.x + translation.x,
-      vertexPosition.y + translation.y,
-      vertexPosition.z + translation.z, 
-      1.0);
-    finalVertexColor = vec4(vertexColor, 1.0);
-  }
+void main(void) {
+  gl_Position = transform * vec4( vertexPosition, 1.0);
+  finalVertexColor = vec4(vertexColor, 1.0);
+}
 `
 
 const FRAGMENT_SHADER = `

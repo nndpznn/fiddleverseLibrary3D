@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
-// import { FiddleGroup } from './fiddleverse/fiddle3D'
 import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
 
@@ -26,16 +25,26 @@ const VERTEX_SHADER = `
   }
 `
 
+// `
+//   #ifdef GL_ES
+//   precision highp float;
+//   #endif
 
 //   attribute vec3 vertexPosition;
-//   uniform mat4 transform;
 
+//   // Note this new additional output.
 //   attribute vec3 vertexColor;
 //   varying vec4 finalVertexColor;
+//   uniform mat4 rotationMatrix;
 
+//   uniform vec3 translation;
 
 //   void main(void) {
-//     gl_Position = transform * vec4(vertexPosition, 1.0);
+//     gl_Position = rotationMatrix * vec4(
+//       vertexPosition.x + translation.x,
+//       vertexPosition.y + translation.y,
+//       vertexPosition.z + translation.z, 
+//       1.0);
 //     finalVertexColor = vec4(vertexColor, 1.0);
 //   }
 // `
