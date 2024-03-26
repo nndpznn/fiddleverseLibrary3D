@@ -8,7 +8,8 @@ import './App.css'
 import Sandbox from './Sandbox'
 import PitchedScene from './PitchedScene'
 import IsocahedronTest from './isocahedronTestPage'
-import WingTest from './wingTestPage'
+import TestPage3 from './testpage3'
+import SphereTest from './wingTestPage'
 
 const classNamePicker = ({ isActive }) => (isActive ? 'current' : null)
 
@@ -38,8 +39,12 @@ const App = () => {
           Isocahedron Test Page
         </NavLink>
 
-        <NavLink className={classNamePicker} to="/wing">
-          Wing Test Page
+        <NavLink className={classNamePicker} to="/sphere">
+          Sphere Test Page
+        </NavLink>
+
+        <NavLink className={classNamePicker} to="/testpage3">
+          Wing and Asteroid Page
         </NavLink>
       </nav>
 
@@ -49,7 +54,8 @@ const App = () => {
           <Route path="sandbox" element={<Sandbox />} />
           <Route path="pitched" element={<PitchedScene />} />
           <Route path="isocahedron" element={<IsocahedronTest />} />
-          <Route path="wing" element={<WingTest />} />
+          <Route path="sphere" element={<SphereTest />} />
+          <Route path="testpage3" element={<TestPage3 />} />
         </Routes>
       </main>
     </article>

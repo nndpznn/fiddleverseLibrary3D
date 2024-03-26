@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
 import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
+import { octocylinderShape } from './fiddleverse/octocylinder'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -16,11 +17,16 @@ const VERTEX_SHADER = `
   // Note this new additional output.
   attribute vec3 vertexColor;
   varying vec4 finalVertexColor;
-
   uniform mat4 transform;
 
+  // uniform vec3 translation;
+
   void main(void) {
-    gl_Position = transform * vec4( vertexPosition, 1.0);
+    gl_Position = transform * vec4(
+      vertexPosition.x,
+      vertexPosition.y,
+      vertexPosition.z, 
+      1.0);
     finalVertexColor = vec4(vertexColor, 1.0);
   }
 `
@@ -35,16 +41,11 @@ const VERTEX_SHADER = `
 //   // Note this new additional output.
 //   attribute vec3 vertexColor;
 //   varying vec4 finalVertexColor;
-//   uniform mat4 rotationMatrix;
 
-//   uniform vec3 translation;
+//   uniform mat4 transform;
 
 //   void main(void) {
-//     gl_Position = rotationMatrix * vec4(
-//       vertexPosition.x + translation.x,
-//       vertexPosition.y + translation.y,
-//       vertexPosition.z + translation.z, 
-//       1.0);
+//     gl_Position = transform * vec4( vertexPosition, 1.0);
 //     finalVertexColor = vec4(vertexColor, 1.0);
 //   }
 // `
@@ -86,17 +87,31 @@ const IsocahedronTest = props => {
     isocahedron.wireframe = false
 
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
+    const grayColor = {r:0.3,g:0.3,b:0.3}
     const isocahedronFrame = new dondiShape(gl, blueColor)
 
     isocahedron.children.push(isocahedronFrame.meshThing(gl))
 
+    const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
+    cubeThing.wireframe = false
+  
     const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
     cubeTest.wireframe = true
 
+    const octocylinderTest = new octocylinderShape(gl, grayColor)
+    octocylinderTest.wireframe = false
+
+    const octocylinderOutline = new octocylinderShape(gl, blueColor)
+    octocylinderOutline.wireframe = true
+
+    octocylinderTest.children.push(octocylinderOutline.meshThing(gl))
+
     // Pass the vertices to WebGL.
-    fiddleverse.add(isocahedron.meshThing(gl))
+    // fiddleverse.add(isocahedron.meshThing(gl))
     // fiddleverse.add(isocahedronFrame.meshThing(gl))
     // fiddleverse.add(cubeTest.meshThing(gl))
+    // fiddleverse.add(cubeThing.meshThing(gl))
+    fiddleverse.add(octocylinderTest.meshThing(gl))
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
     

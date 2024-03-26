@@ -2,28 +2,33 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
-import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
-import IcosphereThing from './fiddleverse/IcosphereThing'
+import { AsteroidThing } from './fiddleverse/AsteroidThing'
+import FiddlewingThing from './fiddleverse/FiddlewingThing'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
-#ifdef GL_ES
-precision highp float;
-#endif
+  #ifdef GL_ES
+  precision highp float;
+  #endif
 
-attribute vec3 vertexPosition;
+  attribute vec3 vertexPosition;
 
-// Note this new additional output.
-attribute vec3 vertexColor;
-varying vec4 finalVertexColor;
+  // Note this new additional output.
+  attribute vec3 vertexColor;
+  varying vec4 finalVertexColor;
+  uniform mat4 transform;
 
-uniform mat4 transform;
+  // uniform vec3 translation;
 
-void main(void) {
-  gl_Position = transform * vec4( vertexPosition, 1.0);
-  finalVertexColor = vec4(vertexColor, 1.0);
-}
+  void main(void) {
+    gl_Position = transform * vec4(
+      vertexPosition.x,
+      vertexPosition.y,
+      vertexPosition.z, 
+      1.0);
+    finalVertexColor = vec4(vertexColor, 1.0);
+  }
 `
 
 const FRAGMENT_SHADER = `
@@ -45,7 +50,7 @@ const FRAGMENT_SHADER = `
  * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
  * the useEffect hook.
  */
-const SphereTest = props => {
+const TestPage3 = props => {
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -59,25 +64,29 @@ const SphereTest = props => {
     const fiddleverse = new Fiddleverse(canvas, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
 
-    const isocahedron = new dondiShape(gl)
-    isocahedron.wireframe = false
-
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
-    const grayColor = {r: 0.25, g: 0.25, b: 0.25}
-    const isocahedronFrame = new dondiShape(gl, blueColor)
+    const grayColor = {r:0.3,g:0.3,b:0.3}
 
-    isocahedron.children.push(isocahedronFrame.meshThing(gl))
-
+    const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
+    cubeThing.wireframe = false
+  
     const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
     cubeTest.wireframe = true
 
-    const icosphereTest = new IcosphereThing(gl, grayColor)
-    icosphereTest.wireframe = false
-    const icosphereFrame = new IcosphereThing(gl, blueColor)
+    const asteroidTest = new AsteroidThing(gl, blueColor, 0.1, {x: 0.25, y: -0.25, z: 0})
 
+    const fiddlewingTest = new FiddlewingThing(gl)
+    fiddlewingTest.wireframe = false
+
+    const wingFrame = new FiddlewingThing(gl, blueColor)
+    fiddlewingTest.children.push(wingFrame.meshThing())
+    
     // Pass the vertices to WebGL.
-    fiddleverse.add(icosphereTest.meshThing())
-    fiddleverse.add(icosphereFrame.meshThing())
+    // fiddleverse.add(cubeTest.meshThing(gl))
+    // fiddleverse.add(cubeThing.meshThing(gl))
+
+    fiddleverse.add(asteroidTest.meshThing(gl))
+    fiddleverse.add(fiddlewingTest.meshThing())
     
     fiddleverse.process()
 
@@ -165,4 +174,4 @@ const SphereTest = props => {
   )
 }
 
-export default SphereTest
+export default TestPage3
