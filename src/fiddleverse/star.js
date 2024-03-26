@@ -1,42 +1,52 @@
-import fiddle3D, { BufferGeometry, BufferAttribute, MeshPhongMaterial, Mesh, Group } from './fiddle3D'
+import fiddle3D from "./fiddle3D";
 
-class starshape extends fiddle3D{
-    constructor(gl,size,color,position) {
-        const SIZE = size
-        const POSITION = position
+class StarShape extends fiddle3D {
+  constructor(gl, size, color, position) {
+    const SIZE = size;
+    const POSITION = position;
 
-        super(
-            gl,
-            [
-        [ POSITION.x + SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 1
-        [ POSITION.x - SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 2
-        [ POSITION.x - SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 3
-        [ POSITION.x - SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 4
-        [ POSITION.x - SIZE, POSITION.y - SIZE, POSITION.z + SIZE], // 5
-        [ POSITION.x + SIZE, POSITION.y - SIZE, POSITION.z + SIZE], // 6
-        [ POSITION.x + SIZE, POSITION.y - SIZE, POSITION.z + SIZE], // 7
-        [ POSITION.x + SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 8
-        [ POSITION.x + SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 9
-        [ POSITION.x + SIZE, POSITION.y + SIZE, POSITION.z + SIZE], // 10
-        [ POSITION.x + SIZE, POSITION.y + SIZE, POSITION.z + SIZE]  // 0
-              ],
-              [
-                [0, 0, 1],  // 0 middle of star for 3d
-                [0, 2.5, 0], // 1 top of the star
-                [-0.5, 1, 0], //2
-                [-2.5, 1, 0], //3
-                [-1, 0, 0], //4
-                [-1.5, -2, 0], //5      //these comments are old the numbers don't mean anything for now so ignore them, I'm using gthem to help me make open vertices for them
-                [0, -1, 0], // 6
-                [1.5, -2, 0], //7
-                [1, 0, 0], //8
-                [0.5, 1, 0], //9
-                [2.5, 1, 0] //10
-              ],
+    super(
+      gl,
+      [
+        [POSITION.x, POSITION.y + SIZE, POSITION.z], // 0 
+        [POSITION.x - SIZE, POSITION.y + SIZE, POSITION.z], // 1
+        [POSITION.x - SIZE * 0.5, POSITION.y + SIZE * 0.5, POSITION.z], // 2
+        [POSITION.x - SIZE * 2.5, POSITION.y + SIZE * 0.5, POSITION.z], // 3
+        [POSITION.x - SIZE * 1, POSITION.y, POSITION.z], // 4
+        [POSITION.x - SIZE * 1.5, POSITION.y - SIZE * 2, POSITION.z], // 5
+        [POSITION.x, POSITION.y - SIZE, POSITION.z], // 6
+        [POSITION.x + SIZE * 1.5, POSITION.y - SIZE * 2, POSITION.z], // 7
+        [POSITION.x + SIZE, POSITION.y, POSITION.z], // 8
+        [POSITION.x + SIZE * 2.5, POSITION.y + SIZE * 0.5, POSITION.z], // 9
+        [POSITION.x + SIZE * 0.5, POSITION.y + SIZE * 0.5, POSITION.z], // 10
+        [POSITION.x, POSITION.y + SIZE, POSITION.z - SIZE * 0.5] //11
+      ],
+      [
+        [0, 1, 2],
+        [0, 2, 3],
+        [0, 3, 4],
+        [0, 4, 5],
+        [0, 5, 6],
+        [0, 6, 7],
+        [0, 7, 8],
+        [0, 8, 9],
+        [0, 9, 10],
+        [0, 10, 1], 
+        [11, 1, 10],
+        [11, 2, 1],
+        [11, 3, 2],
+        [11, 4, 3],
+        [11, 5, 4],
+        [11, 6, 5],
+        [11, 7, 6],
+        [11, 8, 7],
+        [11, 9, 8],
+        [11, 10, 9]
 
-              color
-        )
-    }
+      ],
+      color
+    );
+  }
 }
 
-export {starshape}
+export { StarShape };
