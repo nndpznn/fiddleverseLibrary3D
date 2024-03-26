@@ -10,6 +10,7 @@ import PitchedScene from './PitchedScene'
 import IsocahedronTest from './isocahedronTestPage'
 import TestPage3 from './testpage3'
 import SphereTest from './wingTestPage'
+import StarTest from './starPage'
 
 const classNamePicker = ({ isActive }) => (isActive ? 'current' : null)
 
@@ -46,6 +47,10 @@ const App = () => {
         <NavLink className={classNamePicker} to="/testpage3">
           Wing and Asteroid Page
         </NavLink>
+
+        <NavLink className={classNamePicker} to="/star">
+          Star Page
+        </NavLink>
       </nav>
 
       <main>
@@ -56,6 +61,7 @@ const App = () => {
           <Route path="isocahedron" element={<IsocahedronTest />} />
           <Route path="sphere" element={<SphereTest />} />
           <Route path="testpage3" element={<TestPage3 />} />
+          <Route path="star" element={<StarTest />} />
         </Routes>
       </main>
     </article>
