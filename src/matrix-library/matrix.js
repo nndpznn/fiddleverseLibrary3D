@@ -45,4 +45,9 @@ class fiddleMatrix {
 
         return result
     }
+
+    glForm(){
+        //Flattens the matrix into a long array of its columns - meant for use when entering the matrix into the glsl shader
+        return [...this.columns[0], ...this.columns[1], ...this.columns[2], ...this.columns[3]]
+    }
 }
