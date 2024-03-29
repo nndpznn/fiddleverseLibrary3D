@@ -1,5 +1,6 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import { getRotationMatrix } from '../matrixFunctions'
+import { FiddleMatrix } from '../matrix-library/matrix'
 
 class Fiddleverse {
     constructor(canvas, vertexShader, fragmentShader) {

@@ -1,9 +1,12 @@
 import { toRawLineArray, toRawTriangleArray } from "../shapes"
 import { initVertexBuffer } from '../glsl-utilities'
+import { FiddleMatrix } from '../matrix-library/matrix'
 
 class fiddle3D {
     constructor(gl, vertices, facesByIndex, color) {
         this.gl = gl
+
+        this.instanceTransformation = new FiddleMatrix()
         this.vertices = vertices ?? []
         this.facesByIndex = facesByIndex ?? []
         this.color = color ?? { r: 0.5, g: 0.5, b: 0.5 }
