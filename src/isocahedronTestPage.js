@@ -90,7 +90,7 @@ const IsocahedronTest = props => {
     const grayColor = {r:0.3,g:0.3,b:0.3}
     const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    isocahedron.children.push(isocahedronFrame.meshThing(gl))
+    isocahedron.add(isocahedronFrame)
 
     const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
     cubeThing.wireframe = false
@@ -104,14 +104,14 @@ const IsocahedronTest = props => {
     const octocylinderOutline = new octocylinderShape(gl, blueColor)
     octocylinderOutline.wireframe = true
 
-    octocylinderTest.children.push(octocylinderOutline.meshThing(gl))
+    octocylinderTest.add(octocylinderOutline)
 
     // Pass the vertices to WebGL.
     // fiddleverse.add(isocahedron.meshThing(gl))
     // fiddleverse.add(isocahedronFrame.meshThing(gl))
     // fiddleverse.add(cubeTest.meshThing(gl))
     // fiddleverse.add(cubeThing.meshThing(gl))
-    fiddleverse.add(octocylinderTest.meshThing(gl))
+    fiddleverse.add(octocylinderTest)
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
     

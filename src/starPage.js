@@ -98,8 +98,8 @@ const StarTest = props => {
     // fiddleverse.add(isocahedronFrame.meshThing(gl))
     // fiddleverse.add(cubeTest.meshThing(gl))
     // fiddleverse.add(cubeThing.meshThing(gl))
-    fiddleverse.add(starTest.meshThing(gl))
-    fiddleverse.add(starOutline.meshThing(gl))
+    fiddleverse.add(starTest)
+    fiddleverse.add(starOutline)
 
     // fiddleverse.remove(isocahedron.meshThing(gl))
     

@@ -1,6 +1,6 @@
 import { toRawLineArray, toRawTriangleArray } from "../shapes"
 import { initVertexBuffer } from '../glsl-utilities'
-import { FiddleMatrix } from '../matrix-library/matrix'
+import FiddleMatrix from "../matrix-library/matrix"
 
 class fiddle3D {
     constructor(gl, vertices, facesByIndex, color) {
@@ -45,25 +45,29 @@ class fiddle3D {
 
     setInstanceTransformation(newMatrix) {
         /* 
-        Propogates any change of matrix to the object's children, somewhat recursively.
         Setting this as a method instead of a setter function so that we can use this statement below without
         triggering an infinite loop. 
+        NOTE: Because we need to use this function to propogate the translations through the list of children, WE CANNOT USE MESHTHINGS IN THE CHILDREN LIST
         */
         this.instanceTransformation = newMatrix
 
+        this.propogateTranslations(this.instanceTransformation)
+    }
+
+    propogateTranslations(parentMatrix){
+        /**
+         * Propogates parent translations to any children if possible
+         */
         if (this.children.length > 0) {
-            for (child in this.children) {
-                child.setInstanceTransformation(newMatrix)
-            }
+            this.children.forEach(child => {
+                child.setInstanceTransformation(child.instanceTransformation.multiply(parentMatrix))
+            })
         }
     }
 
     add(fiddle3D) {
         this.children.push(fiddle3D)
-
-        // Transformation of the parent is automatically propogated to the child.
-        // Is this the right implementation?
-        fiddle3D.setInstanceTransformation(this.instanceTransformation)
+        this.propogateTranslations(this.instanceTransformation)
     }
 
     remove(fiddle3D) {
@@ -77,7 +81,8 @@ class fiddle3D {
             mode: this.wireframeValue ? this.gl.LINES : this.gl.TRIANGLES,
             verticesBuffer: this.verticesBuffer,
             colorsBuffer: this.colorsBuffer,
-            children: this.children
+            children: this.children,
+            instanceTransformation: this.instanceTransformation,
         }
     }
 

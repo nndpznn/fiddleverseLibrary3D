@@ -5,6 +5,9 @@ import { Fiddleverse } from './fiddleverse/fiddleverse'
 import { cubeShape } from './fiddleverse/cube'
 import { AsteroidThing } from './fiddleverse/AsteroidThing'
 import FiddlewingThing from './fiddleverse/FiddlewingThing'
+import TranslationMatrix from './matrix-library/translationMatrix'
+import ScaleMatrix from './matrix-library/scaleMatrix'
+import RotationMatrix from './matrix-library/rotationMatrix'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -67,28 +70,37 @@ const TestPage3 = props => {
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const grayColor = {r:0.3,g:0.3,b:0.3}
 
+    const translationMatrix = new TranslationMatrix(0.25, 0, 0)
+    const rotationMatrix = new RotationMatrix(45, 1, 0, 0)
+    const comboMatrix = rotationMatrix.multiply(translationMatrix)
+
     const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
     cubeThing.wireframe = false
   
     const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
     cubeTest.wireframe = true
 
-    const asteroidTest = new AsteroidThing(gl, blueColor, 0.1, {x: 0.25, y: -0.25, z: 0})
+    const asteroidTest = new AsteroidThing(gl, blueColor, 0.1, {x: 0, y: 0, z: 0})
 
     const fiddlewingTest = new FiddlewingThing(gl)
     fiddlewingTest.wireframe = false
+    fiddlewingTest.setInstanceTransformation(comboMatrix)
 
     const wingFrame = new FiddlewingThing(gl, blueColor)
-    fiddlewingTest.children.push(wingFrame.meshThing())
+    wingFrame.setInstanceTransformation(new TranslationMatrix(0, -0.25, 0))
+    fiddlewingTest.add(wingFrame)
     
     // Pass the vertices to WebGL.
     // fiddleverse.add(cubeTest.meshThing(gl))
     // fiddleverse.add(cubeThing.meshThing(gl))
 
-    fiddleverse.add(asteroidTest.meshThing(gl))
-    fiddleverse.add(fiddlewingTest.meshThing())
+    fiddleverse.add(asteroidTest)
+    fiddleverse.add(fiddlewingTest)
+  
     
     fiddleverse.process()
+
+    console.log(fiddlewingTest)
 
     /*
      * Displays the scene.

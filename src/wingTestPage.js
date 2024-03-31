@@ -66,7 +66,7 @@ const SphereTest = props => {
     const grayColor = {r: 0.25, g: 0.25, b: 0.25}
     const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    isocahedron.children.push(isocahedronFrame.meshThing(gl))
+    isocahedron.add(isocahedronFrame)
 
     const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
     cubeTest.wireframe = true
@@ -76,8 +76,8 @@ const SphereTest = props => {
     const icosphereFrame = new IcosphereThing(gl, blueColor)
 
     // Pass the vertices to WebGL.
-    fiddleverse.add(icosphereTest.meshThing())
-    fiddleverse.add(icosphereFrame.meshThing())
+    fiddleverse.add(icosphereTest)
+    fiddleverse.add(icosphereFrame)
     
     fiddleverse.process()
 

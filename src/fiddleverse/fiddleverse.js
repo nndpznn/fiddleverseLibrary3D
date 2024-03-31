@@ -2,8 +2,45 @@ import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilit
 import { getRotationMatrix } from '../matrixFunctions'
 import { FiddleMatrix } from '../matrix-library/matrix'
 
+//default shaders
+const VERTEX_SHADER = `
+#ifdef GL_ES
+precision highp float;
+#endif
+
+attribute vec3 vertexPosition;
+
+// Note this new additional output.
+attribute vec3 vertexColor;
+varying vec4 finalVertexColor;
+
+uniform mat4 transform;
+
+void main(void) {
+  gl_Position = transform * vec4( vertexPosition, 1.0);
+  finalVertexColor = vec4(vertexColor, 1.0);
+}
+`
+
+const FRAGMENT_SHADER = `
+  #ifdef GL_ES
+  precision highp float;
+  #endif
+
+  varying vec4 finalVertexColor;
+
+  void main(void) {
+    // We vary the color based on the fragment's z coordinate,
+    // which, at this point, ranges from 0 (near) to 1 (far).
+    // Note the ".rgb" subselector.
+    gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
+  }
+`
+
+
+
 class Fiddleverse {
-    constructor(canvas, vertexShader, fragmentShader) {
+    constructor(canvas, vertexShader = VERTEX_SHADER, fragmentShader = FRAGMENT_SHADER) {
     // Grab the WebGL rendering context.
         const gl = getGL(canvas)
         if (!gl) {
@@ -56,7 +93,7 @@ class Fiddleverse {
         gl.enableVertexAttribArray(this.vertexPosition)
         this.vertexColor = gl.getAttribLocation(this.shaderProgram, 'vertexColor')
         gl.enableVertexAttribArray(this.vertexColor)
-        this.rotationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
+        this.translationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
 
         this.translationVector = [0, 0, 0]
         this.scaleVector = [1, 1, 1]
@@ -69,8 +106,13 @@ class Fiddleverse {
     drawMesh(fiddle3Dmesh) {
       const gl = this.gl
 
+      
+      
+
       if (fiddle3Dmesh.children.length === 0 ) { // THEN NO CHILDREN!
 
+        //set the translation matrix to the instance matrix of the current object
+        gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
         // console.log(object)
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
@@ -84,6 +126,8 @@ class Fiddleverse {
 
       } else { // THEN CHILDREN!
 
+        //set the translation matrix to the instance matrix of the current object
+        gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
         gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
@@ -95,7 +139,8 @@ class Fiddleverse {
         gl.drawArrays(fiddle3Dmesh.mode, 0, fiddle3Dmesh.vertices.length / 3)
 
         fiddle3Dmesh.children.forEach(child => {
-          this.drawMesh(child)
+          //children aren't stored as their meshThings so we need to pass meshThings into drawMesh
+          this.drawMesh(child.meshThing())
         })
 
       }
@@ -119,18 +164,19 @@ class Fiddleverse {
         //   Math.sin(t), 0,  Math.cos(t), 0,
         //   0, 0, 0, 1]
         
-        // Set up the rotation matrix.
-        gl.uniformMatrix4fv(this.rotationMatrix, gl.FALSE, new Float32Array(transformMatrix))
   
         // Display the objects.
         this.cast.forEach(mesh => {
-          this.drawMesh(mesh)
+          this.drawMesh(mesh.meshThing())
         })
   
         // All done.
         gl.flush()
     }
 
+    /**
+       * NOTE: Please make sure to add the fiddle3D object, not the meshThing()
+       */ 
     add = (object) => {
       this.cast.add(object)
     }
@@ -141,23 +187,25 @@ class Fiddleverse {
 
     process = () => {
       this.cast.forEach(objectToDraw => {
+        //Redefine the meshThing for reduced confusion between children and parents - since children cannot be added as their meshThings, we're making it so that we also don't add meshthings directly to the universe
+        let objectToDrawMesh = objectToDraw.meshThing()
 
-        objectToDraw.verticesBuffer = initVertexBuffer(this.gl, objectToDraw.vertices)
+        objectToDrawMesh.verticesBuffer = initVertexBuffer(this.gl, objectToDrawMesh.vertices)
   
-        if (!objectToDraw.colors) {
+        if (!objectToDrawMesh.colors) {
           // If we have a single color, we expand that into an array
           // of the same color over and over.
-          objectToDraw.colors = []
+          objectToDrawMesh.colors = []
           for (let i = 0, maxi = objectToDraw.vertices.length / 3; i < maxi; i += 1) {
-            objectToDraw.colors = objectToDraw.colors.concat(
-              objectToDraw.color.r,
-              objectToDraw.color.g,
-              objectToDraw.color.b
+            objectToDrawMesh.colors = objectToDrawMesh.colors.concat(
+              objectToDrawMesh.color.r,
+              objectToDrawMesh.color.g,
+              objectToDrawMesh.color.b
             )
           }
         }
   
-        objectToDraw.colorsBuffer = initVertexBuffer(this.gl, objectToDraw.colors)
+        objectToDrawMesh.colorsBuffer = initVertexBuffer(this.gl, objectToDrawMesh.colors)
       })
     }
 }

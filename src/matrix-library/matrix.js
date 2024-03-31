@@ -1,43 +1,48 @@
 class FiddleMatrix {
     constructor() {
-        this.matrix = [
+        this.transformMatrix = [
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1],
         ]
 
-        this.rows = this.matrix
+        this.rows = this.transformMatrix
 
         this.columns = [
-            [this.matrix[0][0], this.matrix[1][0], this.matrix[2][0], this.matrix[3][0]],
-            [this.matrix[0][1], this.matrix[1][1], this.matrix[2][1], this.matrix[3][1]],
-            [this.matrix[0][2], this.matrix[1][2], this.matrix[2][2], this.matrix[3][2]],
-            [this.matrix[0][3], this.matrix[1][3], this.matrix[2][3], this.matrix[3][3]],
+            [this.transformMatrix[0][0], this.transformMatrix[1][0], this.transformMatrix[2][0], this.transformMatrix[3][0]],
+            [this.transformMatrix[0][1], this.transformMatrix[1][1], this.transformMatrix[2][1], this.transformMatrix[3][1]],
+            [this.transformMatrix[0][2], this.transformMatrix[1][2], this.transformMatrix[2][2], this.transformMatrix[3][2]],
+            [this.transformMatrix[0][3], this.transformMatrix[1][3], this.transformMatrix[2][3], this.transformMatrix[3][3]],
         ]
     }
 
     get matrix() {
-        return this.matrix
+        return this.transformMatrix
     }
 
+    /**
+     * @param {number[4][4]} newMatrix
+     */
     set matrix(newMatrix) {
         // This better be a goddamn 4x4.
-        this.matrix = newMatrix
+        this.transformMatrix = newMatrix
+        console.log(this.transformMatrix)
 
         // Also re-initializing these attributes, just in case.
         this.updateRC()
     }
+    
 
     updateRC() {
         // Since we ended up doing this a lot... here's a helper method to reset rows and columns as the matrix is updated.
-        this.rows = this.matrix
+        this.rows = this.transformMatrix
 
         this.columns = [
-            [this.matrix[0][0], this.matrix[1][0], this.matrix[2][0], this.matrix[3][0]],
-            [this.matrix[0][1], this.matrix[1][1], this.matrix[2][1], this.matrix[3][1]],
-            [this.matrix[0][2], this.matrix[1][2], this.matrix[2][2], this.matrix[3][2]],
-            [this.matrix[0][3], this.matrix[1][3], this.matrix[2][3], this.matrix[3][3]],
+            [this.transformMatrix[0][0], this.transformMatrix[1][0], this.transformMatrix[2][0], this.transformMatrix[3][0]],
+            [this.transformMatrix[0][1], this.transformMatrix[1][1], this.transformMatrix[2][1], this.transformMatrix[3][1]],
+            [this.transformMatrix[0][2], this.transformMatrix[1][2], this.transformMatrix[2][2], this.transformMatrix[3][2]],
+            [this.transformMatrix[0][3], this.transformMatrix[1][3], this.transformMatrix[2][3], this.transformMatrix[3][3]],
         ]
 
     }
@@ -48,7 +53,8 @@ class FiddleMatrix {
     }
 
     multiply(other) {
-        // In this case, we're assuming that this.matrix is the first matrix and otherMatrix is the second.
+        var rtn = new FiddleMatrix()
+        // In this case, we're assuming that this.matrix is the first matrix (left one) and otherMatrix is the second (right one).
         let result = [
             [this.arrayX(this.rows[0],other.columns[0]), this.arrayX(this.rows[0],other.columns[1]), this.arrayX(this.rows[0],other.columns[2]), this.arrayX(this.rows[0],other.columns[3])],
 
@@ -59,7 +65,9 @@ class FiddleMatrix {
             [this.arrayX(this.rows[3],other.columns[0]), this.arrayX(this.rows[3],other.columns[1]), this.arrayX(this.rows[3],other.columns[2]), this.arrayX(this.rows[3],other.columns[3])],
         ]
 
-        return result
+        rtn.matrix = result
+
+        return rtn
     }
 
     glForm() {
