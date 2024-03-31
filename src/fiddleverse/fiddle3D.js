@@ -43,8 +43,27 @@ class fiddle3D {
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
     }
 
+    setInstanceTransformation(newMatrix) {
+        /* 
+        Propogates any change of matrix to the object's children, somewhat recursively.
+        Setting this as a method instead of a setter function so that we can use this statement below without
+        triggering an infinite loop. 
+        */
+        this.instanceTransformation = newMatrix
+
+        if (this.children.length > 0) {
+            for (child in this.children) {
+                child.setInstanceTransformation(newMatrix)
+            }
+        }
+    }
+
     add(fiddle3D) {
         this.children.push(fiddle3D)
+
+        // Transformation of the parent is automatically propogated to the child.
+        // Is this the right implementation?
+        fiddle3D.setInstanceTransformation(this.instanceTransformation)
     }
 
     remove(fiddle3D) {
@@ -63,21 +82,5 @@ class fiddle3D {
     }
 
 }
-
-// class FiddleGroup {
-//     constructor() {
-//         this.children = []
-//     }
-
-//     add(fiddle3D) {
-//         this.children.push(fiddle3D)
-//     }
-
-
-
-//     draw(gl) {
-//         this.children.forEach(child => child.draw(gl))
-//     }
-// }
 
 export default fiddle3D 

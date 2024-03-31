@@ -118,6 +118,7 @@ class Fiddleverse {
         //   0, 1, 0, 0, 
         //   Math.sin(t), 0,  Math.cos(t), 0,
         //   0, 0, 0, 1]
+        
         // Set up the rotation matrix.
         gl.uniformMatrix4fv(this.rotationMatrix, gl.FALSE, new Float32Array(transformMatrix))
   

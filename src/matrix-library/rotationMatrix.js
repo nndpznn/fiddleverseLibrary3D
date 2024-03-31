@@ -1,4 +1,6 @@
-class rotationMatrix extends fiddleMatrix{
+import FiddleMatrix from "./matrix"
+
+class RotationMatrix extends FiddleMatrix{
     constructor(theta, x, y, z){
         //Rotation matrix for the angle theta on the arbitrary axis (x, y, z) - Credit to Dondi's barebones playground code
         super()
@@ -33,12 +35,8 @@ class rotationMatrix extends fiddleMatrix{
         ]
 
         //Re-set rows and columns so that rotation matrices show up in those attributes - IMPORTANT FOR MATRIX OPERATIONS
-        this.rows = this.matrix
-        this.columns = [
-            [this.matrix[0][0], this.matrix[1][0], this.matrix[2][0], this.matrix[3][0]],
-            [this.matrix[0][1], this.matrix[1][1], this.matrix[2][1], this.matrix[3][1]],
-            [this.matrix[0][2], this.matrix[1][2], this.matrix[2][2], this.matrix[3][2]],
-            [this.matrix[0][3], this.matrix[1][3], this.matrix[2][3], this.matrix[3][1]],
-        ]
+        this.updateRC()
     }
 }
+
+export default RotationMatrix
