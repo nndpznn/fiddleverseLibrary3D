@@ -1,6 +1,6 @@
 class FiddleMatrix {
-    constructor() {
-        this.transformMatrix = [
+    constructor(setMatrix) {
+        this.transformMatrix = setMatrix ? setMatrix : [
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
@@ -76,4 +76,4 @@ class FiddleMatrix {
     }
 }
 
-export default FiddleMatrix
+export { FiddleMatrix }
