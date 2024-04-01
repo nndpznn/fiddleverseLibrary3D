@@ -6,7 +6,7 @@ import { cubeShape } from './fiddleverse/cube'
 import { AsteroidThing } from './fiddleverse/AsteroidThing'
 import FiddlewingThing from './fiddleverse/FiddlewingThing'
 import TranslationMatrix from './matrix-library/translationMatrix'
-import ScaleMatrix from './matrix-library/scaleMatrix'
+// import ScaleMatrix from './matrix-library/scaleMatrix'
 import RotationMatrix from './matrix-library/rotationMatrix'
 
 // Slightly-leveled-up GLSL shaders.

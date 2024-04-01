@@ -1,6 +1,6 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
-import { getRotationMatrix } from '../matrixFunctions'
-import { FiddleMatrix } from '../matrix-library/matrix'
+// import { getRotationMatrix } from '../matrixFunctions'
+// import { FiddleMatrix } from '../matrix-library/matrix'
 
 //default shaders
 const VERTEX_SHADER = `
@@ -152,11 +152,11 @@ class Fiddleverse {
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   
-        const transformMatrix = [
-          this.scaleVector[0], 0, 0, 0, 
-          0, this.scaleVector[1], 0, 0, 
-          0, 0, this.scaleVector[2], 0,
-          ...this.translationVector, 1]
+        // const transformMatrix = [
+        //   this.scaleVector[0], 0, 0, 0, 
+        //   0, this.scaleVector[1], 0, 0, 
+        //   0, 0, this.scaleVector[2], 0,
+        //   ...this.translationVector, 1]
 
         // const rotationMatrix = [
         //   Math.cos(t), 0, -Math.sin(t), 0, 
@@ -187,7 +187,7 @@ class Fiddleverse {
 
     process = () => {
       this.cast.forEach(objectToDraw => {
-        //Redefine the meshThing for reduced confusion between children and parents - since children cannot be added as their meshThings, we're making it so that we also don't add meshthings directly to the universe
+        // Redefine the meshThing for reduced confusion between children and parents - since children cannot be added as their meshThings, we're making it so that we also don't add meshthings directly to the universe
         let objectToDrawMesh = objectToDraw.meshThing()
 
         objectToDrawMesh.verticesBuffer = initVertexBuffer(this.gl, objectToDrawMesh.vertices)

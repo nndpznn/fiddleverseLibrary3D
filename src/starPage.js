@@ -2,9 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from './fiddleverse/fiddleverse'
-import { dondiShape } from './fiddleverse/dondiShape'
-import { cubeShape } from './fiddleverse/cube'
-import { octocylinderShape } from './fiddleverse/octocylinder'
 import { StarShape } from './fiddleverse/star'
 
 // Slightly-leveled-up GLSL shaders.

@@ -48,7 +48,7 @@ correctResult2.matrix = [
 ]
 
 describe("Matrix multiply function", () => {
-    it("correctly multiplies two matrices", () => {
+    it("correctly multiplies two matrices, even up to double digits", () => {
         expect(testMatrix2.multiply(testMatrix3).matrix).toStrictEqual(correctResult2.matrix)
     })
 })

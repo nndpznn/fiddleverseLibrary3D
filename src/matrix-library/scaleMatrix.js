@@ -1,4 +1,4 @@
-import FiddleMatrix from "./matrix"
+import { FiddleMatrix } from "./matrix"
 
 class ScaleMatrix extends FiddleMatrix {
     constructor(sx, sy, sz){

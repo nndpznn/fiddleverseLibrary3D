@@ -32,7 +32,6 @@ class FiddleMatrix {
         // Also re-initializing these attributes, just in case.
         this.updateRC()
     }
-    
 
     updateRC() {
         // Since we ended up doing this a lot... here's a helper method to reset rows and columns as the matrix is updated.
