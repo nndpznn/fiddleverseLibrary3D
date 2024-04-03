@@ -1,5 +1,7 @@
 import { FiddleMatrix } from '../matrix-library/matrix'
 import OrthoMatrix from './orthographicMatrix'
+import ScaleMatrix from './scaleMatrix'
+import TranslationMatrix from './translationMatrix'
 
 describe('Matrix library', () => {
     test('does not crash', () => {
@@ -55,8 +57,34 @@ describe("Matrix multiply function", () => {
 })
 
 // TRANSLATION TEST
+let translationTest = new TranslationMatrix(0.5, 1, 0.75)
+let correctTranslation = [
+    [1, 0, 0, 0.5],
+    [0, 1, 0, 1],
+    [0, 0, 1, 0.75],
+    [0, 0, 0, 1]
+]
+
+describe("Translation Matrix", () => {
+    it("correctly takes translation inputs and creates a corresponding matrix", () =>{
+        expect(translationTest.matrix).toStrictEqual(correctTranslation)
+    })
+})
 
 // SCALE TEST
+let scaleTest = new ScaleMatrix(0.5, 2, 3)
+let correctScale = [
+    [0.5, 0, 0, 0],
+    [0, 2, 0, 0],
+    [0, 0, 3, 0],
+    [0, 0, 0, 1]
+]
+
+describe("Scale Matrix", () => {
+    it("correctly takes scalar inputs and creates a corresponding matrix", () =>{
+        expect(sacleTest.matrix).toStrictEqual(correctScale)
+    })
+})
 
 // ROTATION TEST
 
