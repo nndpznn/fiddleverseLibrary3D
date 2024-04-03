@@ -1,8 +1,10 @@
 import { FiddleMatrix } from "./matrix"
 
+/* IMPORTANT! This matrix needs to be the last in any string of transformations. */
 class OrthoMatrix extends FiddleMatrix {
     constructor(flatDim){
-        //Start with the identity matrix
+
+        // Start with the identity matrix.
         super()
 
         /* Depending on what dimension we want to "flatten" or get rid of, 
@@ -18,6 +20,8 @@ class OrthoMatrix extends FiddleMatrix {
             case "z":
                 flatDim = 2
                 break
+            default:
+                flatDim = 2
         }
         
         this.matrix[flatDim][0] = 0

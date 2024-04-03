@@ -5,6 +5,8 @@ import { Fiddleverse } from './fiddleverse/fiddleverse'
 import { dondiShape } from './fiddleverse/dondiShape'
 import { cubeShape } from './fiddleverse/cube'
 import { octocylinderShape } from './fiddleverse/octocylinder'
+import OrthoMatrix from './matrix-library/orthographicMatrix'
+import RotationMatrix from './matrix-library/rotationMatrix'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -103,8 +105,12 @@ const IsocahedronTest = props => {
 
     const octocylinderOutline = new octocylinderShape(gl, blueColor)
     octocylinderOutline.wireframe = true
-
     octocylinderTest.add(octocylinderOutline)
+
+    const tiltMatrix = new RotationMatrix(-45, 1, 0, 0)
+    const orthTestMatrix = new OrthoMatrix("y")
+    const octocylinderCombinedMatrix = tiltMatrix.multiply(orthTestMatrix)
+    octocylinderTest.setInstanceTransformation(octocylinderCombinedMatrix)
 
     // Pass the vertices to WebGL.
     // fiddleverse.add(isocahedron.meshThing(gl))
@@ -112,8 +118,6 @@ const IsocahedronTest = props => {
     // fiddleverse.add(cubeTest.meshThing(gl))
     // fiddleverse.add(cubeThing.meshThing(gl))
     fiddleverse.add(octocylinderTest)
-
-    // fiddleverse.remove(isocahedron.meshThing(gl))
     
     fiddleverse.process()
 
