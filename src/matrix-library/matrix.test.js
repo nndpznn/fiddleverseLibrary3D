@@ -82,7 +82,7 @@ let correctScale = [
 
 describe("Scale Matrix", () => {
     it("correctly takes scalar inputs and creates a corresponding matrix", () =>{
-        expect(sacleTest.matrix).toStrictEqual(correctScale)
+        expect(scaleTest.matrix).toStrictEqual(correctScale)
     })
 })
 
