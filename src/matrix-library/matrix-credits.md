@@ -1,14 +1,18 @@
 ## MATRIX CREDITS!
 
+### GROUP
+- Perspective matrix
+
 ### Nolan
-- Matrix multiplication
+- Orthogonal projection matrix
 
 ### Dylan
-
+- Arbitrary rotation matrix
 
 ### JD
-
+- Scale matrix
 
 ### Allen
+- Translation matrix
 
 
