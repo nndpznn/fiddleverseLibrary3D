@@ -1,5 +1,7 @@
 ## MATRIX CREDITS!
 
+NOTE! Perspective projection is implemented only on isocahedronTestPage.js.
+
 ### GROUP
 - Perspective matrix
 

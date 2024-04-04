@@ -21,7 +21,7 @@ const VERTEX_SHADER = `
   uniform mat4 transform;
 
   void main(void) {
-    gl_Position = transform * vec4(vertexPosition, 1.0);
+    gl_Position = projectionMatrix * transform * vec4(vertexPosition, 1.0);
   }
 `
 
@@ -133,16 +133,16 @@ const IsocahedronTest = props => {
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
 
-      fiddleverse.translationVector[2] -= 0.001
+      fiddleverse.translationVector[2] -= 0.00001
 
       fiddleverse.drawScene(currentRotation)
 
-      if (fiddleverse.translationVector[0] > 1.0) {
-        fiddleverse.translationVector[0] = -1.0
+      if (fiddleverse.translationVector[0] > 3.0) {
+        fiddleverse.translationVector[0] = -3.0
       }
 
-      if (fiddleverse.translationVector[2] > 0.5) {
-        fiddleverse.translationVector[2] = 0.0
+      if (fiddleverse.translationVector[1] < -5.0) {
+        fiddleverse.translationVector[1] = 5.0
       }
 
       if (currentRotation >= FULL_CIRCLE) {

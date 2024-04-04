@@ -131,7 +131,7 @@ class Fiddleverse {
 
         // Set the varying colors.
         gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
-        
+
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
         gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
