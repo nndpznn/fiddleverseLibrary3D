@@ -1,5 +1,6 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import OrthoMatrix from '../matrix-library/orthographicMatrix'
+import PerspectiveMatrix from '../matrix-library/perspectiveMatrix'
 // import { getRotationMatrix } from '../matrixFunctions'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 
@@ -152,6 +153,9 @@ class Fiddleverse {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
         let translation = new TranslationMatrix(...this.translationVector)
+
+        let projection = new PerspectiveMatrix(1, 1, 1, 1000)
+        // new Float32Array(projection.glForm())
 
         gl.uniformMatrix4fv(
           this.projectionMatrix,
