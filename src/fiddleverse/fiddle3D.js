@@ -49,7 +49,7 @@ class fiddle3D {
         triggering an infinite loop. 
         NOTE: Because we need to use this function to propogate the translations through the list of children, WE CANNOT USE MESHTHINGS IN THE CHILDREN LIST
         */
-        this.instanceTransformation = newMatrix
+        this.instanceTransformation = newMatrix.multiply(this.instanceTransformation)
 
         this.propogateTranslations(this.instanceTransformation)
     }
@@ -60,7 +60,7 @@ class fiddle3D {
          */
         if (this.children.length > 0) {
             this.children.forEach(child => {
-                child.setInstanceTransformation(child.instanceTransformation.multiply(parentMatrix))
+                child.setInstanceTransformation(parentMatrix.multiply(child.instanceTransformation))
             })
         }
     }

@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
-import { Fiddleverse } from './fiddleverse/fiddleverse'
-import { dondiShape } from './fiddleverse/dondiShape'
-import { cubeShape } from './fiddleverse/cube'
-import IcosphereThing from './fiddleverse/IcosphereThing'
+import { Fiddleverse } from '../fiddleverse/fiddleverse'
+import { StarShape } from '../fiddleverse/star'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -45,7 +43,11 @@ const FRAGMENT_SHADER = `
  * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
  * the useEffect hook.
  */
-const SphereTest = props => {
+const StarTest = props => {
+
+  const screenHeight = 6
+  const screenWidth = 10
+
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -56,28 +58,27 @@ const SphereTest = props => {
     }
 
     // Grab the WebGL rendering context.
-    const fiddleverse = new Fiddleverse(canvas, VERTEX_SHADER, FRAGMENT_SHADER)
+    const fiddleverse = new Fiddleverse(canvas, screenHeight, screenWidth, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
 
-    const isocahedron = new dondiShape(gl)
-    isocahedron.wireframe = false
-
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
-    const grayColor = {r: 0.25, g: 0.25, b: 0.25}
-    const isocahedronFrame = new dondiShape(gl, blueColor)
+    const grayColor = {r:0.3,g:0.3,b:0.3}
 
-    isocahedron.add(isocahedronFrame)
+    const starTest = new StarShape(gl, 0.3, grayColor, {x:0,y:0,z:0})
+    starTest.wireframe = false
 
-    const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
-    cubeTest.wireframe = true
-
-    const icosphereTest = new IcosphereThing(gl, grayColor)
-    icosphereTest.wireframe = false
-    const icosphereFrame = new IcosphereThing(gl, blueColor)
+    const starOutline = new StarShape(gl, 0.3, blueColor, {x:0,y:0,z:0})
+    starOutline.wireframe = true
 
     // Pass the vertices to WebGL.
-    fiddleverse.add(icosphereTest)
-    fiddleverse.add(icosphereFrame)
+    // fiddleverse.add(isocahedron.meshThing(gl))
+    // fiddleverse.add(isocahedronFrame.meshThing(gl))
+    // fiddleverse.add(cubeTest.meshThing(gl))
+    // fiddleverse.add(cubeThing.meshThing(gl))
+    fiddleverse.add(starTest)
+    fiddleverse.add(starOutline)
+
+    // fiddleverse.remove(isocahedron.meshThing(gl))
     
     fiddleverse.process()
 
@@ -165,4 +166,4 @@ const SphereTest = props => {
   )
 }
 
-export default SphereTest
+export default StarTest

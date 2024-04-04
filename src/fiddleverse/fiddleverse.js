@@ -1,6 +1,7 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
+import OrthoMatrix from '../matrix-library/orthographicMatrix'
 // import { getRotationMatrix } from '../matrixFunctions'
-// import { FiddleMatrix } from '../matrix-library/matrix'
+import TranslationMatrix from '../matrix-library/translationMatrix'
 
 //default shaders
 const VERTEX_SHADER = `
@@ -40,7 +41,7 @@ const FRAGMENT_SHADER = `
 
 
 class Fiddleverse {
-    constructor(canvas, vertexShader = VERTEX_SHADER, fragmentShader = FRAGMENT_SHADER) {
+    constructor(canvas, screenHeight, screenWidth, vertexShader, fragmentShader) {
     // Grab the WebGL rendering context.
         const gl = getGL(canvas)
         if (!gl) {
@@ -55,6 +56,8 @@ class Fiddleverse {
         gl.viewport(0, 0, canvas.width, canvas.height)
 
         this.cast = new Set()
+        this.screenHeight = screenHeight
+        this.screenWidth = screenWidth
 
         let abort = false
         const shaderProgram = initSimpleShaderProgram(
@@ -91,7 +94,7 @@ class Fiddleverse {
         // Hold on to the important variables within the shaders.
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
         gl.enableVertexAttribArray(this.vertexPosition)
-        this.vertexColor = gl.getAttribLocation(this.shaderProgram, 'vertexColor')
+        this.vertexColor = gl.getUniformLocation(this.shaderProgram, 'color')
         gl.enableVertexAttribArray(this.vertexColor)
         this.translationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
 
@@ -106,8 +109,7 @@ class Fiddleverse {
     drawMesh(fiddle3Dmesh) {
       const gl = this.gl
 
-      
-      
+      // let orthograpicOverlay = new OrthoMatrix(this.screenWidth, this.screenHeight, 1, 1000)
 
       if (fiddle3Dmesh.children.length === 0 ) { // THEN NO CHILDREN!
 
@@ -117,11 +119,9 @@ class Fiddleverse {
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
         gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
-
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
         gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
-
         gl.drawArrays(fiddle3Dmesh.mode, 0, fiddle3Dmesh.vertices.length / 3)
 
       } else { // THEN CHILDREN!
@@ -130,12 +130,11 @@ class Fiddleverse {
         gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
         // Set the varying colors.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
+        // gl.uniform3f(this.vertexColor, ...fiddle3Dmesh.color)
         gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
-
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
         gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
-
         gl.drawArrays(fiddle3Dmesh.mode, 0, fiddle3Dmesh.vertices.length / 3)
 
         fiddle3Dmesh.children.forEach(child => {
@@ -151,23 +150,20 @@ class Fiddleverse {
         const gl = this.gl
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+
+        let translation = new TranslationMatrix(...this.translationVector)
   
         // const transformMatrix = [
         //   this.scaleVector[0], 0, 0, 0, 
         //   0, this.scaleVector[1], 0, 0, 
         //   0, 0, this.scaleVector[2], 0,
         //   ...this.translationVector, 1]
-
-        // const rotationMatrix = [
-        //   Math.cos(t), 0, -Math.sin(t), 0, 
-        //   0, 1, 0, 0, 
-        //   Math.sin(t), 0,  Math.cos(t), 0,
-        //   0, 0, 0, 1]
         
-  
         // Display the objects.
-        this.cast.forEach(mesh => {
-          this.drawMesh(mesh.meshThing())
+        this.cast.forEach(object => {
+          
+          object.setInstanceTransformation(translation)
+          this.drawMesh(object.meshThing())
         })
   
         // All done.

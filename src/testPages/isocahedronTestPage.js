@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
-import { Fiddleverse } from './fiddleverse/fiddleverse'
-import { dondiShape } from './fiddleverse/dondiShape'
-import { cubeShape } from './fiddleverse/cube'
-import { octocylinderShape } from './fiddleverse/octocylinder'
-import OrthoMatrix from './matrix-library/orthographicMatrix'
-import RotationMatrix from './matrix-library/rotationMatrix'
+import { Fiddleverse } from '../fiddleverse/fiddleverse'
+import { dondiShape } from '../fiddleverse/dondiShape'
+import { cubeShape } from '../fiddleverse/cube'
+import { octocylinderShape } from '../fiddleverse/octocylinder'
+import OrthoMatrix from '../matrix-library/orthographicMatrix'
+import RotationMatrix from '../matrix-library/rotationMatrix'
+
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -16,54 +17,23 @@ const VERTEX_SHADER = `
 
   attribute vec3 vertexPosition;
 
-  // Note this new additional output.
-  attribute vec3 vertexColor;
-  varying vec4 finalVertexColor;
+  // uniform mat4 projectionMatrix;
   uniform mat4 transform;
 
-  // uniform vec3 translation;
-
   void main(void) {
-    gl_Position = transform * vec4(
-      vertexPosition.x,
-      vertexPosition.y,
-      vertexPosition.z, 
-      1.0);
-    finalVertexColor = vec4(vertexColor, 1.0);
+    gl_Position = transform * vec4(vertexPosition, 1.0);
   }
 `
-
-// `
-//   #ifdef GL_ES
-//   precision highp float;
-//   #endif
-
-//   attribute vec3 vertexPosition;
-
-//   // Note this new additional output.
-//   attribute vec3 vertexColor;
-//   varying vec4 finalVertexColor;
-
-//   uniform mat4 transform;
-
-//   void main(void) {
-//     gl_Position = transform * vec4( vertexPosition, 1.0);
-//     finalVertexColor = vec4(vertexColor, 1.0);
-//   }
-// `
 
 const FRAGMENT_SHADER = `
   #ifdef GL_ES
   precision highp float;
   #endif
 
-  varying vec4 finalVertexColor;
+  uniform vec3 color;
 
   void main(void) {
-    // We vary the color based on the fragment's z coordinate,
-    // which, at this point, ranges from 0 (near) to 1 (far).
-    // Note the ".rgb" subselector.
-    gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
+    gl_FragColor = vec4(color, 1.0);
   }
 `
 
@@ -72,6 +42,10 @@ const FRAGMENT_SHADER = `
  * the useEffect hook.
  */
 const IsocahedronTest = props => {
+
+  const screenHeight = 6
+  const screenWidth = 10
+
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -82,23 +56,21 @@ const IsocahedronTest = props => {
     }
 
     // Grab the WebGL rendering context.
-    const fiddleverse = new Fiddleverse(canvas, VERTEX_SHADER, FRAGMENT_SHADER)
+    const fiddleverse = new Fiddleverse(canvas, screenHeight, screenWidth, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
-
-    const isocahedron = new dondiShape(gl)
-    isocahedron.wireframe = false
 
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const grayColor = {r:0.3,g:0.3,b:0.3}
-    const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    isocahedron.add(isocahedronFrame)
+    // const isocahedron = new dondiShape(gl)
+    // isocahedron.wireframe = false
+    // const isocahedronFrame = new dondiShape(gl, blueColor)
+    // isocahedron.add(isocahedronFrame)
 
-    const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
-    cubeThing.wireframe = false
-  
-    const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
-    cubeTest.wireframe = true
+    // const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
+    // cubeThing.wireframe = false
+    // const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
+    // cubeTest.wireframe = true
 
     const octocylinderTest = new octocylinderShape(gl, grayColor)
     octocylinderTest.wireframe = false
@@ -108,9 +80,7 @@ const IsocahedronTest = props => {
     octocylinderTest.add(octocylinderOutline)
 
     const tiltMatrix = new RotationMatrix(-45, 1, 0, 0)
-    const orthTestMatrix = new OrthoMatrix("y")
-    const octocylinderCombinedMatrix = tiltMatrix.multiply(orthTestMatrix)
-    octocylinderTest.setInstanceTransformation(octocylinderCombinedMatrix)
+    // octocylinderTest.setInstanceTransformation(tiltMatrix)
 
     // Pass the vertices to WebGL.
     // fiddleverse.add(isocahedron.meshThing(gl))
@@ -162,11 +132,17 @@ const IsocahedronTest = props => {
 
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-      fiddleverse.translationVector[0] += 0.00
+
+      fiddleverse.translationVector[2] += 0.01
+
       fiddleverse.drawScene(currentRotation)
 
       if (fiddleverse.translationVector[0] > 1.0) {
         fiddleverse.translationVector[0] = -1.0
+      }
+
+      if (fiddleverse.translationVector[2] > 0.5) {
+        fiddleverse.translationVector[2] = 0.0
       }
 
       if (currentRotation >= FULL_CIRCLE) {

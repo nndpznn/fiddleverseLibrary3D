@@ -7,10 +7,10 @@ import './App.css'
 
 import Sandbox from './Sandbox'
 import PitchedScene from './PitchedScene'
-import IsocahedronTest from './isocahedronTestPage'
-import TestPage3 from './testpage3'
-import SphereTest from './wingTestPage'
-import StarTest from './starPage'
+import IsocahedronTest from './testPages/isocahedronTestPage'
+import TestPage3 from './testPages/testpage3'
+import SphereTest from './testPages/wingTestPage'
+import StarTest from './testPages/starPage'
 
 const classNamePicker = ({ isActive }) => (isActive ? 'current' : null)
 

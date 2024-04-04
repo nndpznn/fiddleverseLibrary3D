@@ -89,30 +89,30 @@ describe("Scale Matrix", () => {
 // ROTATION TEST
 
 // ORTHOGRAPHIC TEST
-let orthoTest1 = new FiddleMatrix()
-orthoTest1.matrix = [
-    [3, 2, 1, 0],
-    [4, 5, 6, 0],
-    [9, 8, 7, 0],
-    [0, 0, 0, 1],
-]
+// let orthoTest1 = new FiddleMatrix()
+// orthoTest1.matrix = [
+//     [3, 2, 1, 0],
+//     [4, 5, 6, 0],
+//     [9, 8, 7, 0],
+//     [0, 0, 0, 1],
+// ]
 
-let orthoTest2 = new OrthoMatrix("y")
+// let orthoTest2 = new OrthoMatrix("y")
 
-let orthoTest3 = orthoTest2.multiply(orthoTest1)
+// let orthoTest3 = orthoTest2.multiply(orthoTest1)
 
-let correctOrtho = [
-    [3, 2, 1, 0],
-    [0, 0, 0, 0],
-    [9, 8, 7, 0],
-    [0, 0, 0, 1],
-]
+// let correctOrtho = [
+//     [3, 2, 1, 0],
+//     [0, 0, 0, 0],
+//     [9, 8, 7, 0],
+//     [0, 0, 0, 1],
+// ]
 
-describe("Orthographic projection matrix", () => {
-    it("correctly removes a certain dimension of a matrix", () => {
-        expect(orthoTest3.matrix).toStrictEqual(correctOrtho)
-    })
-})
+// describe("Orthographic projection matrix", () => {
+//     it("correctly removes a certain dimension of a matrix", () => {
+//         expect(orthoTest3.matrix).toStrictEqual(correctOrtho)
+//     })
+// })
 
 // PROJECTION TEST
 

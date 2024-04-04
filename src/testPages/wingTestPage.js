@@ -1,37 +1,29 @@
 import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
-import { Fiddleverse } from './fiddleverse/fiddleverse'
-import { cubeShape } from './fiddleverse/cube'
-import { AsteroidThing } from './fiddleverse/AsteroidThing'
-import FiddlewingThing from './fiddleverse/FiddlewingThing'
-import TranslationMatrix from './matrix-library/translationMatrix'
-// import ScaleMatrix from './matrix-library/scaleMatrix'
-import RotationMatrix from './matrix-library/rotationMatrix'
+import { Fiddleverse } from '../fiddleverse/fiddleverse'
+import { dondiShape } from '../fiddleverse/dondiShape'
+import { cubeShape } from '../fiddleverse/cube'
+import IcosphereThing from '../fiddleverse/IcosphereThing'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
+#ifdef GL_ES
+precision highp float;
+#endif
 
-  attribute vec3 vertexPosition;
+attribute vec3 vertexPosition;
 
-  // Note this new additional output.
-  attribute vec3 vertexColor;
-  varying vec4 finalVertexColor;
-  uniform mat4 transform;
+// Note this new additional output.
+attribute vec3 vertexColor;
+varying vec4 finalVertexColor;
 
-  // uniform vec3 translation;
+uniform mat4 transform;
 
-  void main(void) {
-    gl_Position = transform * vec4(
-      vertexPosition.x,
-      vertexPosition.y,
-      vertexPosition.z, 
-      1.0);
-    finalVertexColor = vec4(vertexColor, 1.0);
-  }
+void main(void) {
+  gl_Position = transform * vec4( vertexPosition, 1.0);
+  finalVertexColor = vec4(vertexColor, 1.0);
+}
 `
 
 const FRAGMENT_SHADER = `
@@ -53,7 +45,11 @@ const FRAGMENT_SHADER = `
  * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
  * the useEffect hook.
  */
-const TestPage3 = props => {
+const SphereTest = props => {
+
+  const screenHeight = 6
+  const screenWidth = 10
+
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -64,43 +60,30 @@ const TestPage3 = props => {
     }
 
     // Grab the WebGL rendering context.
-    const fiddleverse = new Fiddleverse(canvas, VERTEX_SHADER, FRAGMENT_SHADER)
+    const fiddleverse = new Fiddleverse(canvas, screenHeight, screenWidth, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
 
+    const isocahedron = new dondiShape(gl)
+    isocahedron.wireframe = false
+
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
-    const grayColor = {r:0.3,g:0.3,b:0.3}
+    const grayColor = {r: 0.25, g: 0.25, b: 0.25}
+    const isocahedronFrame = new dondiShape(gl, blueColor)
 
-    const translationMatrix = new TranslationMatrix(0.25, 0, 0)
-    const rotationMatrix = new RotationMatrix(45, 1, 0, 0)
-    const comboMatrix = rotationMatrix.multiply(translationMatrix)
+    isocahedron.add(isocahedronFrame)
 
-    const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
-    cubeThing.wireframe = false
-  
     const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
     cubeTest.wireframe = true
 
-    const asteroidTest = new AsteroidThing(gl, blueColor, 0.1, {x: 0, y: 0, z: 0})
+    const icosphereTest = new IcosphereThing(gl, grayColor)
+    icosphereTest.wireframe = false
+    const icosphereFrame = new IcosphereThing(gl, blueColor)
 
-    const fiddlewingTest = new FiddlewingThing(gl)
-    fiddlewingTest.wireframe = false
-    fiddlewingTest.setInstanceTransformation(comboMatrix)
-
-    const wingFrame = new FiddlewingThing(gl, blueColor)
-    wingFrame.setInstanceTransformation(new TranslationMatrix(0, -0.25, 0))
-    fiddlewingTest.add(wingFrame)
-    
     // Pass the vertices to WebGL.
-    // fiddleverse.add(cubeTest.meshThing(gl))
-    // fiddleverse.add(cubeThing.meshThing(gl))
-
-    fiddleverse.add(asteroidTest)
-    fiddleverse.add(fiddlewingTest)
-  
+    fiddleverse.add(icosphereTest)
+    fiddleverse.add(icosphereFrame)
     
     fiddleverse.process()
-
-    console.log(fiddlewingTest)
 
     /*
      * Displays the scene.
@@ -186,4 +169,4 @@ const TestPage3 = props => {
   )
 }
 
-export default TestPage3
+export default SphereTest

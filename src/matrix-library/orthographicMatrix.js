@@ -1,32 +1,28 @@
 import { FiddleMatrix } from "./matrix"
 
-/* IMPORTANT! This matrix needs to be the last in any string of transformations. */
 class OrthoMatrix extends FiddleMatrix {
-    constructor(flatDim){
+    constructor(screenWidth, screenHeight, nearPlane, farPlane){
 
         // Start with the identity matrix.
         super()
 
-        /* Depending on what dimension we want to "flatten" or get rid of, 
-        we deal with a different row. */
+        // Defined by six numbers: Left, Right, Top, Bottom, Far, and Near.
 
-        switch (flatDim) {
-            case "x":
-                flatDim = 0
-                break
-            case "y":
-                flatDim = 1
-                break
-            case "z":
-                flatDim = 2
-                break
-            default:
-                flatDim = 2
-        }
-        
-        this.matrix[flatDim][0] = 0
-        this.matrix[flatDim][1] = 0
-        this.matrix[flatDim][2] = 0
+        // Aspect ratio = width / height aka 
+
+        let l = -(screenWidth/2)
+        let r = screenWidth/2
+        let t = screenHeight/2
+        let b = -(screenHeight/2)
+        let f = nearPlane
+        let n = farPlane
+
+        this.matrix = [
+            [2/(r-l),       0,        0,  -(r+l/r-l)],
+            [0,       2/(t-b),        0,  -(t+b/t-b)],
+            [0,             0, -2/(f-n),  -(f+n/f-n)],
+            [0,             0,        0,           1],
+        ]
 
         //Re-set rows and columns so that the scalar values show up in those attributes - IMPORTANT FOR MATRIX OPERATIONS
         this.updateRC()
