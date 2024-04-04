@@ -6,20 +6,19 @@ class StarShape extends fiddle3D {
     const POSITION = position;
 
     super(
-      gl,
-      [
-        [POSITION.x, POSITION.y + SIZE, POSITION.z], // 0 
-        [POSITION.x - SIZE, POSITION.y + SIZE, POSITION.z], // 1
-        [POSITION.x - SIZE * 0.5, POSITION.y + SIZE * 0.5, POSITION.z], // 2
-        [POSITION.x - SIZE * 2.5, POSITION.y + SIZE * 0.5, POSITION.z], // 3
-        [POSITION.x - SIZE * 1, POSITION.y, POSITION.z], // 4
-        [POSITION.x - SIZE * 1.5, POSITION.y - SIZE * 2, POSITION.z], // 5
-        [POSITION.x, POSITION.y - SIZE, POSITION.z], // 6
-        [POSITION.x + SIZE * 1.5, POSITION.y - SIZE * 2, POSITION.z], // 7
-        [POSITION.x + SIZE, POSITION.y, POSITION.z], // 8
-        [POSITION.x + SIZE * 2.5, POSITION.y + SIZE * 0.5, POSITION.z], // 9
-        [POSITION.x + SIZE * 0.5, POSITION.y + SIZE * 0.5, POSITION.z], // 10
-        [POSITION.x, POSITION.y + SIZE, POSITION.z - SIZE * 0.5] //11
+      gl,[
+        [POSITION.x, POSITION.y + SIZE, POSITION.z], // 0 (Top center)
+        [POSITION.x - SIZE, POSITION.y + SIZE, POSITION.z], // 1 (Top left)
+        [POSITION.x - SIZE * 0.5, POSITION.y + SIZE * 0.5, POSITION.z], // 2 (Top left center)
+        [POSITION.x - SIZE * 2.5, POSITION.y + SIZE * 0.5, POSITION.z], // 3 (Top left outer)
+        [POSITION.x - SIZE * 1, POSITION.y, POSITION.z], // 4 (Left center)
+        [POSITION.x - SIZE * 1.5, POSITION.y - SIZE * 2, POSITION.z], // 5 (Bottom left outer)
+        [POSITION.x, POSITION.y - SIZE, POSITION.z], // 6 (Bottom center)
+        [POSITION.x + SIZE * 1.5, POSITION.y - SIZE * 2, POSITION.z], // 7 (Bottom right outer)
+        [POSITION.x + SIZE, POSITION.y, POSITION.z], // 8 (Right center)
+        [POSITION.x + SIZE * 2.5, POSITION.y + SIZE * 0.5, POSITION.z], // 9 (Top right outer)
+        [POSITION.x, POSITION.y + SIZE * 2, POSITION.z], // 10 (Top center)
+        [POSITION.x, POSITION.y + SIZE * 1.5, POSITION.z - SIZE * 0.25] // 11 (Top center, slightly back)
       ],
       [
         [0, 1, 2],
@@ -41,8 +40,12 @@ class StarShape extends fiddle3D {
         [11, 7, 6],
         [11, 8, 7],
         [11, 9, 8],
-        [11, 10, 9]
-
+        [11, 10, 9],
+        [0, 10, 1],
+        [0, 9, 10],
+        [0, 8, 9],
+        [0, 7, 8],
+        [0, 6, 7]
       ],
       color
     );
