@@ -101,7 +101,7 @@ class IcosphereThing extends fiddle3D {
     console.log(icosphereTriangles)
 
    //So that the icosphere doesn't just become a flat subdivided icosahedron, we need to normalize the points so that they are equidistant from the center
-   for (var k = 0; k < icosphereVertices.length; k++) {
+   for (var i = 0; i < icosphereVertices.length; i++) {
       const normalizer = 1 / Math.hypot(icosphereVertices[i][0], icosphereVertices[i][1], icosphereVertices[i][2])
       icosphereVertices[i][0] *= normalizer
       icosphereVertices[i][1] *= normalizer
