@@ -1,5 +1,7 @@
-import { FiddleMatrix } from '../matrix-library/matrix'
+
+import { FiddleMatrix } from './matrix'
 import OrthoMatrix from './orthographicMatrix'
+import RotationMatrix from './rotationMatrix'
 import ScaleMatrix from './scaleMatrix'
 import TranslationMatrix from './translationMatrix'
 
@@ -87,6 +89,49 @@ describe("Scale Matrix", () => {
 })
 
 // ROTATION TEST
+let rotationTest1 = new RotationMatrix(90, 1, 0, 0) //x-axis rotation
+let correctRotation1 = [
+    [1, 0, 0, 0],
+    [0, 0, -1, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 1]
+]
+let rotationTest2 = new RotationMatrix(90, 0, 1, 0) //y-axis rotation
+let correctRotation2 = [
+    [0, 0, 1, 0],
+    [0, 1, 0, 0],
+    [-1, 0, 0, 0],
+    [0, 0, 0, 1]
+]
+let rotationTest3 = new RotationMatrix(90, 0, 0, 1) //z-axis rotation
+let correctRotation3 = [
+    [0, -1, 0, 0],
+    [1, 0, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
+]
+let rotationTest4 = new RotationMatrix(45, 0.5, 0.25, 0.75) //arbitrary axis rotation
+let correctRotation4 = [
+    [0.7907905579903911, -0.525104821111919, 0.3145079017103789, 0],
+    [0.6087885979157627, 0.7280277253875085, -0.3152016404063445, 0],
+    [-0.06345657129884827, 0.4407273056121099, 0.8953952789951956, 0],
+    [0, 0, 0, 1]
+]
+
+describe("Rotation Matrix", () => {
+    it("works for rotating 90 degrees around the x-axis", () => {
+        expect(rotationTest1.matrix).toStrictEqual(correctRotation1)
+    })
+    it("works for rotating 90 degrees around the y-axis", () => {
+        expect(rotationTest2.matrix).toStrictEqual(correctRotation2)
+    })
+    it("works for rotating 90 degrees around the z-axis", () => {
+        expect(rotationTest3.matrix).toStrictEqual(correctRotation3)
+    })
+    it("works for rotating around an arbitrary axis", () => {
+        expect(rotationTest4.matrix).toStrictEqual(correctRotation4)
+    })
+})
 
 // ORTHOGRAPHIC TEST
 // let orthoTest1 = new FiddleMatrix()
