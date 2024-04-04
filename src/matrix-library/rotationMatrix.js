@@ -8,6 +8,7 @@ class RotationMatrix extends FiddleMatrix{
         const s = Math.sin((theta * Math.PI) / 180.0)
         var c = Math.cos((theta * Math.PI) / 180.0)
         //Due to IEEE precision errors with Math.cos, we need to rectify 6.123...e-17 not being zero (which it should be, because that's the result of cos(90))
+        //Credit to: https://github.com/josdejong/mathjs/issues/447
         if (c == 6.123233995736766e-17){
             c = 0
         }
