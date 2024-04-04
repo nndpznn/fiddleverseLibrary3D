@@ -162,3 +162,10 @@ describe("Rotation Matrix", () => {
 // PROJECTION TEST
 
 // WEBGL/GLSL CONVERSION TEST
+var conversionTest1 = new FiddleMatrix()
+let correctConversion1 = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+describe("WebGL Conversion", () => {
+    it("works for FiddleMatrices", () => {
+        expect(conversionTest1.glForm()).toStrictEqual(correctConversion1)
+    })
+})
