@@ -6,22 +6,18 @@ import { StarShape } from '../fiddleverse/star'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
-#ifdef GL_ES
-precision highp float;
-#endif
+  #ifdef GL_ES
+  precision highp float;
+  #endif
 
-attribute vec3 vertexPosition;
+  attribute vec3 vertexPosition;
 
-// Note this new additional output.
-attribute vec3 vertexColor;
-varying vec4 finalVertexColor;
+  uniform mat4 projectionMatrix;
+  uniform mat4 transform;
 
-uniform mat4 transform;
-
-void main(void) {
-  gl_Position = transform * vec4( vertexPosition, 1.0);
-  finalVertexColor = vec4(vertexColor, 1.0);
-}
+  void main(void) {
+    gl_Position = transform * vec4(vertexPosition, 1.0);
+  }
 `
 
 const FRAGMENT_SHADER = `
@@ -29,13 +25,10 @@ const FRAGMENT_SHADER = `
   precision highp float;
   #endif
 
-  varying vec4 finalVertexColor;
+  uniform vec3 color;
 
   void main(void) {
-    // We vary the color based on the fragment's z coordinate,
-    // which, at this point, ranges from 0 (near) to 1 (far).
-    // Note the ".rgb" subselector.
-    gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
+    gl_FragColor = vec4(color, 1.0);
   }
 `
 

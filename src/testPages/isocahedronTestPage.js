@@ -17,7 +17,7 @@ const VERTEX_SHADER = `
 
   attribute vec3 vertexPosition;
 
-  // uniform mat4 projectionMatrix;
+  uniform mat4 projectionMatrix;
   uniform mat4 transform;
 
   void main(void) {
@@ -133,7 +133,7 @@ const IsocahedronTest = props => {
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
 
-      fiddleverse.translationVector[2] += 0.001
+      fiddleverse.translationVector[2] -= 0.001
 
       fiddleverse.drawScene(currentRotation)
 

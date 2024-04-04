@@ -38,8 +38,6 @@ const FRAGMENT_SHADER = `
   }
 `
 
-
-
 class Fiddleverse {
     constructor(canvas, screenHeight, screenWidth, vertexShader, fragmentShader) {
     // Grab the WebGL rendering context.
@@ -98,6 +96,8 @@ class Fiddleverse {
         gl.enableVertexAttribArray(this.vertexColor)
         this.translationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
 
+        this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
+
         this.translationVector = [0, 0, 0]
         this.scaleVector = [1, 1, 1]
 
@@ -115,10 +115,10 @@ class Fiddleverse {
 
         //set the translation matrix to the instance matrix of the current object
         gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
-        // console.log(object)
+
         // Set the varying colors.
-        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
-        gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
+        gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
         gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
@@ -128,10 +128,10 @@ class Fiddleverse {
 
         //set the translation matrix to the instance matrix of the current object
         gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
+
         // Set the varying colors.
-        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
-        // gl.uniform3f(this.vertexColor, ...fiddle3Dmesh.color)
-        gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
+        gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
         gl.vertexAttribPointer(this.vertexPosition, 3, gl.FLOAT, false, 0, 0)
@@ -152,12 +152,12 @@ class Fiddleverse {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
         let translation = new TranslationMatrix(...this.translationVector)
-  
-        // const transformMatrix = [
-        //   this.scaleVector[0], 0, 0, 0, 
-        //   0, this.scaleVector[1], 0, 0, 
-        //   0, 0, this.scaleVector[2], 0,
-        //   ...this.translationVector, 1]
+
+        gl.uniformMatrix4fv(
+          this.projectionMatrix,
+          gl.FALSE,
+          new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0])
+        )
         
         // Display the objects.
         this.cast.forEach(object => {
