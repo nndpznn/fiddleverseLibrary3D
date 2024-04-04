@@ -21,7 +21,9 @@ class fiddle3D {
         this.colors = []
         for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
             this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
+            // console.log("adding colors...")
         }
+        // console.log(this.colors)
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
 
     }

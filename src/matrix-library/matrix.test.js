@@ -1,6 +1,7 @@
 
 import { FiddleMatrix } from './matrix'
 import OrthoMatrix from './orthographicMatrix'
+import PerspectiveMatrix from './perspectiveMatrix'
 import RotationMatrix from './rotationMatrix'
 import ScaleMatrix from './scaleMatrix'
 import TranslationMatrix from './translationMatrix'
@@ -68,7 +69,7 @@ let correctTranslation = [
 ]
 
 describe("Translation Matrix", () => {
-    it("correctly takes translation inputs and creates a corresponding matrix", () =>{
+    it("correctly takes translation inputs and creates a corresponding matrix", () => {
         expect(translationTest.matrix).toStrictEqual(correctTranslation)
     })
 })
@@ -83,7 +84,7 @@ let correctScale = [
 ]
 
 describe("Scale Matrix", () => {
-    it("correctly takes scalar inputs and creates a corresponding matrix", () =>{
+    it("correctly takes scalar inputs and creates a corresponding matrix", () => {
         expect(scaleTest.matrix).toStrictEqual(correctScale)
     })
 })
@@ -134,32 +135,36 @@ describe("Rotation Matrix", () => {
 })
 
 // ORTHOGRAPHIC TEST
-// let orthoTest1 = new FiddleMatrix()
-// orthoTest1.matrix = [
-//     [3, 2, 1, 0],
-//     [4, 5, 6, 0],
-//     [9, 8, 7, 0],
-//     [0, 0, 0, 1],
-// ]
+let orthoTest1 = new OrthoMatrix(8, 12, 100, 1000)
 
-// let orthoTest2 = new OrthoMatrix("y")
+let correctOrtho = [
+    [1/4,   0,      0,        -0],
+    [  0, 1/6,      0,        -0],
+    [  0,   0, -1/450, -1100/900],
+    [  0,   0,      0,         1],
+]
 
-// let orthoTest3 = orthoTest2.multiply(orthoTest1)
-
-// let correctOrtho = [
-//     [3, 2, 1, 0],
-//     [0, 0, 0, 0],
-//     [9, 8, 7, 0],
-//     [0, 0, 0, 1],
-// ]
-
-// describe("Orthographic projection matrix", () => {
-//     it("correctly removes a certain dimension of a matrix", () => {
-//         expect(orthoTest3.matrix).toStrictEqual(correctOrtho)
-//     })
-// })
+describe("Orthogonal projection matrix", () => {
+    it("correctly processes given plane values to break out of NDC", () => {
+        expect(orthoTest1.matrix).toStrictEqual(correctOrtho)
+    })
+})
 
 // PROJECTION TEST
+let perspectiveTest1 = new PerspectiveMatrix(8, 12, 100, 1000)
+
+let correctPerspective = [
+    [25,     0,     0,       0],
+    [  0, 50/3,     0,       0],
+    [  0,    0, -11/9, -2000/9],
+    [  0,    0,    -1,       0],
+]
+
+describe("Perspective projection matrix", () => {
+    it("correctly processes given plane values to provide a dynamic perspective view", () => {
+        expect(orthoTest1.matrix).toStrictEqual(correctOrtho)
+    })
+})
 
 // WEBGL/GLSL CONVERSION TEST
 var conversionTest1 = new FiddleMatrix()

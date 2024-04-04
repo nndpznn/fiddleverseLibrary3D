@@ -133,7 +133,7 @@ const IsocahedronTest = props => {
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
 
-      fiddleverse.translationVector[2] += 0.01
+      fiddleverse.translationVector[2] += 0.001
 
       fiddleverse.drawScene(currentRotation)
 
