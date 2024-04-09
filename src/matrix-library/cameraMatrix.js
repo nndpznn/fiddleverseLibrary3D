@@ -1,7 +1,20 @@
 import { FiddleMatrix } from "./matrix"
 
-class PerspectiveMatrix extends FiddleMatrix {
-    constructor(leftBound, rightBound, topBound, bottomBound, nearPlane, farPlane){
+class CameraMatrix extends FiddleMatrix {
+    /* 
+    Makes the viewer the center of the universe. Repositions the entire world as though
+    we're moving through it, but really it's moving around us!
+        THE CALCULATION SHOULD WORK THIS WAY: [Perspective][Camera][Transforms]
+        meaning transforms first, then camera, then perspective. 
+    */
+
+    constructor(p, q, up){
+        
+        // Uh.. I guess we need a vector class?
+
+        // const ze = p.subtract(Q).unit
+        // const ye = up.subtract(up.projection(ze)).unit
+        // const xe = ye.cross(ze)
 
         // Start with the identity matrix.
         super()
@@ -10,14 +23,7 @@ class PerspectiveMatrix extends FiddleMatrix {
 
         // Aspect ratio = width / height aka 
 
-        let l = leftBound
-        let r = rightBound
-        let t = topBound
-        let b = bottomBound
-        let n = nearPlane
-        let f = farPlane
-        console.log(`left: ${l}, right: ${r}, top: ${t}, bottom: ${b}, near: ${n}, far: ${f}`)
-
+        // THIS ISN'T RIGHT YET LMAO
         this.matrix = [
             [(2*n)/(r-l),     0,  (r+l)/(r-l),              0],
             [0,     (2*n)/(t-b),  (t+b)/(t-b),              0],
@@ -30,4 +36,4 @@ class PerspectiveMatrix extends FiddleMatrix {
     }
 }
 
-export default PerspectiveMatrix
+export default CameraMatrix
