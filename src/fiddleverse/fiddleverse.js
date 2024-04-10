@@ -1,43 +1,42 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
+import CameraMatrix from '../matrix-library/cameraMatrix'
+import { FiddleMatrix } from '../matrix-library/matrix'
 import OrthoMatrix from '../matrix-library/orthographicMatrix'
 import PerspectiveMatrix from '../matrix-library/perspectiveMatrix'
 // import { getRotationMatrix } from '../matrixFunctions'
 import TranslationMatrix from '../matrix-library/translationMatrix'
+import Vector from '../vector'
 
 //default shaders
-// const VERTEX_SHADER = `
-// #ifdef GL_ES
-// precision highp float;
-// #endif
+const VERTEX_SHADER = `
+#ifdef GL_ES
+precision highp float;
+#endif
 
-// attribute vec3 vertexPosition;
+attribute vec3 vertexPosition;
 
-// // Note this new additional output.
-// attribute vec3 vertexColor;
-// varying vec4 finalVertexColor;
+uniform mat4 projectionMatrix;
+uniform mat4 transform;
+uniform mat4 camera;
 
-// uniform mat4 transform;
+void main(void) {
+  gl_Position = projectionMatrix * camera * transform * vec4(vertexPosition, 1.0);
+}
+`
 
-// void main(void) {
-//   gl_Position = transform * vec4( vertexPosition, 1.0);
-//   finalVertexColor = vec4(vertexColor, 1.0);
-// }
-// `
+ const FRAGMENT_SHADER = `
+   #ifdef GL_ES
+   precision highp float;
+   #endif
+   varying vec4 finalVertexColor;
 
-// const FRAGMENT_SHADER = `
-//   #ifdef GL_ES
-//   precision highp float;
-//   #endif
-
-//   varying vec4 finalVertexColor;
-
-//   void main(void) {
-//     // We vary the color based on the fragment's z coordinate,
-//     // which, at this point, ranges from 0 (near) to 1 (far).
-//     // Note the ".rgb" subselector.
-//     gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
-//   }
-// `
+   void main(void) {
+     // We vary the color based on the fragment's z coordinate,
+     // which, at this point, ranges from 0 (near) to 1 (far).
+     // Note the ".rgb" subselector.
+     gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
+   }
+ `
 
 class Fiddleverse {
     constructor(canvas, screenHeight, screenWidth, vertexShader, fragmentShader) {
@@ -98,6 +97,7 @@ class Fiddleverse {
         this.translationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
 
         this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
+        this.cameraMatrix = gl.getUniformLocation(shaderProgram, 'camera')
 
         this.translationVector = [0, 0, 0]
         this.scaleVector = [1, 1, 1]
@@ -155,13 +155,17 @@ class Fiddleverse {
         let translation = new TranslationMatrix(...this.translationVector)
 
         // new Float32Array(projection.glForm())
-        let projection = new PerspectiveMatrix(1, 1, 1, 1, 1, 1000)
+        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.01, 1000)
         
-        gl.uniformMatrix4fv(
-          this.projectionMatrix,
-          gl.FALSE,
-          new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0])
-        )
+        //gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0]))
+        
+        //NOTE: using the actual perspective code made it so nothing showed up on the canvas, so I'm just using an identity matrix for now
+        gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(new FiddleMatrix().glForm()))
+
+        //This does seem to move and orient the camera, but seems like it might have some weird interactions? (it also could be me missing smt)
+        let camera = new CameraMatrix(new Vector(0, 0, 0), new Vector(0, 0, -1), new Vector(0, 1, 0))
+        //console.log(camera)
+        gl.uniformMatrix4fv(this.cameraMatrix, gl.FALSE, new Float32Array(camera.glForm()))
         
         // Display the objects.
         this.cast.forEach(object => {
