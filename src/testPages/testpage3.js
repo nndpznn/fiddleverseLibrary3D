@@ -11,18 +11,19 @@ import RotationMatrix from '../matrix-library/rotationMatrix'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
+#ifdef GL_ES
+precision highp float;
+#endif
 
-  attribute vec3 vertexPosition;
+attribute vec3 vertexPosition;
 
-  uniform mat4 projectionMatrix;
-  uniform mat4 transform;
+uniform mat4 projectionMatrix;
+uniform mat4 transform;
+uniform mat4 camera;
 
-  void main(void) {
-    gl_Position = transform * vec4(vertexPosition, 1.0);
-  }
+void main(void) {
+  gl_Position = projectionMatrix * camera * transform * vec4(vertexPosition, 1.0);
+}
 `
 
 const FRAGMENT_SHADER = `

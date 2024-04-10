@@ -74,7 +74,7 @@ const SphereTest = props => {
     const icosphereFrame = new IcosphereThing(gl, blueColor)
 
     // Pass the vertices to WebGL.
-    //fiddleverse.add(icosphereTest)
+    fiddleverse.add(icosphereTest)
     fiddleverse.add(icosphereFrame)
     
     fiddleverse.process()
