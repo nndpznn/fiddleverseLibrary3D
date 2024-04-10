@@ -16,7 +16,7 @@ class PerspectiveMatrix extends FiddleMatrix {
         let b = bottomBound
         let n = nearPlane
         let f = farPlane
-        console.log(`left: ${l}, right: ${r}, top: ${t}, bottom: ${b}, near: ${n}, far: ${f}`)
+        // console.log(`left: ${l}, right: ${r}, top: ${t}, bottom: ${b}, near: ${n}, far: ${f}`)
 
         this.matrix = [
             [(2*n)/(r-l),     0,  (r+l)/(r-l),              0],

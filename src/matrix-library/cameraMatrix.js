@@ -20,19 +20,7 @@ class CameraMatrix extends FiddleMatrix {
         // Start with the identity matrix.
         super()
 
-        // Defined by six numbers: Left, Right, Top, Bottom, Far, and Near.
-
-        // Aspect ratio = width / height aka 
-
-        /* THIS ISN'T RIGHT YET LMAO
-        this.matrix = [
-            [(2*n)/(r-l),     0,  (r+l)/(r-l),              0],
-            [0,     (2*n)/(t-b),  (t+b)/(t-b),              0],
-            [0,               0, -(f+n)/(f-n), -(2*n*f)/(f-n)],
-            [0,               0,         -1,              0],
-        ]*/
-
-        console.log(p, xe, ye, ze, xe.multiply(p.x))
+        // console.log(p, xe, ye, ze, xe.multiply(p.x))
 
         // assuming the arguments are all vectors (they should be), this should be the correct matrix
         this.matrix = [

@@ -4,7 +4,7 @@ class RotationMatrix extends FiddleMatrix{
     constructor(theta, x, y, z){
         //Rotation matrix for the angle theta on the arbitrary axis (x, y, z) - Credit to Dondi's barebones playground code
         super()
-        const axisLength = Math.sqrt(x * x + y * y + z * z)
+        const axisLength = Math.sqrt((x * x) + (y * y) + (z * z))
         const s = Math.sin((theta * Math.PI) / 180.0)
         var c = Math.cos((theta * Math.PI) / 180.0)
         //Due to IEEE precision errors with Math.cos, we need to rectify 6.123...e-17 not being zero (which it should be, because that's the result of cos(90))

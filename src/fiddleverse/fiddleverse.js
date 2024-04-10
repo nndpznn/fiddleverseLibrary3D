@@ -92,8 +92,13 @@ class Fiddleverse {
         // Hold on to the important variables within the shaders.
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
         gl.enableVertexAttribArray(this.vertexPosition)
+
+        this.vertexColorArray = gl.getUniformLocation(this.shaderProgram, 'vertexColor')
+        gl.enableVertexAttribArray(this.vertexColorArray)
+
         this.vertexColor = gl.getUniformLocation(this.shaderProgram, 'color')
         gl.enableVertexAttribArray(this.vertexColor)
+
         this.translationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
 
         this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
@@ -155,12 +160,12 @@ class Fiddleverse {
         let translation = new TranslationMatrix(...this.translationVector)
 
         // new Float32Array(projection.glForm())
-        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.01, 1000)
+        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.01, 10)
         
         //gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0]))
         
         //NOTE: using the actual perspective code made it so nothing showed up on the canvas, so I'm just using an identity matrix for now
-        gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(new FiddleMatrix().glForm()))
+        gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(projection.glForm()))
 
         //This does seem to move and orient the camera, but seems like it might have some weird interactions? (it also could be me missing smt)
         let camera = new CameraMatrix(new Vector(0, 0, 0), new Vector(0, 0, -1), new Vector(0, 1, 0))

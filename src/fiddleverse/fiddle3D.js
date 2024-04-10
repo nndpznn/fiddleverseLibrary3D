@@ -21,9 +21,7 @@ class fiddle3D {
         this.colors = []
         for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
             this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
-            // console.log("adding colors...")
         }
-        // console.log(this.colors)
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
 
     }
@@ -52,24 +50,25 @@ class fiddle3D {
         NOTE: Because we need to use this function to propogate the translations through the list of children, WE CANNOT USE MESHTHINGS IN THE CHILDREN LIST
         */
         this.instanceTransformation = newMatrix.multiply(this.instanceTransformation)
+        console.log(this.instanceTransformation.transformMatrix)
 
-        this.propogateTranslations(this.instanceTransformation)
+        this.propogateTranslations(newMatrix)
     }
 
-    propogateTranslations(parentMatrix){
+    propogateTranslations(matrixChange){
         /**
          * Propogates parent translations to any children if possible
          */
         if (this.children.length > 0) {
             this.children.forEach(child => {
-                child.setInstanceTransformation(parentMatrix.multiply(child.instanceTransformation))
+                child.setInstanceTransformation(matrixChange)
             })
         }
     }
 
     add(fiddle3D) {
         this.children.push(fiddle3D)
-        this.propogateTranslations(this.instanceTransformation)
+        fiddle3D.instanceTransformation = this.instanceTransformation.multiply(fiddle3D.instanceTransformation)
     }
 
     remove(fiddle3D) {

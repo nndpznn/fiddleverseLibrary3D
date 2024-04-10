@@ -16,6 +16,8 @@ precision highp float;
 #endif
 
 attribute vec3 vertexPosition;
+attribute vec3 vertexColor;
+varying vec3 pixelVertexColor;
 
 uniform mat4 projectionMatrix;
 uniform mat4 transform;
@@ -23,6 +25,7 @@ uniform mat4 camera;
 
 void main(void) {
   gl_Position = projectionMatrix * camera * transform * vec4(vertexPosition, 1.0);
+  pixelVertexColor = vertexColor;
 }
 `
 
@@ -33,8 +36,11 @@ const FRAGMENT_SHADER = `
 
   uniform vec3 color;
 
+  varying vec4 pixelVertexColor;
+
   void main(void) {
     gl_FragColor = vec4(color, 1.0);
+
   }
 `
 
@@ -61,34 +67,22 @@ const IsocahedronTest = props => {
     const gl = fiddleverse.gl
 
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
-    const grayColor = {r:0.3,g:0.3,b:0.3}
-
-    // const isocahedron = new dondiShape(gl)
-    // isocahedron.wireframe = false
-    // const isocahedronFrame = new dondiShape(gl, blueColor)
-    // isocahedron.add(isocahedronFrame)
-
-    // const cubeThing = new cubeShape(gl, grayColor, 0.5, {x: 0, y: 0, z: 0})
-    // cubeThing.wireframe = false
-    // const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
-    // cubeTest.wireframe = true
+    const grayColor = {r: 0.3,  g: 0.3,  b: 0.3}
 
     const octocylinderTest = new octocylinderShape(gl, grayColor)
     octocylinderTest.wireframe = false
 
     const octocylinderOutline = new octocylinderShape(gl, blueColor)
     octocylinderOutline.wireframe = true
+
     octocylinderTest.add(octocylinderOutline)
 
-    const tiltMatrix = new RotationMatrix(-45, 1, 0, 0)
-    // octocylinderTest.setInstanceTransformation(tiltMatrix)
+    const tiltMatrix = new RotationMatrix(0, 1, 0, 0)
+    octocylinderTest.setInstanceTransformation(tiltMatrix)
 
     // Pass the vertices to WebGL.
-    // fiddleverse.add(isocahedron.meshThing(gl))
-    // fiddleverse.add(isocahedronFrame.meshThing(gl))
-    // fiddleverse.add(cubeTest.meshThing(gl))
-    // fiddleverse.add(cubeThing.meshThing(gl))
     fiddleverse.add(octocylinderTest)
+    // fiddleverse.add(octocylinderOutline)
     
     fiddleverse.process()
 
@@ -134,21 +128,25 @@ const IsocahedronTest = props => {
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
 
-      fiddleverse.translationVector[2] -= 0.00001
+      fiddleverse.translationVector[0] -= 0.01
 
-      fiddleverse.drawScene(currentRotation)
-
-      if (fiddleverse.translationVector[0] > 3.0) {
-        fiddleverse.translationVector[0] = -3.0
+      if (fiddleverse.translationVector[0] < -0.9) {
+        fiddleverse.translationVector[0] += 1.8
       }
 
-      if (fiddleverse.translationVector[1] < -5.0) {
-        fiddleverse.translationVector[1] = 5.0
+      if (fiddleverse.translationVector[1] < -.9) {
+        fiddleverse.translationVector[1] = 1
+      }
+
+      if (fiddleverse.translationVector[2] < -5.0) {
+        fiddleverse.translationVector[2] = 5.0
       }
 
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE
       }
+
+      fiddleverse.drawScene(currentRotation)
 
       // Request the next frame.
       previousTimestamp = timestamp
