@@ -7,7 +7,7 @@ import './App.css'
 
 import Sandbox from './Sandbox'
 import PitchedScene from './PitchedScene'
-import IsocahedronTest from './testPages/isocahedronTestPage'
+import MainTest from './testPages/mainTestPage'
 import TestPage3 from './testPages/testpage3'
 import SphereTest from './testPages/wingTestPage'
 import StarTest from './testPages/starPage'
@@ -16,10 +16,10 @@ const classNamePicker = ({ isActive }) => (isActive ? 'current' : null)
 
 const Greeting = () => (
   <article>
-    <h1>This is starter code only!</h1>
+    <h1>Into the Fiddleverse.</h1>
 
     <p>
-      Make sure to take this apart and put it back with a better design once you’ve gotten the hang of WebGL and GLSL.
+      Welcome to the custom graphics repository of Nolan Nguyen, Dylan Suzuki, JD Elia, and Allen Boyce.
     </p>
   </article>
 )
@@ -28,28 +28,28 @@ const App = () => {
   return (
     <article className="App">
       <nav>
-        <NavLink className={classNamePicker} to="/sandbox">
+        {/* <NavLink className={classNamePicker} to="/sandbox">
           Sandbox Scene
-        </NavLink>
+        </NavLink> */}
 
-        <NavLink className={classNamePicker} to="/pitched">
+        <NavLink style={{ textDecoration: 'none', color: '#2980d6' }} className={classNamePicker} to="/pitched">
           Pitched Scene
         </NavLink>
 
-        <NavLink className={classNamePicker} to="/isocahedron">
-          Isocahedron Test Page
+        <NavLink style={{ textDecoration: 'none', color: '#2980d6' }} className={classNamePicker} to="/main">
+          MAIN TEST
         </NavLink>
 
-        <NavLink className={classNamePicker} to="/sphere">
-          Sphere Test Page
+        <NavLink style={{ textDecoration: 'none', color: '#2980d6' }} className={classNamePicker} to="/sphere">
+          SPHERE TEST
         </NavLink>
 
-        <NavLink className={classNamePicker} to="/testpage3">
-          Wing and Asteroid Page
+        <NavLink style={{ textDecoration: 'none', color: '#2980d6' }} className={classNamePicker} to="/testpage3">
+          WING/RANDOM ASTEROID TEST
         </NavLink>
 
-        <NavLink className={classNamePicker} to="/star">
-          Star Page
+        <NavLink style={{ textDecoration: 'none', color: '#2980d6'}} className={classNamePicker} to="/star">
+          STAR TEST
         </NavLink>
       </nav>
 
@@ -58,7 +58,7 @@ const App = () => {
           <Route path="" element={<Greeting />} />
           <Route path="sandbox" element={<Sandbox />} />
           <Route path="pitched" element={<PitchedScene />} />
-          <Route path="isocahedron" element={<IsocahedronTest />} />
+          <Route path="main" element={<MainTest />} />
           <Route path="sphere" element={<SphereTest />} />
           <Route path="testpage3" element={<TestPage3 />} />
           <Route path="star" element={<StarTest />} />

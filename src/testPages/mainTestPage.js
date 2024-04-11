@@ -2,10 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
-import { dondiShape } from '../fiddleverse/dondiShape'
-import { cubeShape } from '../fiddleverse/cube'
 import { octocylinderShape } from '../fiddleverse/octocylinder'
-import OrthoMatrix from '../matrix-library/orthographicMatrix'
 import RotationMatrix from '../matrix-library/rotationMatrix'
 
 
@@ -48,7 +45,7 @@ const FRAGMENT_SHADER = `
  * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
  * the useEffect hook.
  */
-const IsocahedronTest = props => {
+const MainTest = props => {
 
   const screenHeight = 6
   const screenWidth = 10
@@ -130,8 +127,8 @@ const IsocahedronTest = props => {
 
       fiddleverse.translationVector[0] -= 0.01
 
-      if (fiddleverse.translationVector[0] < -0.9) {
-        fiddleverse.translationVector[0] += 1.8
+      if (fiddleverse.translationVector[0] < -0.5) {
+        fiddleverse.translationVector[0] = 1
       }
 
       if (fiddleverse.translationVector[1] < -.9) {
@@ -180,4 +177,4 @@ const IsocahedronTest = props => {
   )
 }
 
-export default IsocahedronTest
+export default MainTest
