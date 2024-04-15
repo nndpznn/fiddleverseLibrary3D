@@ -55,6 +55,27 @@ const icosahedron = () => {
       ]
     }
   }
+
+  const computeTriangleNormals = protoGeometry => {
+    const result = []
+
+    protoGeometry.facesByIndex.forEach(face => {
+      const p0 = new Vector(protoGeometry.vertices[face[0]])
+      const p1 = new Vector(protoGeometry.vertices[face[1]])
+      const p2 = new Vector(protoGeometry.vertices[face[1]])
+
+      const v1 = p1.subtract(p0)
+      const v2 = p2.subtract(p0)
+
+      const N = v1.cross(v2)
+
+      result.push(...N.elements)
+      result.push(...N.elements)
+      result.push(...N.elements)
+    })
+
+    return result
+  }
   
   /**
    * Utility function for turning our nascent geometry object into a “raw” coordinate array
@@ -95,5 +116,5 @@ const icosahedron = () => {
     return result
   }
   
-  export { icosahedron, toRawTriangleArray, toRawLineArray }
+  export { icosahedron, toRawTriangleArray, toRawLineArray, computeTriangleNormals }
   

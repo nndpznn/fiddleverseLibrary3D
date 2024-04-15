@@ -6,6 +6,10 @@ import { octocylinderShape } from '../fiddleverse/octocylinder'
 import RotationMatrix from '../matrix-library/rotationMatrix'
 
 
+/* ISSUES:
+    - The z-axis has strange behaviors. When moving back and forth through it, the near
+    and far plane appear to be very limiting. The animation is not nearly as smooth, as well.
+*/
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
 #ifdef GL_ES
@@ -133,10 +137,6 @@ const MainTest = props => {
 
       if (fiddleverse.translationVector[1] < -.9) {
         fiddleverse.translationVector[1] = 1
-      }
-
-      if (fiddleverse.translationVector[2] < -5.0) {
-        fiddleverse.translationVector[2] = 5.0
       }
 
       if (currentRotation >= FULL_CIRCLE) {
