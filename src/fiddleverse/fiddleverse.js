@@ -160,9 +160,10 @@ class Fiddleverse {
         let translation = new TranslationMatrix(...this.translationVector)
 
         // new Float32Array(projection.glForm())
-        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.01, 10)
+        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.0001, 10000)
+        // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(projection.glForm()))
         
-        //gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0]))
+        // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0]))
         
         //NOTE: using the actual perspective code made it so nothing showed up on the canvas, so I'm just using an identity matrix for now
         gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(new FiddleMatrix().glForm()))

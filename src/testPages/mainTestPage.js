@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
 import { octocylinderShape } from '../fiddleverse/octocylinder'
 import RotationMatrix from '../matrix-library/rotationMatrix'
+import TranslationMatrix from '../matrix-library/translationMatrix'
 
 
 /* ISSUES:
@@ -102,8 +103,9 @@ const MainTest = props => {
     const FRAMES_PER_SECOND = 60
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
-    const DEGREES_PER_MILLISECOND = 0.033
+    const DEGREES_PER_MILLISECOND = 0.5
     const FULL_CIRCLE = 360.0
+    let moveRate = -0.01
 
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
@@ -129,7 +131,17 @@ const MainTest = props => {
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
 
-      fiddleverse.translationVector[0] -= 0.01
+      // fiddleverse.translationVector[0] -= 0.01
+
+      const rotateOctoX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
+      const rotateOctoY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
+      const rotateOctoZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+      octocylinderTest.setInstanceTransformation(rotateOctoX)
+      octocylinderTest.setInstanceTransformation(rotateOctoY)
+      octocylinderTest.setInstanceTransformation(rotateOctoZ)
+
+      const moveMatrix = new TranslationMatrix(moveRate, 0, 0)
+      // octocylinderTest.setInstanceTransformation(moveMatrix)
 
       if (fiddleverse.translationVector[0] < -0.5) {
         fiddleverse.translationVector[0] = 1
