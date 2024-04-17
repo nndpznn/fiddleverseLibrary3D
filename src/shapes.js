@@ -1,3 +1,5 @@
+import Vector from './vector.js'
+
 /*
  * This module defines/generates vertex arrays for certain predefined shapes.
  * The "shapes" are returned as indexed vertices, with utility functions for
@@ -62,7 +64,7 @@ const icosahedron = () => {
     protoGeometry.facesByIndex.forEach(face => {
       const p0 = new Vector(protoGeometry.vertices[face[0]])
       const p1 = new Vector(protoGeometry.vertices[face[1]])
-      const p2 = new Vector(protoGeometry.vertices[face[1]])
+      const p2 = new Vector(protoGeometry.vertices[face[2]])
 
       const v1 = p1.subtract(p0)
       const v2 = p2.subtract(p0)

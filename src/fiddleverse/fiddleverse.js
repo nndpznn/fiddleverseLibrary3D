@@ -3,7 +3,6 @@ import CameraMatrix from '../matrix-library/cameraMatrix'
 import { FiddleMatrix } from '../matrix-library/matrix'
 // import OrthoMatrix from '../matrix-library/orthographicMatrix'
 import PerspectiveMatrix from '../matrix-library/perspectiveMatrix'
-// import { getRotationMatrix } from '../matrixFunctions'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 import Vector from '../vector'
 
