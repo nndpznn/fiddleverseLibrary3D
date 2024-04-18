@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
 import { StarShape } from '../fiddleverse/star'
+import RotationMatrix from '../matrix-library/rotationMatrix'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -88,15 +89,10 @@ const StarTest = props => {
     const starOutline = new StarShape(gl, 0.3, blueColor, {x:0,y:0,z:0})
     starOutline.wireframe = true
 
+    starTest.add(starOutline)
     // Pass the vertices to WebGL.
-    // fiddleverse.add(isocahedron.meshThing(gl))
-    // fiddleverse.add(isocahedronFrame.meshThing(gl))
-    // fiddleverse.add(cubeTest.meshThing(gl))
-    // fiddleverse.add(cubeThing.meshThing(gl))
     fiddleverse.add(starTest)
-    fiddleverse.add(starOutline)
-
-    // fiddleverse.remove(isocahedron.meshThing(gl))
+    // fiddleverse.add(starOutline)
     
     fiddleverse.process()
 
@@ -115,7 +111,7 @@ const StarTest = props => {
     const FRAMES_PER_SECOND = 60
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
-    const DEGREES_PER_MILLISECOND = 0.033
+    const DEGREES_PER_MILLISECOND = 0.5
     const FULL_CIRCLE = 360.0
 
     const advanceScene = timestamp => {
@@ -141,7 +137,15 @@ const StarTest = props => {
 
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-      fiddleverse.translationVector[0] += 0.00
+
+
+      const rotateOctoX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
+      const rotateOctoY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
+      const rotateOctoZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+      starTest.setInstanceTransformation(rotateOctoX)
+      starTest.setInstanceTransformation(rotateOctoY)
+      starTest.setInstanceTransformation(rotateOctoZ)
+
       fiddleverse.drawScene(currentRotation)
 
       if (fiddleverse.translationVector[0] > 1.0) {

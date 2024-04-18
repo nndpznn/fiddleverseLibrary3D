@@ -5,6 +5,7 @@ import { Fiddleverse } from '../fiddleverse/fiddleverse'
 import { dondiShape } from '../fiddleverse/dondiShape'
 import { cubeShape } from '../fiddleverse/cube'
 import IcosphereThing from '../fiddleverse/IcosphereThing'
+import RotationMatrix from '../matrix-library/rotationMatrix'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -99,7 +100,7 @@ const SphereTest = props => {
 
     // Pass the vertices to WebGL.
     fiddleverse.add(icosphereTest)
-    fiddleverse.add(icosphereFrame)
+    // fiddleverse.add(icosphereFrame)
     
     fiddleverse.process()
 
@@ -118,7 +119,7 @@ const SphereTest = props => {
     const FRAMES_PER_SECOND = 60
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
-    const DEGREES_PER_MILLISECOND = 0.033
+    const DEGREES_PER_MILLISECOND = 0.5
     const FULL_CIRCLE = 360.0
 
     const advanceScene = timestamp => {
@@ -144,7 +145,14 @@ const SphereTest = props => {
 
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-      fiddleverse.translationVector[0] += 0.00
+      
+      const rotateOctoX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
+      const rotateOctoY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
+      const rotateOctoZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+      icosphereTest.setInstanceTransformation(rotateOctoX)
+      icosphereTest.setInstanceTransformation(rotateOctoY)
+      icosphereTest.setInstanceTransformation(rotateOctoZ)
+
       fiddleverse.drawScene(currentRotation)
 
       if (fiddleverse.translationVector[0] > 1.0) {
