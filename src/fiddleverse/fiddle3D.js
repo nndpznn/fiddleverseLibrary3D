@@ -17,11 +17,11 @@ class fiddle3D {
         this.rawVertices = toRawLineArray(this)
 
         this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
-        this.colors = []
-        for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
-            this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
-        }
-        // this.colors = computeTriangleNormals(this)
+        // this.colors = []
+        // for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
+        //     this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
+        // }
+        this.colors = computeTriangleNormals(this)
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
         this.normalsBuffer = initVertexBuffer(this.gl, computeTriangleNormals(this))
 
@@ -36,11 +36,11 @@ class fiddle3D {
         this.rawVertices = newWireframeValue ? toRawLineArray(this) : toRawTriangleArray(this)
         
         this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
-        this.colors = []
-        for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
-            this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
-        }
-        // this.colors = computeTriangleNormals(this)
+        // this.colors = []
+        // for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
+        //     this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
+        // }
+        this.colors = computeTriangleNormals(this)
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
         this.normalsBuffer = initVertexBuffer(this.gl, computeTriangleNormals(this))
     }

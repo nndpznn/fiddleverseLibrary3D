@@ -91,7 +91,7 @@ class Fiddleverse {
         gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0)
 
         // Set the varying colors.
-        // gl.uniform3f(this.vertexColorArray, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        // gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
         gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
 
@@ -109,7 +109,7 @@ class Fiddleverse {
         gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0)
 
         // Set the varying colors.
-        // gl.uniform3f(this.vertexColorArray, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        // gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
         gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
 

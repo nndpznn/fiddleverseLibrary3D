@@ -40,10 +40,13 @@ void main(void) {
   );
 
   gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
-  pixelVertexColor = vec4(
-    reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
-    1.0
-  );
+
+  // pixelVertexColor = vec4(
+  //   reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
+  //   1.0
+  // );
+
+  pixelVertexColor = vec4(vertexColor, 1.0);
 }
 `
 

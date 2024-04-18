@@ -16,13 +16,35 @@ precision highp float;
 #endif
 
 attribute vec3 vertexPosition;
+attribute vec3 vertexColor;
+varying vec4 pixelVertexColor;
 
-uniform mat4 projectionMatrix;
+attribute vec3 vertexNormal;
+
+uniform mat4 projection;
 uniform mat4 transform;
 uniform mat4 camera;
 
 void main(void) {
-  gl_Position = projectionMatrix * camera * transform * vec4(vertexPosition, 1.0);
+  // Hardcoded light direction.
+
+  vec3 lightDirection = vec3(1.0, 0.0, 0.0);
+
+  vec4 transformedNormal = transform * vec4(vertexNormal, 1.0);
+
+  float reflectedLight = dot(
+    normalize(lightDirection), 
+    normalize(vec3(transformedNormal))
+  );
+
+  gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
+
+  // pixelVertexColor = vec4(
+  //   reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
+  //   1.0
+  // );
+
+  pixelVertexColor = vec4(vertexColor, 1.0);
 }
 `
 
@@ -31,10 +53,12 @@ const FRAGMENT_SHADER = `
   precision highp float;
   #endif
 
-  uniform vec3 color;
+  // uniform vec3 color;
+
+  varying vec4 pixelVertexColor;
 
   void main(void) {
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = pixelVertexColor;
   }
 `
 
