@@ -27,7 +27,6 @@ class FiddleMatrix {
     set matrix(newMatrix) {
         // This better be a goddamn 4x4.
         this.transformMatrix = newMatrix
-        // console.log(this.transformMatrix)
 
         // Also re-initializing these attributes, just in case.
         this.updateRC()

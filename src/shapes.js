@@ -58,13 +58,27 @@ const icosahedron = () => {
     }
   }
 
+  const computeFaceNormals = protoGeometry =>
+  protoGeometry.facesByIndex.map(face => {
+    // Compute the triangle normal...
+    const p0 = new Vector(...protoGeometry.vertices[face[0]])
+    const p1 = new Vector(...protoGeometry.vertices[face[1]])
+    const p2 = new Vector(...protoGeometry.vertices[face[2]])
+
+    const v1 = p1.subtract(p0)
+    const v2 = p2.subtract(p0)
+
+    // Formula from book "Real-time 3D Graphics" "Normals" section.
+    return v1.cross(v2)
+  })
+
   const computeTriangleNormals = protoGeometry => {
     const result = []
 
     protoGeometry.facesByIndex.forEach(face => {
-      const p0 = new Vector(protoGeometry.vertices[face[0]])
-      const p1 = new Vector(protoGeometry.vertices[face[1]])
-      const p2 = new Vector(protoGeometry.vertices[face[2]])
+      const p0 = new Vector(...protoGeometry.vertices[face[0]])
+      const p1 = new Vector(...protoGeometry.vertices[face[1]])
+      const p2 = new Vector(...protoGeometry.vertices[face[2]])
 
       const v1 = p1.subtract(p0)
       const v2 = p2.subtract(p0)
@@ -76,6 +90,29 @@ const icosahedron = () => {
       result.push(...N.elements)
     })
 
+    return result
+  }
+
+  const computeVertexNormals = protoGeometry => {
+    const result = []
+  
+    // For every triangle...
+    protoGeometry.facesByIndex.forEach(face => {
+      // For every vertex in that triangle...
+      face.forEach(vertexIndex => {
+        let totalVector = new Vector(0, 0, 0)
+  
+        // Grab every face the vertex is in.
+        protoGeometry.facesByIndex.forEach((face, faceIndex) => {
+          if (face.includes(vertexIndex)) {
+            totalVector = totalVector.add(protoGeometry.faceNormals[faceIndex])
+          }
+        })
+  
+        result.push(...totalVector.unit.elements)
+      })
+    })
+  
     return result
   }
   
@@ -92,6 +129,7 @@ const icosahedron = () => {
       })
     })
   
+    console.log(result)
     return result
   }
   
@@ -118,5 +156,5 @@ const icosahedron = () => {
     return result
   }
   
-  export { icosahedron, toRawTriangleArray, toRawLineArray, computeTriangleNormals }
+  export { icosahedron, toRawTriangleArray, toRawLineArray, computeFaceNormals, computeTriangleNormals, computeVertexNormals }
   

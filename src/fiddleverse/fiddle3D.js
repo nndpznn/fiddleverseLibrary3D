@@ -1,4 +1,4 @@
-import { toRawLineArray, toRawTriangleArray } from "../shapes"
+import { computeTriangleNormals, toRawLineArray, toRawTriangleArray } from "../shapes"
 import { initVertexBuffer } from '../glsl-utilities'
 import { FiddleMatrix } from "../matrix-library/matrix"
 
@@ -17,12 +17,13 @@ class fiddle3D {
         this.rawVertices = toRawLineArray(this)
 
         this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
-
         this.colors = []
         for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
             this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
         }
+        // this.colors = computeTriangleNormals(this)
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
+        this.normalsBuffer = initVertexBuffer(this.gl, computeTriangleNormals(this))
 
     }
 
@@ -35,12 +36,13 @@ class fiddle3D {
         this.rawVertices = newWireframeValue ? toRawLineArray(this) : toRawTriangleArray(this)
         
         this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
-
         this.colors = []
         for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
             this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
         }
+        // this.colors = computeTriangleNormals(this)
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
+        this.normalsBuffer = initVertexBuffer(this.gl, computeTriangleNormals(this))
     }
 
     setInstanceTransformation(newMatrix) {
@@ -50,7 +52,6 @@ class fiddle3D {
         NOTE: Because we need to use this function to propogate the translations through the list of children, WE CANNOT USE MESHTHINGS IN THE CHILDREN LIST
         */
         this.instanceTransformation = newMatrix.multiply(this.instanceTransformation)
-        console.log(this.instanceTransformation.transformMatrix)
 
         this.propogateTranslations(newMatrix)
     }
@@ -82,6 +83,7 @@ class fiddle3D {
             mode: this.wireframeValue ? this.gl.LINES : this.gl.TRIANGLES,
             verticesBuffer: this.verticesBuffer,
             colorsBuffer: this.colorsBuffer,
+            normalsBuffer: this.normalsBuffer,
             children: this.children,
             instanceTransformation: this.instanceTransformation,
         }

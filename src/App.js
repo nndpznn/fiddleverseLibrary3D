@@ -9,7 +9,7 @@ import Sandbox from './Sandbox'
 import PitchedScene from './PitchedScene'
 import MainTest from './testPages/mainTestPage'
 import TestPage3 from './testPages/testpage3'
-import SphereTest from './testPages/wingTestPage'
+import SphereTest from './testPages/spherePage'
 import StarTest from './testPages/starPage'
 
 const classNamePicker = ({ isActive }) => (isActive ? 'current' : null)

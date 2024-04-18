@@ -6,37 +6,6 @@ import PerspectiveMatrix from '../matrix-library/perspectiveMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 import Vector from '../vector'
 
-//default shaders
-// const VERTEX_SHADER = `
-// #ifdef GL_ES
-// precision highp float;
-// #endif
-
-// attribute vec3 vertexPosition;
-
-// uniform mat4 projectionMatrix;
-// uniform mat4 transform;
-// uniform mat4 camera;
-
-// void main(void) {
-//   gl_Position = projectionMatrix * camera * transform * vec4(vertexPosition, 1.0);
-// }
-// `
-
-//  const FRAGMENT_SHADER = `
-//    #ifdef GL_ES
-//    precision highp float;
-//    #endif
-//    varying vec4 finalVertexColor;
-
-//    void main(void) {
-//      // We vary the color based on the fragment's z coordinate,
-//      // which, at this point, ranges from 0 (near) to 1 (far).
-//      // Note the ".rgb" subselector.
-//      gl_FragColor = vec4((1.0 - gl_FragCoord.z) * finalVertexColor.rgb, 1.0);
-//    }
-//  `
-
 class Fiddleverse {
     constructor(canvas, screenHeight, screenWidth, vertexShader, fragmentShader) {
     // Grab the WebGL rendering context.
@@ -91,16 +60,13 @@ class Fiddleverse {
         // Hold on to the important variables within the shaders.
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
         gl.enableVertexAttribArray(this.vertexPosition)
-
-        this.vertexColorArray = gl.getUniformLocation(this.shaderProgram, 'vertexColor')
-        gl.enableVertexAttribArray(this.vertexColorArray)
-
-        this.vertexColor = gl.getUniformLocation(this.shaderProgram, 'color')
+        this.vertexColor = gl.getAttribLocation(this.shaderProgram, 'vertexColor')
         gl.enableVertexAttribArray(this.vertexColor)
 
-        this.translationMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
+        this.vertexNormal = gl.getAttribLocation(shaderProgram, "vertexNormal")
 
-        this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'projectionMatrix')
+        this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'projection')
+        this.transformMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
         this.cameraMatrix = gl.getUniformLocation(shaderProgram, 'camera')
 
         this.translationVector = [0, 0, 0]
@@ -119,10 +85,15 @@ class Fiddleverse {
       if (fiddle3Dmesh.children.length === 0 ) { // THEN NO CHILDREN!
 
         //set the translation matrix to the instance matrix of the current object
-        gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
+        gl.uniformMatrix4fv(this.transformMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.normalsBuffer)
+        gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0)
 
         // Set the varying colors.
-        gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        // gl.uniform3f(this.vertexColorArray, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
+        gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
@@ -132,10 +103,15 @@ class Fiddleverse {
       } else { // THEN CHILDREN!
 
         //set the translation matrix to the instance matrix of the current object
-        gl.uniformMatrix4fv(this.translationMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
+        gl.uniformMatrix4fv(this.transformMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.normalsBuffer)
+        gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0)
 
         // Set the varying colors.
-        gl.uniform3f(this.vertexColor, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        // gl.uniform3f(this.vertexColorArray, fiddle3Dmesh.color.r, fiddle3Dmesh.color.g, fiddle3Dmesh.color.b)
+        gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.colorsBuffer)
+        gl.vertexAttribPointer(this.vertexColor, 3, gl.FLOAT, false, 0, 0)
 
         // Set the varying vertex coordinates.
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.verticesBuffer)
@@ -158,8 +134,7 @@ class Fiddleverse {
 
         let translation = new TranslationMatrix(...this.translationVector)
 
-        // new Float32Array(projection.glForm())
-        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.0001, 10000)
+        // let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.0001, 10000)
         // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(projection.glForm()))
         
         // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array([20, 0, 0, 0, 0, 200.0 / 6.0, 0, 0, 0, 0, -10100.0 / 9900.0, -1, 0, 0, -2000000.0 / 9900.0, 0]))
