@@ -1,4 +1,4 @@
-import { computeTriangleNormals, toRawLineArray, toRawTriangleArray } from "../shapes"
+import { computeFaceNormals, computeTriangleNormals, computeVertexNormals, toRawLineArray, toRawTriangleArray } from "../shapes"
 import { initVertexBuffer } from '../glsl-utilities'
 import { FiddleMatrix } from "../matrix-library/matrix"
 
@@ -13,8 +13,14 @@ class fiddle3D {
 
         this.children = []
 
+        //Visual modifier values
         this.wireframeValue = true
+        this.smoothValue = false
+        this.visualizeNormals = false // THIS PART RE-ASSIGNS COLORS TO THE VERTEX NORMALS. SET IT TO FALSE FOR NORMAL COLORS
+
+
         this.rawVertices = toRawLineArray(this)
+        this.faceNormals = computeFaceNormals(this)
 
         this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
 
@@ -24,11 +30,23 @@ class fiddle3D {
         }
 
         // THIS PART RE-ASSIGNS COLORS TO THE VERTEX NORMALS. COMMENT IT OUT FOR THE OLD COLORS
-        this.colors = computeTriangleNormals(this)
+        if(this.visualizeNormals){
+            this.colors = computeTriangleNormals(this)
+        }
 
+        
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
-        this.normalsBuffer = initVertexBuffer(this.gl, computeTriangleNormals(this))
+        this.normalsBuffer = initVertexBuffer(this.gl, this.smoothValue ? computeVertexNormals(this) : computeTriangleNormals(this))
 
+    }
+
+    get smooth() {
+        return this.smoothValue
+    }
+
+    set smooth(newSmoothValue) {
+        this.smoothValue = newSmoothValue
+        this.normalsBuffer = initVertexBuffer(this.gl, this.smoothValue ? computeVertexNormals(this) : computeTriangleNormals(this))
     }
 
     get wireframe() {
@@ -46,10 +64,12 @@ class fiddle3D {
             this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
         }
 
-        // THIS PART RE-ASSIGNS COLORS TO THE VERTEX NORMALS. COMMENT IT OUT FOR THE OLD COLORS
-        this.colors = computeTriangleNormals(this)
+        
+        if(this.visualizeNormals){
+            this.colors = computeTriangleNormals(this)
+        }
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
-        this.normalsBuffer = initVertexBuffer(this.gl, computeTriangleNormals(this))
+        this.normalsBuffer = initVertexBuffer(this.gl, this.smoothValue ? computeVertexNormals(this) : computeTriangleNormals(this))
     }
 
     setInstanceTransformation(newMatrix) {

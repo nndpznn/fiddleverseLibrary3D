@@ -60,18 +60,43 @@ class Fiddleverse {
         // Hold on to the important variables within the shaders.
         this.vertexPosition = gl.getAttribLocation(this.shaderProgram, 'vertexPosition')
         gl.enableVertexAttribArray(this.vertexPosition)
+        
         this.vertexColor = gl.getAttribLocation(this.shaderProgram, 'vertexColor')
         gl.enableVertexAttribArray(this.vertexColor)
 
-        this.vertexNormal = gl.getAttribLocation(shaderProgram, "vertexNormal")
+        this.vertexNormal = gl.getAttribLocation(this.shaderProgram, "vertexNormal")
+        gl.enableVertexAttribArray(this.vertexNormal)
 
-        this.projectionMatrix = gl.getUniformLocation(shaderProgram, 'projection')
+        this.projectionMatrix = gl.getUniformLocation(this.shaderProgram, 'projection')
         this.transformMatrix = gl.getUniformLocation(this.shaderProgram, 'transform')
-        this.cameraMatrix = gl.getUniformLocation(shaderProgram, 'camera')
+        this.cameraMatrix = gl.getUniformLocation(this.shaderProgram, 'camera')
+        this.lightVector = gl.getUniformLocation(this.shaderProgram, 'light')
 
         this.translationVector = [0, 0, 0]
         this.scaleVector = [1, 1, 1]
+        this.lightSource = [1, 0, 0]
+        this.camera = [new Vector(0, 0, 0), new Vector(0, 0, -1), new Vector(0, 1, 0)]
 
+    }
+
+    set light(newLight) {
+      this.lightSource = newLight
+      this.gl.uniform3f(this.lightVector, ...new Float32Array(this.lightSource))
+    }
+
+    set cameraPosition(newPosition) {
+      this.camera[1] = new Vector(...newPosition)
+      this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
+    }
+
+    set cameraView(newView) {
+      this.camera[0] = new Vector(...newView)
+      this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
+    }
+
+    set cameraUpOrientation(newUp) {
+      this.camera[2] = new Vector(...newUp)
+      this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
     }
 
     /*
@@ -87,6 +112,7 @@ class Fiddleverse {
         //set the translation matrix to the instance matrix of the current object
         gl.uniformMatrix4fv(this.transformMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
 
+        //set the vertex normals
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.normalsBuffer)
         gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0)
 
@@ -105,6 +131,7 @@ class Fiddleverse {
         //set the translation matrix to the instance matrix of the current object
         gl.uniformMatrix4fv(this.transformMatrix, gl.FALSE, new Float32Array(fiddle3Dmesh.instanceTransformation.glForm()))
 
+        //set the vertex normals
         gl.bindBuffer(gl.ARRAY_BUFFER, fiddle3Dmesh.normalsBuffer)
         gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0)
 
@@ -143,9 +170,10 @@ class Fiddleverse {
         gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(new FiddleMatrix().glForm()))
 
         //This does seem to move and orient the camera, but seems like it might have some weird interactions? (it also could be me missing smt)
-        let camera = new CameraMatrix(new Vector(0, 0, 0), new Vector(0, 0, -1), new Vector(0, 1, 0))
         //console.log(camera)
-        gl.uniformMatrix4fv(this.cameraMatrix, gl.FALSE, new Float32Array(camera.glForm()))
+        gl.uniformMatrix4fv(this.cameraMatrix, gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
+
+        gl.uniform3f(this.lightVector, ...new Float32Array(this.lightSource))
         
         // Display the objects.
         this.cast.forEach(object => {

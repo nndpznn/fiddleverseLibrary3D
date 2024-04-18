@@ -66,23 +66,22 @@ class IcosphereThing extends fiddle3D {
         let firstSmaller = p1 < p2
         let smallerPoint = firstSmaller ? p1: p2
         let largerPoint = firstSmaller ? p2: p1
-        console.log("Generating midpoint from", p1, p2)
+        //console.log("Generating midpoint from", p1, p2)
         //Add the points together and divide them by 2 to get the midpoint
         let mid = [(smallerPoint[0] + largerPoint[0])/2,
         (smallerPoint[1] + largerPoint[1])/2, 
         (smallerPoint[2] + largerPoint[2])/2, ]
 
-        console.log("Midpoint is: ", mid)
+        //console.log("Midpoint is: ", mid)
         //Put new midpoint into the vertex array
         icosphereVertices.push(mid)
         //Increment vIndex so we have a reference to the new point and return it
         vIndex++
         return vIndex
     }
-
     //For each existing triangle in the icosahedron, we need to subdivide that triangle into 4 triangles
     for(var i = 0; i < icosaTriangles.length; i++){
-      console.log("Spltting triangle: ", icosaTriangles[i])
+      //console.log("Spltting triangle: ", icosaTriangles[i])
       //Grab the vertices in the current triangle
       const v1 = icosaVertices[icosaTriangles[i][0]]
       const v2 = icosaVertices[icosaTriangles[i][1]]
@@ -97,8 +96,8 @@ class IcosphereThing extends fiddle3D {
       icosphereTriangles.push([icosaTriangles[i][2], m3, m2])
       icosphereTriangles.push([m1, m2, m3])
     }
-    console.log(icosphereVertices)
-    console.log(icosphereTriangles)
+    //console.log(icosphereVertices)
+    //console.log(icosphereTriangles)
 
    //So that the icosphere doesn't just become a flat subdivided icosahedron, we need to normalize the points so that they are equidistant from the center
    for (var i = 0; i < icosphereVertices.length; i++) {

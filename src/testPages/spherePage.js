@@ -22,27 +22,28 @@ attribute vec3 vertexNormal;
 uniform mat4 projection;
 uniform mat4 transform;
 uniform mat4 camera;
+uniform vec3 light;
 
 void main(void) {
   // Hardcoded light direction.
-
   vec3 lightDirection = vec3(1.0, 0.0, 0.0);
+  lightDirection = light;
 
-  vec4 transformedNormal = transform * vec4(vertexNormal, 1.0);
+  vec3 transformedNormal = mat3(transform) * vertexNormal;
 
   float reflectedLight = dot(
     normalize(lightDirection), 
-    normalize(vec3(transformedNormal))
+    normalize(transformedNormal)
   );
 
   gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
 
-  // pixelVertexColor = vec4(
-  //   reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
-  //   1.0
-  // );
+  pixelVertexColor = vec4(
+     reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
+     1.0
+  );
 
-  pixelVertexColor = vec4(vertexColor, 1.0);
+  //pixelVertexColor = vec4(vertexColor, 1.0);
 }
 `
 
@@ -51,7 +52,7 @@ const FRAGMENT_SHADER = `
   precision highp float;
   #endif
 
-  // uniform vec3 color;
+  uniform vec3 color;
 
   varying vec4 pixelVertexColor;
 
@@ -81,21 +82,12 @@ const SphereTest = props => {
     // Grab the WebGL rendering context.
     const fiddleverse = new Fiddleverse(canvas, screenHeight, screenWidth, VERTEX_SHADER, FRAGMENT_SHADER)
     const gl = fiddleverse.gl
-
-    const isocahedron = new dondiShape(gl)
-    isocahedron.wireframe = false
-
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const grayColor = {r: 0.25, g: 0.25, b: 0.25}
-    const isocahedronFrame = new dondiShape(gl, blueColor)
-
-    isocahedron.add(isocahedronFrame)
-
-    const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
-    cubeTest.wireframe = true
 
     const icosphereTest = new IcosphereThing(gl, grayColor)
     icosphereTest.wireframe = false
+    icosphereTest.smooth = false
     const icosphereFrame = new IcosphereThing(gl, blueColor)
 
     // Pass the vertices to WebGL.
@@ -103,6 +95,9 @@ const SphereTest = props => {
     // fiddleverse.add(icosphereFrame)
     
     fiddleverse.process()
+    fiddleverse.light = [0, 0, -1]
+    fiddleverse.cameraPosition = [1, 0, -1]
+    fiddleverse.cameraView = [0.5, 0, 0]
 
     /*
      * Displays the scene.

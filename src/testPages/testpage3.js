@@ -200,6 +200,7 @@ const TestPage3 = props => {
       <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
+      <h1>NOTE - the wing frame is offset on purpose to test child transformation</h1>
     </article>
   )
 }
