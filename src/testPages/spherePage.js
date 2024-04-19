@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 
 // import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
-import { dondiShape } from '../fiddleverse/dondiShape'
-import { cubeShape } from '../fiddleverse/cube'
 import IcosphereThing from '../fiddleverse/IcosphereThing'
 import RotationMatrix from '../matrix-library/rotationMatrix'
 
@@ -69,6 +67,7 @@ const SphereTest = props => {
 
   const screenHeight = 6
   const screenWidth = 10
+  var smoothOrNah = true
 
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
@@ -87,17 +86,17 @@ const SphereTest = props => {
 
     const icosphereTest = new IcosphereThing(gl, grayColor)
     icosphereTest.wireframe = false
-    icosphereTest.smooth = false
+    icosphereTest.smooth = true
     const icosphereFrame = new IcosphereThing(gl, blueColor)
 
     // Pass the vertices to WebGL.
     fiddleverse.add(icosphereTest)
-    // fiddleverse.add(icosphereFrame)
+    fiddleverse.add(icosphereFrame)
     
     fiddleverse.process()
     fiddleverse.light = [0, 0, -1]
-    fiddleverse.cameraPosition = [1, 0, -1]
-    fiddleverse.cameraView = [0.5, 0, 0]
+    fiddleverse.cameraPosition = [0, 0, -1]
+    fiddleverse.cameraView = [0, 0, 0]
 
     /*
      * Displays the scene.
@@ -173,19 +172,39 @@ const SphereTest = props => {
           previousTimestamp = null
           window.requestAnimationFrame(advanceScene)
         }
+      },
+
+      toggleGeometry: () => {
+        fiddleverse.toggleGeometry()
+        window.requestAnimationFrame(advanceScene)
+
       }
     })
-  }, [canvasRef])
+  }, [canvasRef, smoothOrNah])
 
   // Set up the rotation toggle: clicking on the canvas does it.
   const handleCanvasClick = event => fiddleverse.toggleRotation()
 
+  const handleToggleGeometry = event => {
+    fiddleverse.toggleGeometry()
+    smoothOrNah = !smoothOrNah
+  }
+
   return (
     <article>
       {/* Yes, still square. */}
+      {/* <h1>This sphere makes use of our {smoothOrNah ? "smooth" : "faceted"} geometry.</h1> */}
+      <h1>This sphere makes use of our smooth/faceted geometry.</h1>
       <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
+
+      <button disabled={!fiddleverse} onClick={handleToggleGeometry}>
+            Toggle Geometry
+      </button>
+
+      <h2>(It has to be spinning to see the changes.)</h2>
+
     </article>
   )
 }

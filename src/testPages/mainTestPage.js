@@ -90,7 +90,7 @@ const MainTest = props => {
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const grayColor = {r: 0.3,  g: 0.3,  b: 0.3}
 
-    const octocylinderTest = new octocylinderShape(gl, grayColor)
+    const octocylinderTest = new octocylinderShape(gl, blueColor)
     octocylinderTest.wireframe = false
 
     const octocylinderOutline = new octocylinderShape(gl, blueColor)
@@ -106,6 +106,9 @@ const MainTest = props => {
     // fiddleverse.add(octocylinderOutline)
     
     fiddleverse.process()
+    fiddleverse.light = [0, 0, -1]
+    fiddleverse.cameraPosition = [0, 0, -1]
+    fiddleverse.cameraView = [0, 0, 0]
 
     /*
      * Displays the scene.
@@ -195,8 +198,14 @@ const MainTest = props => {
     })
   }, [canvasRef])
 
+
   // Set up the rotation toggle: clicking on the canvas does it.
   const handleCanvasClick = event => fiddleverse.toggleRotation()
+
+  const switchCamera = event => {
+    fiddleverse.cameraPosition = [1, 0, -1]
+    console.log("HEY!")
+  }
 
   return (
     <article>
@@ -204,6 +213,11 @@ const MainTest = props => {
       <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
+
+      <button disabled={!fiddleverse} onClick={switchCamera}>
+            Switch Camera
+      </button>
+
     </article>
   )
 }

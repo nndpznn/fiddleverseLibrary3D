@@ -84,14 +84,26 @@ class Fiddleverse {
       this.gl.uniform3f(this.lightVector, ...new Float32Array(this.lightSource))
     }
 
+    get cameraPosition() {
+      return this.camera[1]
+    }
+
     set cameraPosition(newPosition) {
       this.camera[1] = new Vector(...newPosition)
       this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
     }
 
+    get cameraView() {
+      return this.camera[0]
+    }
+
     set cameraView(newView) {
       this.camera[0] = new Vector(...newView)
       this.gl.uniformMatrix4fv(this.cameraMatrix, this.gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
+    }
+
+    get cameraUpOrientation() {
+      return this.camera[2]
     }
 
     set cameraUpOrientation(newUp) {
@@ -153,6 +165,14 @@ class Fiddleverse {
       }
     }
 
+    toggleGeometry() {
+      // console.log("universe method")
+      this.cast.forEach(object => {
+        // console.log(`BEFORE: ${object.smoothValue}`)
+        object.smooth = !object.smooth
+        // console.log(`AFTER: ${object.smoothValue}`)
+      })
+    }
 
     drawScene(currentRotation) {
         const gl = this.gl

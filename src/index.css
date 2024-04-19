@@ -12,6 +12,10 @@ h1 {
   font-size: 40px;
 }
 
+h2 {
+  text-align: center;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
