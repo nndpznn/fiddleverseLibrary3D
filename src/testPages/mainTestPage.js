@@ -122,6 +122,8 @@ const MainTest = props => {
     let animationActive = false
     let previousTimestamp = null
 
+    let cameraSwitched = true
+
     const FRAMES_PER_SECOND = 60
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
@@ -197,12 +199,21 @@ const MainTest = props => {
       },
 
       switchCamera: () =>{
-        // if (fiddleverse.cameraPosition.elements == [0, 1, -1]) {
-        //   fiddleverse.cameraPosition = [0, 0, -1]
-        // } else {
-        //   fiddleverse.cameraPosition = [0, 1, -1]
-        // }
-        fiddleverse.cameraPosition = [0, -1, -1]
+        console.log("Switching camera")
+        cameraSwitched = !cameraSwitched
+        //Toggle cameraPosition to demonstrate camera controls
+        if(cameraSwitched){
+          fiddleverse.cameraPosition = [0, 0, -1]
+        }
+        else{
+          fiddleverse.cameraPosition = [0, -1, -1]
+        }
+        
+        //Redraw scene so that we can see the change
+        fiddleverse.drawScene(currentRotation)
+
+        previousTimestamp = null
+        window.requestAnimationFrame(advanceScene)
       }
     })
   }, [canvasRef])
