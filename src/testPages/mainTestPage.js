@@ -211,9 +211,6 @@ const MainTest = props => {
         
         //Redraw scene so that we can see the change
         fiddleverse.drawScene(currentRotation)
-
-        previousTimestamp = null
-        window.requestAnimationFrame(advanceScene)
       }
     })
   }, [canvasRef])

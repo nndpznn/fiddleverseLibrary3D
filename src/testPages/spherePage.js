@@ -176,8 +176,8 @@ const SphereTest = props => {
 
       toggleGeometry: () => {
         fiddleverse.toggleGeometry()
-        window.requestAnimationFrame(advanceScene)
-
+        //Redraw scene so that we can see the change
+        fiddleverse.drawScene(currentRotation)
       }
     })
   }, [canvasRef, smoothOrNah])
@@ -202,9 +202,7 @@ const SphereTest = props => {
       <button disabled={!fiddleverse} onClick={handleToggleGeometry}>
             Toggle Geometry
       </button>
-
-      <h2>(It has to be spinning to see the changes.)</h2>
-
+      
     </article>
   )
 }
