@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 
-// import { initSimpleShaderProgram } from './glsl-utilities'
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
 import { octocylinderShape } from '../fiddleverse/octocylinder'
 import RotationMatrix from '../matrix-library/rotationMatrix'
@@ -221,7 +220,6 @@ const MainTest = props => {
 
   const handleSwitchCamera = event => {
     fiddleverse.switchCamera()
-    console.log("HEY!")
   }
 
   return (
