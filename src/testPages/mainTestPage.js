@@ -29,9 +29,8 @@ uniform mat4 camera;
 uniform vec3 light;
 
 void main(void) {
-  // Hardcoded light direction.
-  vec3 lightDirection = vec3(1.0, 0.0, 0.0);
-  lightDirection = light;
+  // Now, instead of being hardcoded, lightDirection is variable depending on our light variable.
+  vec3 lightDirection = light;
 
   vec3 transformedNormal = mat3(transform) * vertexNormal;
 
@@ -92,11 +91,12 @@ const MainTest = props => {
 
     const octocylinderTest = new octocylinderShape(gl, blueColor)
     octocylinderTest.wireframe = false
+    // octocylinderTest.smooth = true
 
-    const octocylinderOutline = new octocylinderShape(gl, blueColor)
+    const octocylinderOutline = new octocylinderShape(gl, grayColor)
     octocylinderOutline.wireframe = true
 
-    octocylinderTest.add(octocylinderOutline)
+    // octocylinderTest.add(octocylinderOutline)
 
     const tiltMatrix = new RotationMatrix(0, 1, 0, 0)
     // octocylinderTest.setInstanceTransformation(tiltMatrix)
@@ -194,6 +194,15 @@ const MainTest = props => {
           previousTimestamp = null
           window.requestAnimationFrame(advanceScene)
         }
+      },
+
+      switchCamera: () =>{
+        // if (fiddleverse.cameraPosition.elements == [0, 1, -1]) {
+        //   fiddleverse.cameraPosition = [0, 0, -1]
+        // } else {
+        //   fiddleverse.cameraPosition = [0, 1, -1]
+        // }
+        fiddleverse.cameraPosition = [0, -1, -1]
       }
     })
   }, [canvasRef])
@@ -202,8 +211,8 @@ const MainTest = props => {
   // Set up the rotation toggle: clicking on the canvas does it.
   const handleCanvasClick = event => fiddleverse.toggleRotation()
 
-  const switchCamera = event => {
-    fiddleverse.cameraPosition = [1, 0, -1]
+  const handleSwitchCamera = event => {
+    fiddleverse.switchCamera()
     console.log("HEY!")
   }
 
@@ -214,7 +223,7 @@ const MainTest = props => {
         Your favorite update-your-browser message here.
       </canvas>
 
-      <button disabled={!fiddleverse} onClick={switchCamera}>
+      <button disabled={!fiddleverse} onClick={handleSwitchCamera}>
             Switch Camera
       </button>
 

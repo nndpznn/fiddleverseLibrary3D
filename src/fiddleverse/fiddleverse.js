@@ -79,6 +79,10 @@ class Fiddleverse {
 
     }
 
+    get light() {
+      return this.lightSource
+    }
+
     set light(newLight) {
       this.lightSource = newLight
       this.gl.uniform3f(this.lightVector, ...new Float32Array(this.lightSource))
