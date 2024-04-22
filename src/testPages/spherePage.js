@@ -23,9 +23,11 @@ uniform mat4 camera;
 uniform vec3 light;
 
 void main(void) {
-  // Hardcoded light direction.
-  vec3 lightDirection = vec3(1.0, 0.0, 0.0);
-  lightDirection = light;
+
+  vec3 ambientLight = vec3(0.2, 0.2, 0.2);
+
+  // Now, instead of being hardcoded, lightDirection is variable depending on our light variable.
+  vec3 lightDirection = light;
 
   vec3 transformedNormal = mat3(transform) * vertexNormal;
 
@@ -37,7 +39,8 @@ void main(void) {
   gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
 
   pixelVertexColor = vec4(
-     reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
+     (ambientLight * vertexColor) + (reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor
+    ), 
      1.0
   );
 

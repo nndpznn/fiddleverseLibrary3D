@@ -20,27 +20,31 @@ attribute vec3 vertexNormal;
 uniform mat4 projection;
 uniform mat4 transform;
 uniform mat4 camera;
+uniform vec3 light;
 
 void main(void) {
-  // Hardcoded light direction.
 
-  vec3 lightDirection = vec3(1.0, 0.0, 0.0);
+  vec3 ambientLight = vec3(0.2, 0.2, 0.2);
 
-  vec4 transformedNormal = transform * vec4(vertexNormal, 1.0);
+  // Now, instead of being hardcoded, lightDirection is variable depending on our light variable.
+  vec3 lightDirection = light;
+
+  vec3 transformedNormal = mat3(transform) * vertexNormal;
 
   float reflectedLight = dot(
     normalize(lightDirection), 
-    normalize(vec3(transformedNormal))
+    normalize(transformedNormal)
   );
 
   gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
 
-  // pixelVertexColor = vec4(
-  //   reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
-  //   1.0
-  // );
+  pixelVertexColor = vec4(
+     (ambientLight * vertexColor) + (reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor
+    ), 
+     1.0
+  );
 
-  pixelVertexColor = vec4(vertexColor, 1.0);
+  //pixelVertexColor = vec4(vertexColor, 1.0);
 }
 `
 
@@ -95,6 +99,9 @@ const StarTest = props => {
     // fiddleverse.add(starOutline)
     
     fiddleverse.process()
+    fiddleverse.light = [0, 0, -1]
+    fiddleverse.cameraPosition = [0, 0, -1]
+    fiddleverse.cameraView = [0, 0, 0]
 
     /*
      * Displays the scene.

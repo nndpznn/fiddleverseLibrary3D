@@ -28,6 +28,9 @@ uniform mat4 camera;
 uniform vec3 light;
 
 void main(void) {
+
+  vec3 ambientLight = vec3(0.2, 0.2, 0.2);
+
   // Now, instead of being hardcoded, lightDirection is variable depending on our light variable.
   vec3 lightDirection = light;
 
@@ -41,7 +44,8 @@ void main(void) {
   gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
 
   pixelVertexColor = vec4(
-     reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor, 
+     (ambientLight * vertexColor) + (reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor
+    ), 
      1.0
   );
 
@@ -90,7 +94,7 @@ const MainTest = props => {
 
     const octocylinderTest = new octocylinderShape(gl, blueColor)
     octocylinderTest.wireframe = false
-    // octocylinderTest.smooth = true
+    octocylinderTest.smooth = true
 
     const octocylinderOutline = new octocylinderShape(gl, grayColor)
     octocylinderOutline.wireframe = true
@@ -105,7 +109,7 @@ const MainTest = props => {
     // fiddleverse.add(octocylinderOutline)
     
     fiddleverse.process()
-    fiddleverse.light = [0, 0, -1]
+    fiddleverse.light = [-10, 0, 0]
     fiddleverse.cameraPosition = [0, 0, -1]
     fiddleverse.cameraView = [0, 0, 0]
 

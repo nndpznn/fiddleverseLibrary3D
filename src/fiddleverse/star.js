@@ -54,7 +54,7 @@ class StarShape extends fiddle3D {
       color
     );
 
-    this.normals = (
+    this.normals = [
       0.0, 0.0, 1.0,
       0.0, 0.0, 1.0,
       0.0, 0.0, 1.0, 
@@ -67,7 +67,7 @@ class StarShape extends fiddle3D {
       0.0, 1.0, 0.0,
       0.0, 1.0, 0.0,
 
-    )
+    ]
   }
 }
 
