@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
 import { octocylinderShape } from '../fiddleverse/octocylinder'
+import { cubeShape } from '../fiddleverse/cube'
 import RotationMatrix from '../matrix-library/rotationMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 
@@ -92,6 +93,10 @@ const MainTest = props => {
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const grayColor = {r: 0.3,  g: 0.3,  b: 0.3}
 
+    const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
+    cubeTest.wireframe = false
+    cubeTest.smooth = true
+
     const octocylinderTest = new octocylinderShape(gl, blueColor)
     octocylinderTest.wireframe = false
     octocylinderTest.smooth = true
@@ -102,10 +107,12 @@ const MainTest = props => {
     // octocylinderTest.add(octocylinderOutline)
 
     const tiltMatrix = new RotationMatrix(0, 1, 0, 0)
-    // octocylinderTest.setInstanceTransformation(tiltMatrix)
+    const move100 = new TranslationMatrix(0,0,-100)
+    // octocylinderTest.setInstanceTransformation(move100)
 
     // Pass the vertices to WebGL.
     fiddleverse.add(octocylinderTest)
+    // fiddleverse.add(cubeTest)
     // fiddleverse.add(octocylinderOutline)
     
     fiddleverse.process()
@@ -132,7 +139,6 @@ const MainTest = props => {
 
     const DEGREES_PER_MILLISECOND = 0.5
     const FULL_CIRCLE = 360.0
-    let moveRate = -0.01
 
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
@@ -163,11 +169,16 @@ const MainTest = props => {
       const rotateOctoX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
       const rotateOctoY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
       const rotateOctoZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+
       octocylinderTest.setInstanceTransformation(rotateOctoX)
       octocylinderTest.setInstanceTransformation(rotateOctoY)
       octocylinderTest.setInstanceTransformation(rotateOctoZ)
 
-      const moveMatrix = new TranslationMatrix(moveRate, 0, 0)
+      cubeTest.setInstanceTransformation(rotateOctoX)
+      cubeTest.setInstanceTransformation(rotateOctoY)
+      cubeTest.setInstanceTransformation(rotateOctoZ)
+
+      const moveMatrix = new TranslationMatrix(0, 0, -1)
       // octocylinderTest.setInstanceTransformation(moveMatrix)
 
       if (fiddleverse.translationVector[0] < -0.5) {
@@ -229,7 +240,7 @@ const MainTest = props => {
   return (
     <article>
       {/* Yes, still square. */}
-      <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
+      <canvas width="1024" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
 

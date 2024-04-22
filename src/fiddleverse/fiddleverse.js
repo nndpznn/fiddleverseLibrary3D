@@ -185,10 +185,10 @@ class Fiddleverse {
 
         let translation = new TranslationMatrix(...this.translationVector)
 
-        let ortho = new OrthoMatrix(4, 4, 2, -2)
+        let ortho = new OrthoMatrix(8, 4, 100, -1000)
         gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(ortho.glForm()))
 
-        let projection = new PerspectiveMatrix(-1, 1, 1, -1, 0.0001, 10000)
+        let projection = new PerspectiveMatrix(8, 4, 100, 1000)
         // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(projection.glForm()))
         
         //NOTE: using the actual perspective code made it so nothing showed up on the canvas, so I'm just using an identity matrix for now

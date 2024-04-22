@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Fiddleverse } from '../fiddleverse/fiddleverse'
 import IcosphereThing from '../fiddleverse/IcosphereThing'
 import RotationMatrix from '../matrix-library/rotationMatrix'
+import TranslationMatrix from '../matrix-library/translationMatrix'
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -91,6 +92,9 @@ const SphereTest = props => {
     icosphereTest.wireframe = false
     icosphereTest.smooth = true
     const icosphereFrame = new IcosphereThing(gl, blueColor)
+
+    const move100 = new TranslationMatrix(0,0,-100)
+    // icosphereTest.setInstanceTransformation(move100)
 
     // Pass the vertices to WebGL.
     fiddleverse.add(icosphereTest)
@@ -198,7 +202,7 @@ const SphereTest = props => {
       {/* Yes, still square. */}
       {/* <h1>This sphere makes use of our {smoothOrNah ? "smooth" : "faceted"} geometry.</h1> */}
       <h1>This sphere makes use of our smooth/faceted geometry.</h1>
-      <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
+      <canvas width="1024" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
 

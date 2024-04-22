@@ -188,7 +188,7 @@ const StarTest = props => {
   return (
     <article>
       {/* Yes, still square. */}
-      <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
+      <canvas width="1024" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
     </article>

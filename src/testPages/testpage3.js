@@ -197,7 +197,7 @@ const TestPage3 = props => {
     <article>
       {/* Yes, still square. */}
       <h1>Reload the page -- the asteroid uses randomly generated vertices!</h1>
-      <canvas width="512" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
+      <canvas width="1024" height="512" ref={canvasRef} onClick={fiddleverse ? handleCanvasClick : undefined}>
         Your favorite update-your-browser message here.
       </canvas>
       <h1>NOTE - the wing frame is offset on purpose to test child transformation</h1>

@@ -1,7 +1,7 @@
 import { FiddleMatrix } from "./matrix"
 
 class PerspectiveMatrix extends FiddleMatrix {
-    constructor(leftBound, rightBound, topBound, bottomBound, nearPlane, farPlane){
+    constructor(screenWidth, screenHeight, nearPlane, farPlane){
 
         // Start with the identity matrix.
         super()
@@ -10,10 +10,10 @@ class PerspectiveMatrix extends FiddleMatrix {
 
         // Aspect ratio = width / height aka 
 
-        let l = leftBound
-        let r = rightBound
-        let t = topBound
-        let b = bottomBound
+        let l = -(screenWidth/2)
+        let r = screenWidth/2
+        let t = screenHeight/2
+        let b = -(screenHeight/2)
         let n = nearPlane
         let f = farPlane
         // console.log(`left: ${l}, right: ${r}, top: ${t}, bottom: ${b}, near: ${n}, far: ${f}`)
