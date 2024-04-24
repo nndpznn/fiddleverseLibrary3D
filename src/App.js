@@ -6,7 +6,7 @@ import { NavLink, Route, Routes } from 'react-router-dom'
 import './App.css'
 
 import Sandbox from './Sandbox'
-import PitchedScene from './PitchedScene'
+import PitchedScene from './testPages/PitchedScene'
 import MainTest from './testPages/mainTestPage'
 import TestPage3 from './testPages/testpage3'
 import SphereTest from './testPages/spherePage'

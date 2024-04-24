@@ -99,7 +99,7 @@ const MainTest = props => {
 
     const octocylinderTest = new octocylinderShape(gl, blueColor)
     octocylinderTest.wireframe = false
-    octocylinderTest.smooth = true
+    // octocylinderTest.smooth = true
 
     const octocylinderOutline = new octocylinderShape(gl, grayColor)
     octocylinderOutline.wireframe = true
@@ -116,7 +116,7 @@ const MainTest = props => {
     // fiddleverse.add(octocylinderOutline)
     
     fiddleverse.process()
-    fiddleverse.light = [-10, 0, 0]
+    fiddleverse.light = [0, 0, -1]
     fiddleverse.cameraPosition = [0, 0, -1]
     fiddleverse.cameraView = [0, 0, 0]
 
