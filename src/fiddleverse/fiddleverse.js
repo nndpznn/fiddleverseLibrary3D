@@ -1,6 +1,5 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import CameraMatrix from '../matrix-library/cameraMatrix'
-import { FiddleMatrix } from '../matrix-library/matrix'
 import OrthoMatrix from '../matrix-library/orthographicMatrix'
 import PerspectiveMatrix from '../matrix-library/perspectiveMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
@@ -188,14 +187,12 @@ class Fiddleverse {
         let ortho = new OrthoMatrix(8, 4, 100, -1000)
         gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(ortho.glForm()))
 
-        let projection = new PerspectiveMatrix(8, 4, 100, 1000)
+        // let projection = new PerspectiveMatrix(8, 4, 10, 1000)
         // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(projection.glForm()))
         
         //NOTE: using the actual perspective code made it so nothing showed up on the canvas, so I'm just using an identity matrix for now
         // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(new FiddleMatrix().glForm()))
 
-        //This does seem to move and orient the camera, but seems like it might have some weird interactions? (it also could be me missing smt)
-        //console.log(camera)
         gl.uniformMatrix4fv(this.cameraMatrix, gl.FALSE, new Float32Array(new CameraMatrix(...this.camera).glForm()))
 
         gl.uniform3f(this.lightVector, ...new Float32Array(this.lightSource))
@@ -216,10 +213,12 @@ class Fiddleverse {
        */ 
     add = (object) => {
       this.cast.add(object)
+      object.present = true
     }
 
     remove = (object) => {
       this.cast.delete(object)
+      object.present = false
     }
 
     process = () => {

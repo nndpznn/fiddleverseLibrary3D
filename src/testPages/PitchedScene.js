@@ -11,19 +11,12 @@ import { cubeShape } from '../fiddleverse/cube'
 import RotationMatrix from '../matrix-library/rotationMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 import { StarShape } from '../fiddleverse/star'
-import StarTest from './starPage'
-import IcosphereThing from '../fiddleverse/IcosphereThing'
-import SphereTest from './spherePage'
-// import IcosphereThing from '../fiddleverse/IcosphereThing'
-// import icosphereTest from '../fiddleverse/IcosphereThing'
-// import FiddlewingThing from '../fiddleverse/FiddlewingThing'
+import FiddlewingThing from '../fiddleverse/FiddlewingThing'
+// import StarTest from './starPage'
 
 
 const CANVAS_WIDTH = 1024
 const CANVAS_HEIGHT = 512
-
-const FRAMES_PER_SECOND = 30
-const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
 
 // Slightly-leveled-up GLSL shaders.
 const VERTEX_SHADER = `
@@ -85,6 +78,7 @@ const FRAGMENT_SHADER = `
 const PitchedScene = props => {
   const screenHeight = 6
   const screenWidth = 10
+  let cubeMoving = false
 
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
@@ -104,46 +98,54 @@ const PitchedScene = props => {
 
  const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
  cubeTest.wireframe = false
- cubeTest.smooth = true
+ cubeTest.smooth = false
 
- const octocylinderTest = new octocylinderShape(gl, blueColor)
- octocylinderTest.wireframe = false
- octocylinderTest.smooth = true
+ const octocylinder1 = new octocylinderShape(gl, blueColor)
+ octocylinder1.wireframe = false
+ octocylinder1.smooth = false
+ const rotateOctoX = new RotationMatrix(90, 1, 0, 0)
+ octocylinder1.setInstanceTransformation(rotateOctoX)
 
  const octocylinderOutline = new octocylinderShape(gl, grayColor)
  octocylinderOutline.wireframe = true
 
  const starTest = new StarShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
  starTest.wireframe = false
- starTest.smooth = true
+ starTest.smooth = false
 
-//  const sphereTest = new IcosphereThing(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
-//  cubeTest.wireframe = false
-//  cubeTest.smooth = true
+ const wing1 = new FiddlewingThing(gl)
+ wing1.wireframe = false
+ const rotateWingY = new RotationMatrix(90, 0, 1, 0)
+ const rotateWingZ = new RotationMatrix(90, 0, 0, 1)
+ const translateWing = new TranslationMatrix(-0.5, 0, 0)
+ wing1.setInstanceTransformation(rotateWingY)
+ wing1.setInstanceTransformation(rotateWingZ)
+ wing1.setInstanceTransformation(translateWing)
 
-//  const FiddlewingTest = new FiddlewingThing(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
-//  cubeTest.wireframe = false
-//  cubeTest.smooth = true
- 
+ const wing2 = new FiddlewingThing(gl)
+ wing2.wireframe = false
+ const rotateWing2Y = new RotationMatrix(-90, 0, 1, 0)
+ const rotateWing2Z = new RotationMatrix(-90, 0, 0, 1)
+ const translateWing2 = new TranslationMatrix(0.5, 0, 0)
+ wing2.setInstanceTransformation(rotateWing2Y)
+ wing2.setInstanceTransformation(rotateWing2Z)
+ wing2.setInstanceTransformation(translateWing2)
 
- const tiltMatrix = new RotationMatrix(0, 1, 0, 0)
- const move100 = new TranslationMatrix(0,0,-100)
+ octocylinder1.add(wing1)
+ octocylinder1.add(wing2)
+
  const moveLeft = new TranslationMatrix(-2, 0, 0)
- octocylinderTest.setInstanceTransformation(moveLeft)
  const moveRight = new TranslationMatrix(2, 0, 0)
  cubeTest.setInstanceTransformation(moveRight)
  starTest.setInstanceTransformation(moveRight)
- 
-
 
  // Pass the vertices to WebGL.
- fiddleverse.add(octocylinderTest)
+ fiddleverse.add(octocylinder1)
  fiddleverse.add(cubeTest)
- fiddleverse.add(starTest)
-//  fiddleverse.add(sphereTest)
+//  fiddleverse.add(starTest)
  
  fiddleverse.process()
- fiddleverse.light = [0, -1, 0]
+ fiddleverse.light = [0, 0, -1]
  fiddleverse.cameraPosition = [0, 0, -1]
  fiddleverse.cameraView = [0, 0, 0]
 
@@ -193,16 +195,19 @@ const PitchedScene = props => {
 
    // fiddleverse.translationVector[0] -= 0.01
 
-   const rotateOctoX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
-   const rotateOctoY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
-   const rotateOctoZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+   const rotateX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
+  //  const rotateY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
+  //  const rotateZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
 
-   octocylinderTest.setInstanceTransformation(rotateOctoX)
-  //  octocylinderTest.setInstanceTransformation(rotateOctoY)
-  //  octocylinderTest.setInstanceTransformation(rotateOctoZ)
+   octocylinder1.setInstanceTransformation(rotateX)
+  //  octocylinder1.setInstanceTransformation(rotateOctoY)
+  //  octocylinder1.setInstanceTransformation(rotateOctoZ)
 
-   const moveMatrix = new TranslationMatrix(0, 0, -1)
-   // octocylinderTest.setInstanceTransformation(moveMatrix)
+   if (cubeMoving) {
+    cubeTest.setInstanceTransformation(rotateX)
+   }
+
+  //  const moveMatrix = new TranslationMatrix(0, 0, -1)
 
    if (fiddleverse.translationVector[0] < -0.5) {
      fiddleverse.translationVector[0] = 1
@@ -235,7 +240,7 @@ const PitchedScene = props => {
      }
    },
 
-   switchCamera: () =>{
+   switchCamera: () => {
      console.log("Switching camera")
      cameraSwitched = !cameraSwitched
      //Toggle cameraPosition to demonstrate camera controls
@@ -248,16 +253,33 @@ const PitchedScene = props => {
      
      //Redraw scene so that we can see the change
      fiddleverse.drawScene(currentRotation)
+   },
+
+   startCube: () => {
+      cubeMoving = !cubeMoving
+   },
+
+   removeSomething: () => {
+    if (octocylinder1.present) {
+      fiddleverse.remove(octocylinder1)
+      fiddleverse.drawScene(currentRotation)
+    } else {
+      fiddleverse.add(octocylinder1)
+      fiddleverse.drawScene(currentRotation)
+    }
    }
+
  })
 }, [canvasRef])
 
   // Set up the rotation toggle: clicking on the canvas does it.
   const handleStartStop = event => fiddleverse.toggleRotation()
 
-  const handleSwitchCamera = event => {
-    fiddleverse.switchCamera()
-  }
+  const handleSwitchCamera = event => fiddleverse.switchCamera()
+
+  const handleStartCube = event => fiddleverse.startCube()
+
+  const handleRemove = event => fiddleverse.removeSomething()
 
   return (
     <article>
@@ -268,11 +290,19 @@ const PitchedScene = props => {
       </canvas>
 
       <button disabled={!fiddleverse} onClick={handleStartStop}>
-            Start/Stop
+            Master Start/Stop
       </button>
 
       <button disabled={!fiddleverse} onClick={handleSwitchCamera}>
             Switch Camera
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleStartCube}>
+            Start/Stop Cube
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleRemove}>
+            Add/Remove Satellite
       </button>
 
     </article>

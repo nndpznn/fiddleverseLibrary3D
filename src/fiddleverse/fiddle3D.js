@@ -5,6 +5,7 @@ import { FiddleMatrix } from "../matrix-library/matrix"
 class fiddle3D {
     constructor(gl, vertices, facesByIndex, color) {
         this.gl = gl
+        this.present = false
 
         this.instanceTransformation = new FiddleMatrix()
         this.vertices = vertices ?? []
@@ -96,7 +97,7 @@ class fiddle3D {
 
     add(fiddle3D) {
         this.children.push(fiddle3D)
-        fiddle3D.instanceTransformation = this.instanceTransformation.multiply(fiddle3D.instanceTransformation)
+        // fiddle3D.instanceTransformation = this.instanceTransformation.multiply(fiddle3D.instanceTransformation)
     }
 
     remove(fiddle3D) {
