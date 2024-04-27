@@ -96,6 +96,7 @@ const PitchedScene = props => {
 
  const blueColor = {r: 0.18, g: 0.62, b: 0.82}
  const grayColor = {r: 0.3,  g: 0.3,  b: 0.3}
+ const yellowColor = {r: 0.95, g: 0.73, b: 0.05}
 
  const cubeTest = new cubeShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
  cubeTest.wireframe = false
@@ -110,14 +111,15 @@ const PitchedScene = props => {
  const octocylinderOutline = new octocylinderShape(gl, grayColor)
  octocylinderOutline.wireframe = true
 
- const starTest = new StarShape(gl, 0.2, blueColor, {x: 0, y: 0, z: 0})
+ const starTest = new StarShape(gl, 0.65, yellowColor, {x: 0, y: 0, z: 0})
  starTest.wireframe = false
  starTest.smooth = false
  const rotateStarY = new RotationMatrix(90, 1, 0, 0)
 
- const sphereTest = new IcosphereThing(gl, blueColor)
- cubeTest.wireframe = false
- cubeTest.smooth = false
+ const sphereTest = new IcosphereThing(gl, yellowColor)
+ sphereTest.wireframe = false
+ sphereTest.smooth = true
+
 
  
 
@@ -141,14 +143,18 @@ const PitchedScene = props => {
 
  octocylinder1.add(wing1)
  octocylinder1.add(wing2)
+ 
 
  const moveLeft = new TranslationMatrix(-2, 0, 0)
  const moveRight = new TranslationMatrix(2, 0, 0)
  const moveUp = new TranslationMatrix(0, 1, 0)
  const moveDown = new TranslationMatrix(0, -1, 0)
+ const setMiddle = new TranslationMatrix(0, 0, 0)
  cubeTest.setInstanceTransformation(moveRight)
- starTest.setInstanceTransformation(moveUp)
- sphereTest.setInstanceTransformation(moveDown)
+ starTest.setInstanceTransformation(moveLeft)
+ sphereTest.setInstanceTransformation(moveLeft)
+
+ sphereTest.add(starTest) 
 
  // Pass the vertices to WebGL.
  fiddleverse.add(octocylinder1)
