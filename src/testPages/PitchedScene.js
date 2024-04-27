@@ -12,7 +12,8 @@ import RotationMatrix from '../matrix-library/rotationMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 import { StarShape } from '../fiddleverse/star'
 import FiddlewingThing from '../fiddleverse/FiddlewingThing'
-// import StarTest from './starPage'
+import IcosphereThing from '../fiddleverse/IcosphereThing'
+
 
 
 const CANVAS_WIDTH = 1024
@@ -109,9 +110,16 @@ const PitchedScene = props => {
  const octocylinderOutline = new octocylinderShape(gl, grayColor)
  octocylinderOutline.wireframe = true
 
- const starTest = new StarShape(gl, blueColor, 0.5, {x: 0, y: 0, z: 0})
+ const starTest = new StarShape(gl, 0.2, blueColor, {x: 0, y: 0, z: 0})
  starTest.wireframe = false
  starTest.smooth = false
+ const rotateStarY = new RotationMatrix(90, 1, 0, 0)
+
+ const sphereTest = new IcosphereThing(gl, blueColor)
+ cubeTest.wireframe = false
+ cubeTest.smooth = false
+
+ 
 
  const wing1 = new FiddlewingThing(gl)
  wing1.wireframe = false
@@ -136,13 +144,17 @@ const PitchedScene = props => {
 
  const moveLeft = new TranslationMatrix(-2, 0, 0)
  const moveRight = new TranslationMatrix(2, 0, 0)
+ const moveUp = new TranslationMatrix(0, 1, 0)
+ const moveDown = new TranslationMatrix(0, -1, 0)
  cubeTest.setInstanceTransformation(moveRight)
- starTest.setInstanceTransformation(moveRight)
+ starTest.setInstanceTransformation(moveUp)
+ sphereTest.setInstanceTransformation(moveDown)
 
  // Pass the vertices to WebGL.
  fiddleverse.add(octocylinder1)
  fiddleverse.add(cubeTest)
-//  fiddleverse.add(starTest)
+ fiddleverse.add(starTest)
+ fiddleverse.add(sphereTest)
  
  fiddleverse.process()
  fiddleverse.light = [0, 0, -1]
@@ -256,7 +268,7 @@ const PitchedScene = props => {
    },
 
    startCube: () => {
-      cubeMoving = !cubeMoving
+      cubeMoving = !cubeMoving     //look here for cube when searching
    },
 
    removeSomething: () => {
