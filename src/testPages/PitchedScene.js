@@ -13,6 +13,7 @@ import TranslationMatrix from '../matrix-library/translationMatrix'
 import { StarShape } from '../fiddleverse/star'
 import FiddlewingThing from '../fiddleverse/FiddlewingThing'
 import IcosphereThing from '../fiddleverse/IcosphereThing'
+import { pyramidShape } from '../fiddleverse/pyramid'
 
 
 
@@ -120,7 +121,9 @@ const PitchedScene = props => {
  sphereTest.wireframe = false
  sphereTest.smooth = true
 
-
+ const pyramidTest = new pyramidShape(gl, blueColor)
+ pyramidTest.wireframe = false
+ pyramidTest.smooth = false
  
 
  const wing1 = new FiddlewingThing(gl)
@@ -145,14 +148,15 @@ const PitchedScene = props => {
  octocylinder1.add(wing2)
  
 
- const moveLeft = new TranslationMatrix(-2, 0, 0)
+ const moveLeft = new TranslationMatrix(-2.3, 0, 0)
  const moveRight = new TranslationMatrix(2, 0, 0)
  const moveUp = new TranslationMatrix(0, 1, 0)
- const moveDown = new TranslationMatrix(0, -1, 0)
+ const moveDown = new TranslationMatrix(0, -1.3, 0)
  const setMiddle = new TranslationMatrix(0, 0, 0)
  cubeTest.setInstanceTransformation(moveRight)
  starTest.setInstanceTransformation(moveLeft)
  sphereTest.setInstanceTransformation(moveLeft)
+ pyramidTest.setInstanceTransformation(moveDown)
 
  sphereTest.add(starTest) 
 
@@ -161,6 +165,7 @@ const PitchedScene = props => {
  fiddleverse.add(cubeTest)
  fiddleverse.add(starTest)
  fiddleverse.add(sphereTest)
+ fiddleverse.add(pyramidTest)
  
  fiddleverse.process()
  fiddleverse.light = [0, 0, -1]
@@ -299,6 +304,10 @@ const PitchedScene = props => {
 
   const handleRemove = event => fiddleverse.removeSomething()
 
+  const handleStartSun = event => fiddleverse.startSun()
+
+  const handleStartPyramid = event => fiddleverse.startPyramid()
+
   return (
     <article>
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
@@ -321,6 +330,14 @@ const PitchedScene = props => {
 
       <button disabled={!fiddleverse} onClick={handleRemove}>
             Add/Remove Satellite
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleStartSun}>
+            Start/Stop Sun
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleStartPyramid}>
+            Start/Stop Pyramid
       </button>
 
     </article>
