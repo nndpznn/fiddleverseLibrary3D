@@ -164,6 +164,7 @@ const PitchedScene = props => {
     pyramid2Test.setInstanceTransformation(new TranslationMatrix(3, 0, 0))
     cubeTest.setInstanceTransformation(moveRight)
 
+    //FORM THE UFO
     cubeTest.add(pyramid1Test)
     cubeTest.add(pyramid2Test)
 
@@ -172,6 +173,12 @@ const PitchedScene = props => {
     // pyramid2Test.setInstanceTransformation(halfSize)
     cubeTest.setInstanceTransformation(halfSize)
     cubeTest.setInstanceTransformation(new TranslationMatrix(1, 0, 0))
+
+    const rectangleTest = new cubeShape(gl, blueColor, 0.5, { x: 0, y: 0, z: 0 })
+    rectangleTest.setInstanceTransformation(new ScaleMatrix(1, 1.5, 1))
+    rectangleTest.setInstanceTransformation(moveDown)
+    rectangleTest.wireframe = false
+    rectangleTest.smooth = false
 
     sphereTest.add(starTest)
 
@@ -182,6 +189,7 @@ const PitchedScene = props => {
     fiddleverse.add(sphereTest)
     fiddleverse.add(pyramid1Test)
     fiddleverse.add(pyramid2Test)
+    fiddleverse.add(rectangleTest)
 
     fiddleverse.process()
     fiddleverse.light = [0, 0, -1]
