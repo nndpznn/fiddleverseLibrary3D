@@ -20,7 +20,7 @@ const CANVAS_WIDTH = 1024
 const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
-  
+
   const screenHeight = 4
   const screenWidth = 8
 
@@ -47,11 +47,11 @@ const PitchedScene = props => {
     cubeTest.wireframe = false
     cubeTest.smooth = false
 
-    const octocylinder1 = new octocylinderShape(gl, blueColor)
-    octocylinder1.wireframe = false
-    octocylinder1.smooth = false
+    const satelliteBody = new octocylinderShape(gl, blueColor)
+    satelliteBody.wireframe = false
+    satelliteBody.smooth = false
     const rotateOctoX = new RotationMatrix(90, 1, 0, 0)
-    octocylinder1.setInstanceTransformation(rotateOctoX)
+    satelliteBody.setInstanceTransformation(rotateOctoX)
 
     const octocylinderOutline = new octocylinderShape(gl, grayColor)
     octocylinderOutline.wireframe = true
@@ -91,8 +91,8 @@ const PitchedScene = props => {
     wing2.setInstanceTransformation(rotateWing2Z)
     wing2.setInstanceTransformation(translateWing2)
 
-    octocylinder1.add(wing1)
-    octocylinder1.add(wing2)
+    satelliteBody.add(wing1)
+    satelliteBody.add(wing2)
 
     const moveLeft = new TranslationMatrix(-2.3, 0, 0)
     const moveRight = new TranslationMatrix(2, 0, 0)
@@ -128,12 +128,10 @@ const PitchedScene = props => {
     sphereTest.add(starTest)
 
     // Pass the vertices to WebGL.
-    fiddleverse.add(octocylinder1)
+    fiddleverse.add(satelliteBody)
     fiddleverse.add(cubeTest)
     fiddleverse.add(starTest)
     fiddleverse.add(sphereTest)
-    fiddleverse.add(pyramid1Test)
-    fiddleverse.add(pyramid2Test)
     fiddleverse.add(rectangleTest)
 
     fiddleverse.process()
@@ -188,25 +186,16 @@ const PitchedScene = props => {
       // fiddleverse.translationVector[0] -= 0.01
 
       const rotateX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
-      //  const rotateY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
-      //  const rotateZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+      const rotateXFast = new RotationMatrix(2, 1, 0, 0)
+      const rotateY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
+      const rotateZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
 
-      octocylinder1.setInstanceTransformation(rotateX)
-      //  octocylinder1.setInstanceTransformation(rotateOctoY)
-      //  octocylinder1.setInstanceTransformation(rotateOctoZ)
+      satelliteBody.setInstanceTransformation(rotateX)
+      satelliteBody.setInstanceTransformation(rotateY)
+      satelliteBody.setInstanceTransformation(rotateZ)
 
       if (cubeMoving) {
-        cubeTest.setInstanceTransformation(rotateX)
-      }
-
-      //  const moveMatrix = new TranslationMatrix(0, 0, -1)
-
-      if (fiddleverse.translationVector[0] < -0.5) {
-        fiddleverse.translationVector[0] = 1
-      }
-
-      if (fiddleverse.translationVector[1] < -0.9) {
-        fiddleverse.translationVector[1] = 1
+        cubeTest.setInstanceTransformation(rotateXFast)
       }
 
       if (currentRotation >= FULL_CIRCLE) {
@@ -251,11 +240,11 @@ const PitchedScene = props => {
       },
 
       removeSomething: () => {
-        if (octocylinder1.present) {
-          fiddleverse.remove(octocylinder1)
+        if (satelliteBody.present) {
+          fiddleverse.remove(satelliteBody)
           fiddleverse.drawScene(currentRotation)
         } else {
-          fiddleverse.add(octocylinder1)
+          fiddleverse.add(satelliteBody)
           fiddleverse.drawScene(currentRotation)
         }
       }
@@ -292,7 +281,7 @@ const PitchedScene = props => {
       </button>
 
       <button disabled={!fiddleverse} onClick={handleStartCube}>
-        Start/Stop Cube
+        Start/Stop UFO
       </button>
 
       <button disabled={!fiddleverse} onClick={handleRemove}>
