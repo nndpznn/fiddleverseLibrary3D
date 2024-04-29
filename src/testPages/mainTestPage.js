@@ -46,8 +46,6 @@ const MainTest = props => {
 
     // Pass the vertices to WebGL.
     fiddleverse.add(octocylinderTest)
-    // fiddleverse.add(cubeTest)
-    // fiddleverse.add(octocylinderOutline)
     
     fiddleverse.process()
     fiddleverse.light = [0, 0, -1]
@@ -97,8 +95,6 @@ const MainTest = props => {
 
       // All clear.
       currentRotation += DEGREES_PER_MILLISECOND * progress
-
-      // fiddleverse.translationVector[0] -= 0.01
 
       const rotateOctoX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
       const rotateOctoY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
