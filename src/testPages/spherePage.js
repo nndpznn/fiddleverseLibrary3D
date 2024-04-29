@@ -6,71 +6,10 @@ import IcosphereThing from '../fiddleverse/IcosphereThing'
 import RotationMatrix from '../matrix-library/rotationMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
 
-// Slightly-leveled-up GLSL shaders.
-const VERTEX_SHADER = `
-#ifdef GL_ES
-precision highp float;
-#endif
-
-attribute vec3 vertexPosition;
-attribute vec3 vertexColor;
-varying vec4 pixelVertexColor;
-
-attribute vec3 vertexNormal;
-
-uniform mat4 projection;
-uniform mat4 transform;
-uniform mat4 camera;
-uniform vec3 light;
-
-void main(void) {
-
-  vec3 ambientLight = vec3(0.2, 0.2, 0.2);
-
-  // Now, instead of being hardcoded, lightDirection is variable depending on our light variable.
-  vec3 lightDirection = light;
-
-  vec3 transformedNormal = mat3(transform) * vertexNormal;
-
-  float reflectedLight = dot(
-    normalize(lightDirection), 
-    normalize(transformedNormal)
-  );
-
-  gl_Position = projection * camera * transform * vec4(vertexPosition, 1.0);
-
-  pixelVertexColor = vec4(
-     (ambientLight * vertexColor) + (reflectedLight < 0.0 ? vec3(0.0, 0.0, 0.0) : reflectedLight * vertexColor
-    ), 
-     1.0
-  );
-
-  //pixelVertexColor = vec4(vertexColor, 1.0);
-}
-`
-
-const FRAGMENT_SHADER = `
-  #ifdef GL_ES
-  precision highp float;
-  #endif
-
-  uniform vec3 color;
-
-  varying vec4 pixelVertexColor;
-
-  void main(void) {
-    gl_FragColor = pixelVertexColor;
-  }
-`
-
-/**
- * If you don’t know React well, don’t worry about the trappings. Just focus on the code inside
- * the useEffect hook.
- */
 const SphereTest = props => {
 
-  const screenHeight = 6
-  const screenWidth = 10
+  const screenHeight = 4
+  const screenWidth = 8
   var smoothOrNah = true
 
   const [fiddleverse, setFiddleverse] = useState(null)
@@ -83,7 +22,7 @@ const SphereTest = props => {
     }
 
     // Grab the WebGL rendering context.
-    const fiddleverse = new Fiddleverse(canvas, screenHeight, screenWidth, VERTEX_SHADER, FRAGMENT_SHADER)
+    const fiddleverse = new Fiddleverse(canvas, screenHeight, screenWidth)
     const gl = fiddleverse.gl
     const blueColor = {r: 0.18, g: 0.62, b: 0.82}
     const grayColor = {r: 0.25, g: 0.25, b: 0.25}
