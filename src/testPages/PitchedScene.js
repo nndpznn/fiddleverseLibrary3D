@@ -145,24 +145,22 @@ const PitchedScene = props => {
     //for the sun
     sphereTest.add(starTest)
 
-    const toptest = new pyramidShape (gl, redColor)
+    const toptest = new pyramidShape(gl, redColor)
     toptest.wireframe = false
     toptest.smooth = false
 
-    const engine = new pyramidShape (gl, grayColor)
+    const engine = new pyramidShape(gl, grayColor)
     engine.wireframe = false
     engine.smooth = false
 
     const topposition = toptest.setInstanceTransformation(setTop)
     const engineposition = engine.setInstanceTransformation(setEngine)
 
-
     //for the rocket ship
     rectangleTest.add(toptest)
     rectangleTest.add(engine)
 
     rectangleTest.setInstanceTransformation(new TranslationMatrix(1.5, 1, 0)) //this is for me to see the whole ship so i can build it properly. We can remove once done if needed
-
 
     // Pass the vertices to WebGL.
     fiddleverse.add(satelliteBody)
@@ -333,7 +331,7 @@ const PitchedScene = props => {
     <article>
       <p>Use this component to implement your pitched scene—the one with an intended purpose, use cases, etc.</p>
 
-      <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasRef}>
+      <canvas width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={canvasRef} style={{ backgroundColor: 'black' }}>
         Your favorite update-your-browser message here.
       </canvas>
 
