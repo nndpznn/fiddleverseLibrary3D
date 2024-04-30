@@ -26,6 +26,7 @@ const PitchedScene = props => {
   let cubeMoving = false
   let ufoMoving = false
   let sunMoving = false
+  let shipMoving = false
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -136,7 +137,7 @@ const PitchedScene = props => {
     ufo.setInstanceTransformation(new TranslationMatrix(2, 0, 0))
     const stretch = new ScaleMatrix(0, 0, 0.25)
 
-    const rectangleTest = new cubeShape(gl, blueColor, 0.5, { x: 0, y: 0, z: 0 })
+    const rectangleTest = new cubeShape(gl, whiteColor, 0.5, { x: 0, y: 0, z: 0 })
     rectangleTest.setInstanceTransformation(new ScaleMatrix(1, 1.5, 1))
     rectangleTest.setInstanceTransformation(moveDown)
     rectangleTest.wireframe = false
@@ -159,6 +160,7 @@ const PitchedScene = props => {
     //for the rocket ship
     rectangleTest.add(toptest)
     rectangleTest.add(engine)
+    rectangleTest.setInstanceTransformation(halfSize)
 
     rectangleTest.setInstanceTransformation(new TranslationMatrix(1.5, 1, 0)) //this is for me to see the whole ship so i can build it properly. We can remove once done if needed
 
@@ -225,6 +227,7 @@ const PitchedScene = props => {
       const rotateY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
       const rotateYFast = new RotationMatrix(2, 0, 1, 0)
       const rotateZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
+      const rotateZFast = new RotationMatrix(2, 0, 0, 1)
 
       satelliteBody.setInstanceTransformation(rotateX)
       satelliteBody.setInstanceTransformation(rotateY)
@@ -240,6 +243,14 @@ const PitchedScene = props => {
 
       if (sunMoving) {
         sphereTest.setInstanceTransformation(rotateY)
+      }
+
+      if (currentRotation >= FULL_CIRCLE) {
+        currentRotation -= FULL_CIRCLE
+      }
+
+      if (shipMoving) {
+        rectangleTest.setInstanceTransformation(rotateZFast)
       }
 
       if (currentRotation >= FULL_CIRCLE) {
@@ -300,6 +311,10 @@ const PitchedScene = props => {
         sunMoving = !sunMoving
       },
 
+      startShip: () => {
+        shipMoving = !shipMoving
+      },
+
       removeSomething: () => {
         if (satelliteBody.present) {
           fiddleverse.remove(satelliteBody)
@@ -325,7 +340,7 @@ const PitchedScene = props => {
 
   const handleStartSun = event => fiddleverse.startSun()
 
-  const handleStartPyramid = event => fiddleverse.startPyramid()
+  const handleStartShip = event => fiddleverse.startShip()
 
   return (
     <article>
@@ -353,6 +368,10 @@ const PitchedScene = props => {
 
       <button disabled={!fiddleverse} onClick={handleStartSun}>
         Start/Stop Sun
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleStartShip}>
+        Start/Stop Ship
       </button>
     </article>
   )
