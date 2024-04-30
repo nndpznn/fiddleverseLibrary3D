@@ -20,12 +20,11 @@ const CANVAS_WIDTH = 1024
 const CANVAS_HEIGHT = 512
 
 const PitchedScene = props => {
-
   const screenHeight = 4
   const screenWidth = 8
 
   let cubeMoving = false
-
+  let ufoMoving = false
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -43,9 +42,21 @@ const PitchedScene = props => {
     const grayColor = { r: 0.3, g: 0.3, b: 0.3 }
     const yellowColor = { r: 0.95, g: 0.73, b: 0.05 }
 
-    const cubeTest = new cubeShape(gl, grayColor, 0.5, { x: 0, y: 0, z: 0 })
-    cubeTest.wireframe = false
-    cubeTest.smooth = false
+    const cameraPositions = [
+      [0, 0, -1],
+      [-0.5, 0, -0.5],
+      [-1, 0, 0],
+      [-0.5, 0, 0.5],
+      [0, 0, 1],
+      [0.5, 0, 0.5],
+      [1, 0, 0],
+      [0.5, 0, -0.5]
+    ]
+    let cameraPosition = 0
+
+    const ufo = new cubeShape(gl, grayColor, 0.5, { x: 0, y: 0, z: 0 })
+    ufo.wireframe = false
+    ufo.smooth = false
 
     const satelliteBody = new octocylinderShape(gl, blueColor)
     satelliteBody.wireframe = false
@@ -107,17 +118,18 @@ const PitchedScene = props => {
     pyramid1Test.setInstanceTransformation(new TranslationMatrix(1, 0, 0))
     pyramid2Test.setInstanceTransformation(new RotationMatrix(-90, 0, 0, 1))
     pyramid2Test.setInstanceTransformation(new TranslationMatrix(3, 0, 0))
-    cubeTest.setInstanceTransformation(moveRight)
+    ufo.setInstanceTransformation(moveRight)
 
     //FORM THE UFO
-    cubeTest.add(pyramid1Test)
-    cubeTest.add(pyramid2Test)
+    ufo.add(pyramid1Test)
+    ufo.add(pyramid2Test)
 
     const halfSize = new ScaleMatrix(0.5, 0.5, 0.5)
     // pyramid1Test.setInstanceTransformation(halfSize)
     // pyramid2Test.setInstanceTransformation(halfSize)
-    cubeTest.setInstanceTransformation(halfSize)
-    cubeTest.setInstanceTransformation(new TranslationMatrix(1, 0, 0))
+    ufo.setInstanceTransformation(halfSize)
+    ufo.setInstanceTransformation(new TranslationMatrix(2, 0, 0))
+    const stretch = new ScaleMatrix(0, 0, 0.25)
 
     const rectangleTest = new cubeShape(gl, blueColor, 0.5, { x: 0, y: 0, z: 0 })
     rectangleTest.setInstanceTransformation(new ScaleMatrix(1, 1.5, 1))
@@ -129,7 +141,7 @@ const PitchedScene = props => {
 
     // Pass the vertices to WebGL.
     fiddleverse.add(satelliteBody)
-    fiddleverse.add(cubeTest)
+    fiddleverse.add(ufo)
     fiddleverse.add(starTest)
     fiddleverse.add(sphereTest)
     fiddleverse.add(rectangleTest)
@@ -188,14 +200,15 @@ const PitchedScene = props => {
       const rotateX = new RotationMatrix(DEGREES_PER_MILLISECOND, 1, 0, 0)
       const rotateXFast = new RotationMatrix(2, 1, 0, 0)
       const rotateY = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 1, 0)
+      const rotateYFast = new RotationMatrix(2, 0, 1, 0)
       const rotateZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
 
       satelliteBody.setInstanceTransformation(rotateX)
       satelliteBody.setInstanceTransformation(rotateY)
       satelliteBody.setInstanceTransformation(rotateZ)
 
-      if (cubeMoving) {
-        cubeTest.setInstanceTransformation(rotateXFast)
+      if (ufoMoving) {
+        ufo.setInstanceTransformation(rotateYFast)
       }
 
       if (currentRotation >= FULL_CIRCLE) {
@@ -223,13 +236,22 @@ const PitchedScene = props => {
 
       switchCamera: () => {
         console.log('Switching camera')
-        cameraSwitched = !cameraSwitched
-        //Toggle cameraPosition to demonstrate camera controls
-        if (cameraSwitched) {
-          fiddleverse.cameraPosition = [0, 0, -1]
+
+        if (cameraPosition == cameraPositions.length - 1) {
+          cameraPosition = 0
         } else {
-          fiddleverse.cameraPosition = [0, -1, -1]
+          cameraPosition++
         }
+
+        fiddleverse.cameraPosition = cameraPositions[cameraPosition]
+
+        // cameraSwitched = !cameraSwitched
+        // //Toggle cameraPosition to demonstrate camera controls
+        // if (cameraSwitched) {
+        //   fiddleverse.cameraPosition = [0, 0, -1]
+        // } else {
+        //   fiddleverse.cameraPosition = [0, -1, -1]
+        // }
 
         //Redraw scene so that we can see the change
         fiddleverse.drawScene(currentRotation)
@@ -237,6 +259,10 @@ const PitchedScene = props => {
 
       startCube: () => {
         cubeMoving = !cubeMoving //look here for cube when searching
+      },
+
+      startUFO: () => {
+        ufoMoving = !ufoMoving
       },
 
       removeSomething: () => {
@@ -257,6 +283,8 @@ const PitchedScene = props => {
   const handleSwitchCamera = event => fiddleverse.switchCamera()
 
   const handleStartCube = event => fiddleverse.startCube()
+
+  const handleStartUFO = event => fiddleverse.startUFO()
 
   const handleRemove = event => fiddleverse.removeSomething()
 
@@ -280,7 +308,7 @@ const PitchedScene = props => {
         Switch Camera
       </button>
 
-      <button disabled={!fiddleverse} onClick={handleStartCube}>
+      <button disabled={!fiddleverse} onClick={handleStartUFO}>
         Start/Stop UFO
       </button>
 
