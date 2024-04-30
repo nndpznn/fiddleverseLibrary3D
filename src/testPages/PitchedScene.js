@@ -25,6 +25,7 @@ const PitchedScene = props => {
 
   let cubeMoving = false
   let ufoMoving = false
+  let sunMoving = false
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
@@ -41,6 +42,8 @@ const PitchedScene = props => {
     const blueColor = { r: 0.18, g: 0.62, b: 0.82 }
     const grayColor = { r: 0.3, g: 0.3, b: 0.3 }
     const yellowColor = { r: 0.95, g: 0.73, b: 0.05 }
+    const redColor = { r: 255, g: 0, b: 0 }
+    const whiteColor = { r: 255, g: 255, b: 255 }
 
     const cameraPositions = [
       [0, 0, -1],
@@ -110,6 +113,8 @@ const PitchedScene = props => {
     const moveUp = new TranslationMatrix(0, 1, 0)
     const moveDown = new TranslationMatrix(0, -1.3, 0)
     const setMiddle = new TranslationMatrix(0, 0, 0)
+    const setTop = new TranslationMatrix(0, -0.05, 0)
+    const setEngine = new TranslationMatrix(0, -2, 0)
 
     starTest.setInstanceTransformation(moveLeft)
     sphereTest.setInstanceTransformation(moveLeft)
@@ -137,7 +142,27 @@ const PitchedScene = props => {
     rectangleTest.wireframe = false
     rectangleTest.smooth = false
 
+    //for the sun
     sphereTest.add(starTest)
+
+    const toptest = new pyramidShape (gl, redColor)
+    toptest.wireframe = false
+    toptest.smooth = false
+
+    const engine = new pyramidShape (gl, grayColor)
+    engine.wireframe = false
+    engine.smooth = false
+
+    const topposition = toptest.setInstanceTransformation(setTop)
+    const engineposition = engine.setInstanceTransformation(setEngine)
+
+
+    //for the rocket ship
+    rectangleTest.add(toptest)
+    rectangleTest.add(engine)
+
+    rectangleTest.setInstanceTransformation(new TranslationMatrix(1.5, 1, 0)) //this is for me to see the whole ship so i can build it properly. We can remove once done if needed
+
 
     // Pass the vertices to WebGL.
     fiddleverse.add(satelliteBody)
@@ -215,6 +240,14 @@ const PitchedScene = props => {
         currentRotation -= FULL_CIRCLE
       }
 
+      if (sunMoving) {
+        sphereTest.setInstanceTransformation(rotateY)
+      }
+
+      if (currentRotation >= FULL_CIRCLE) {
+        currentRotation -= FULL_CIRCLE
+      }
+
       fiddleverse.drawScene(currentRotation)
 
       // Request the next frame.
@@ -263,6 +296,10 @@ const PitchedScene = props => {
 
       startUFO: () => {
         ufoMoving = !ufoMoving
+      },
+
+      startSun: () => {
+        sunMoving = !sunMoving
       },
 
       removeSomething: () => {
@@ -318,10 +355,6 @@ const PitchedScene = props => {
 
       <button disabled={!fiddleverse} onClick={handleStartSun}>
         Start/Stop Sun
-      </button>
-
-      <button disabled={!fiddleverse} onClick={handleStartPyramid}>
-        Start/Stop Pyramid
       </button>
     </article>
   )
