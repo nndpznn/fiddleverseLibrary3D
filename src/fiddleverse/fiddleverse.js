@@ -247,7 +247,7 @@ class Fiddleverse {
       this.projectionMode = !this.projectionMode
     }
 
-    drawScene(currentRotation) {
+    drawScene() {
         const gl = this.gl
         // Clear the display.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)

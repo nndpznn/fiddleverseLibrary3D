@@ -48,7 +48,7 @@ const SphereTest = props => {
      * Displays the scene.
      */
     let currentRotation = 0.0
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     /*
      * Animates the scene.
@@ -93,7 +93,7 @@ const SphereTest = props => {
       icosphereTest.setInstanceTransformation(rotateOctoY)
       icosphereTest.setInstanceTransformation(rotateOctoZ)
 
-      fiddleverse.drawScene(currentRotation)
+      fiddleverse.drawScene()
 
       if (fiddleverse.translationVector[0] > 1.0) {
         fiddleverse.translationVector[0] = -1.0
@@ -109,7 +109,7 @@ const SphereTest = props => {
     }
 
     // Draw the initial scene.
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     setFiddleverse({
       toggleRotation: () => {
@@ -123,17 +123,17 @@ const SphereTest = props => {
       toggleGeometry: () => {
         fiddleverse.toggleGeometry()
         //Redraw scene so that we can see the change
-        fiddleverse.drawScene(currentRotation)
+        fiddleverse.drawScene()
       },
 
       toggleWireframe: () => {
         fiddleverse.toggleWireframe()
-        fiddleverse.drawScene(currentRotation)
+        fiddleverse.drawScene()
       },
 
       toggleProjection: () => {
         fiddleverse.toggleProjection()
-        fiddleverse.drawScene(currentRotation)
+        fiddleverse.drawScene()
       },
     })
   }, [canvasRef, smoothOrNah])

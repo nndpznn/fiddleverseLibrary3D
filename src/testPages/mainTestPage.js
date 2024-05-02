@@ -56,7 +56,7 @@ const MainTest = props => {
      * Displays the scene.
      */
     let currentRotation = 0.0
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     /*
      * Animates the scene.
@@ -123,7 +123,7 @@ const MainTest = props => {
         currentRotation -= FULL_CIRCLE
       }
 
-      fiddleverse.drawScene(currentRotation)
+      fiddleverse.drawScene()
 
       // Request the next frame.
       previousTimestamp = timestamp
@@ -131,7 +131,7 @@ const MainTest = props => {
     }
 
     // Draw the initial scene.
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     setFiddleverse({
       toggleRotation: () => {
@@ -154,7 +154,7 @@ const MainTest = props => {
         }
         
         //Redraw scene so that we can see the change
-        fiddleverse.drawScene(currentRotation)
+        fiddleverse.drawScene()
       }
     })
   }, [canvasRef])

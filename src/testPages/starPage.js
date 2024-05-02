@@ -46,7 +46,7 @@ const StarTest = props => {
      * Displays the scene.
      */
     let currentRotation = 0.0
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     /*
      * Animates the scene.
@@ -92,7 +92,7 @@ const StarTest = props => {
       starTest.setInstanceTransformation(rotateOctoY)
       starTest.setInstanceTransformation(rotateOctoZ)
 
-      fiddleverse.drawScene(currentRotation)
+      fiddleverse.drawScene()
 
       if (fiddleverse.translationVector[0] > 1.0) {
         fiddleverse.translationVector[0] = -1.0
@@ -108,7 +108,7 @@ const StarTest = props => {
     }
 
     // Draw the initial scene.
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     setFiddleverse({
       toggleRotation: () => {

@@ -63,7 +63,6 @@ const PitchedScene = props => {
     const moveLeft = new TranslationMatrix(-2.3, 0, 0)
     const moveRight = new TranslationMatrix(2, 0, 0)
     const moveUp = new TranslationMatrix(0, 1, 0)
-    const moveDown = new TranslationMatrix(0, -1.3, 0)
     const setMiddle = new TranslationMatrix(0, 0, 0)
     const halfSize = new ScaleMatrix(0.5, 0.5, 0.5)
     const stretch = new ScaleMatrix(0, 0, 0.25)
@@ -145,7 +144,6 @@ const PitchedScene = props => {
     // ROCKET
     const rocketBody = new cubeShape(gl, whiteColor, 0.5, { x: 0, y: 0, z: 0 })
     rocketBody.setInstanceTransformation(new ScaleMatrix(1, 1.5, 1))
-    rocketBody.setInstanceTransformation(moveDown)
     rocketBody.wireframe = false
     rocketBody.smooth = false
 
@@ -160,16 +158,17 @@ const PitchedScene = props => {
     const octocylinderOutline = new octocylinderShape(gl, grayColor)
     octocylinderOutline.wireframe = true
 
-    const setTop = new TranslationMatrix(0, -0.05, 0)
-    const setEngine = new TranslationMatrix(0, -2, 0)
-    rocketTop.setInstanceTransformation(setTop)
-    rocketEngine.setInstanceTransformation(setEngine)
+    rocketTop.setInstanceTransformation(new TranslationMatrix(0, 1.25, 0))
+    rocketEngine.setInstanceTransformation(new TranslationMatrix(0, -0.75, 0))
 
     rocketBody.add(rocketTop)
     rocketBody.add(rocketEngine)
-    rocketBody.setInstanceTransformation(halfSize)
 
-    rocketBody.setInstanceTransformation(new TranslationMatrix(1.5, 1, 0)) //this is for me to see the whole ship so i can build it properly. We can remove once done if needed
+    rocketBody.setInstanceTransformation(new ScaleMatrix(0.4, 0.4, 0.4))
+    rocketBody.setInstanceTransformation(new RotationMatrix(-90, 0, 0, 1))
+    rocketBody.setInstanceTransformation(new TranslationMatrix(0, -1.25, 0))
+
+    rocketBody.setInstanceTransformation(new TranslationMatrix(-4, 0, 0))
     //
 
     // PROCESSING
@@ -187,7 +186,7 @@ const PitchedScene = props => {
      * Displays the scene.
      */
     let currentRotation = 0.0
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     /*
      * Animates the scene.
@@ -256,14 +255,14 @@ const PitchedScene = props => {
       }
 
       if (shipMoving) {
-        rocketBody.setInstanceTransformation(rotateZFast)
+        rocketBody.setInstanceTransformation(new TranslationMatrix(0.05, 0, 0))
       }
 
       if (currentRotation >= FULL_CIRCLE) {
         currentRotation -= FULL_CIRCLE
       }
 
-      fiddleverse.drawScene(currentRotation)
+      fiddleverse.drawScene()
 
       // Request the next frame.
       previousTimestamp = timestamp
@@ -271,7 +270,7 @@ const PitchedScene = props => {
     }
 
     // Draw the initial scene.
-    fiddleverse.drawScene(currentRotation)
+    fiddleverse.drawScene()
 
     setFiddleverse({
       toggleRotation: () => {
@@ -294,7 +293,7 @@ const PitchedScene = props => {
         fiddleverse.cameraPosition = cameraPositions[cameraPosition]
 
         //Redraw scene so that we can see the change
-        fiddleverse.drawScene(currentRotation)
+        fiddleverse.drawScene()
       },
 
       startCube: () => {
@@ -316,10 +315,10 @@ const PitchedScene = props => {
       removeSomething: () => {
         if (satelliteBody.present) {
           fiddleverse.remove(satelliteBody)
-          fiddleverse.drawScene(currentRotation)
+          fiddleverse.drawScene()
         } else {
           fiddleverse.add(satelliteBody)
-          fiddleverse.drawScene(currentRotation)
+          fiddleverse.drawScene()
         }
       }
     })
@@ -369,7 +368,7 @@ const PitchedScene = props => {
       </button>
 
       <button disabled={!fiddleverse} onClick={handleStartShip}>
-        Start/Stop Ship
+        Launch Rocket
       </button>
     </article>
   )
