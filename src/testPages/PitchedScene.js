@@ -324,6 +324,16 @@ const PitchedScene = props => {
         shipMoving = !shipMoving
       },
 
+      addRemoveEngine: () => {
+        if (rocketEngine.present) {
+          rocketBody.remove(rocketEngine)
+          fiddleverse.drawScene(currentRotation)
+        } else {
+          rocketBody.add(rocketEngine)
+          fiddleverse.drawScene(currentRotation)
+        }
+      },
+
       removeSomething: () => {
         if (satelliteBody.present) {
           fiddleverse.remove(satelliteBody)
@@ -350,6 +360,12 @@ const PitchedScene = props => {
   const handleStartSun = event => fiddleverse.startSun()
 
   const handleStartShip = event => fiddleverse.startShip()
+
+  const handleAddRemoveEngine = event => {
+    if (fiddleverse) {
+      fiddleverse.addRemoveEngine()
+    }
+  }
 
   return (
     <article>
@@ -381,6 +397,10 @@ const PitchedScene = props => {
 
       <button disabled={!fiddleverse} onClick={handleStartShip}>
         Launch Rocket
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleAddRemoveEngine}>
+        Add/Remove Engine
       </button>
     </article>
   )
