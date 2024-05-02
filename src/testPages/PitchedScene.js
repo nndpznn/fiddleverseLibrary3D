@@ -23,14 +23,15 @@ const PitchedScene = props => {
   const screenHeight = 4
   const screenWidth = 8
 
-  let cubeMoving = false
-  let ufoMoving = false
-  let sunMoving = false
-  let shipMoving = false
   const [fiddleverse, setFiddleverse] = useState(null)
   const canvasRef = useRef()
 
   useEffect(() => {
+    let cubeMoving = false
+    let ufoMoving = false
+    let sunMoving = false
+    let shipMoving = false
+
     const canvas = canvasRef.current
     if (!canvas) {
       return
@@ -58,35 +59,22 @@ const PitchedScene = props => {
     ]
     let cameraPosition = 0
 
-    const ufo = new cubeShape(gl, grayColor, 0.5, { x: 0, y: 0, z: 0 })
-    ufo.wireframe = false
-    ufo.smooth = false
+    // MATRICES
+    const moveLeft = new TranslationMatrix(-2.3, 0, 0)
+    const moveRight = new TranslationMatrix(2, 0, 0)
+    const moveUp = new TranslationMatrix(0, 1, 0)
+    const moveDown = new TranslationMatrix(0, -1.3, 0)
+    const setMiddle = new TranslationMatrix(0, 0, 0)
+    const halfSize = new ScaleMatrix(0.5, 0.5, 0.5)
+    const stretch = new ScaleMatrix(0, 0, 0.25)
+    //
 
+    // SATELLITE
     const satelliteBody = new octocylinderShape(gl, blueColor)
     satelliteBody.wireframe = false
     satelliteBody.smooth = false
     const rotateOctoX = new RotationMatrix(90, 1, 0, 0)
     satelliteBody.setInstanceTransformation(rotateOctoX)
-
-    const octocylinderOutline = new octocylinderShape(gl, grayColor)
-    octocylinderOutline.wireframe = true
-
-    const starTest = new StarShape(gl, 0.65, yellowColor, { x: 0, y: 0, z: 0 })
-    starTest.wireframe = false
-    starTest.smooth = false
-    const rotateStarY = new RotationMatrix(90, 1, 0, 0)
-
-    const sphereTest = new IcosphereThing(gl, yellowColor)
-    sphereTest.wireframe = false
-    sphereTest.smooth = true
-
-    const pyramid1Test = new pyramidShape(gl, grayColor)
-    pyramid1Test.wireframe = false
-    pyramid1Test.smooth = false
-
-    const pyramid2Test = new pyramidShape(gl, grayColor)
-    pyramid2Test.wireframe = false
-    pyramid2Test.smooth = false
 
     const wing1 = new FiddlewingThing(gl)
     wing1.wireframe = false
@@ -109,16 +97,22 @@ const PitchedScene = props => {
     satelliteBody.add(wing1)
     satelliteBody.add(wing2)
 
-    const moveLeft = new TranslationMatrix(-2.3, 0, 0)
-    const moveRight = new TranslationMatrix(2, 0, 0)
-    const moveUp = new TranslationMatrix(0, 1, 0)
-    const moveDown = new TranslationMatrix(0, -1.3, 0)
-    const setMiddle = new TranslationMatrix(0, 0, 0)
-    const setTop = new TranslationMatrix(0, -0.05, 0)
-    const setEngine = new TranslationMatrix(0, -2, 0)
+    satelliteBody.setInstanceTransformation(halfSize)
+    satelliteBody.setInstanceTransformation(moveLeft)
+    //
 
-    starTest.setInstanceTransformation(moveLeft)
-    sphereTest.setInstanceTransformation(moveLeft)
+    // UFO
+    const ufo = new cubeShape(gl, grayColor, 0.5, { x: 0, y: 0, z: 0 })
+    ufo.wireframe = false
+    ufo.smooth = false
+
+    const pyramid1Test = new pyramidShape(gl, grayColor)
+    pyramid1Test.wireframe = false
+    pyramid1Test.smooth = false
+
+    const pyramid2Test = new pyramidShape(gl, grayColor)
+    pyramid2Test.wireframe = false
+    pyramid2Test.smooth = false
 
     pyramid1Test.setInstanceTransformation(new RotationMatrix(90, 0, 0, 1))
     pyramid1Test.setInstanceTransformation(new TranslationMatrix(1, 0, 0))
@@ -126,50 +120,63 @@ const PitchedScene = props => {
     pyramid2Test.setInstanceTransformation(new TranslationMatrix(3, 0, 0))
     ufo.setInstanceTransformation(moveRight)
 
-    //FORM THE UFO
     ufo.add(pyramid1Test)
     ufo.add(pyramid2Test)
 
-    const halfSize = new ScaleMatrix(0.5, 0.5, 0.5)
-    // pyramid1Test.setInstanceTransformation(halfSize)
-    // pyramid2Test.setInstanceTransformation(halfSize)
     ufo.setInstanceTransformation(halfSize)
     ufo.setInstanceTransformation(new TranslationMatrix(2, 0, 0))
-    const stretch = new ScaleMatrix(0, 0, 0.25)
+    //
 
-    const rectangleTest = new cubeShape(gl, whiteColor, 0.5, { x: 0, y: 0, z: 0 })
-    rectangleTest.setInstanceTransformation(new ScaleMatrix(1, 1.5, 1))
-    rectangleTest.setInstanceTransformation(moveDown)
-    rectangleTest.wireframe = false
-    rectangleTest.smooth = false
+    // SUN
+    const starTest = new StarShape(gl, 0.65, yellowColor, { x: 0, y: 0, z: 0 })
+    starTest.wireframe = false
+    starTest.smooth = false
 
-    //for the sun
-    sphereTest.add(starTest)
+    const sunBody = new IcosphereThing(gl, yellowColor)
+    sunBody.wireframe = false
+    sunBody.smooth = true
 
-    const toptest = new pyramidShape(gl, redColor)
-    toptest.wireframe = false
-    toptest.smooth = false
+    starTest.add(sunBody)
+    starTest.setInstanceTransformation(halfSize)
+    // starTest.setInstanceTransformation(moveLeft)
+    // sunBody.setInstanceTransformation(moveLeft)
+    //
 
-    const engine = new pyramidShape(gl, grayColor)
-    engine.wireframe = false
-    engine.smooth = false
+    // ROCKET
+    const rocketBody = new cubeShape(gl, whiteColor, 0.5, { x: 0, y: 0, z: 0 })
+    rocketBody.setInstanceTransformation(new ScaleMatrix(1, 1.5, 1))
+    rocketBody.setInstanceTransformation(moveDown)
+    rocketBody.wireframe = false
+    rocketBody.smooth = false
 
-    const topposition = toptest.setInstanceTransformation(setTop)
-    const engineposition = engine.setInstanceTransformation(setEngine)
+    const rocketTop = new pyramidShape(gl, redColor)
+    rocketTop.wireframe = false
+    rocketTop.smooth = false
 
-    //for the rocket ship
-    rectangleTest.add(toptest)
-    rectangleTest.add(engine)
-    rectangleTest.setInstanceTransformation(halfSize)
+    const rocketEngine = new pyramidShape(gl, grayColor)
+    rocketEngine.wireframe = false
+    rocketEngine.smooth = false
 
-    rectangleTest.setInstanceTransformation(new TranslationMatrix(1.5, 1, 0)) //this is for me to see the whole ship so i can build it properly. We can remove once done if needed
+    const octocylinderOutline = new octocylinderShape(gl, grayColor)
+    octocylinderOutline.wireframe = true
 
-    // Pass the vertices to WebGL.
+    const setTop = new TranslationMatrix(0, -0.05, 0)
+    const setEngine = new TranslationMatrix(0, -2, 0)
+    rocketTop.setInstanceTransformation(setTop)
+    rocketEngine.setInstanceTransformation(setEngine)
+
+    rocketBody.add(rocketTop)
+    rocketBody.add(rocketEngine)
+    rocketBody.setInstanceTransformation(halfSize)
+
+    rocketBody.setInstanceTransformation(new TranslationMatrix(1.5, 1, 0)) //this is for me to see the whole ship so i can build it properly. We can remove once done if needed
+    //
+
+    // PROCESSING
     fiddleverse.add(satelliteBody)
     fiddleverse.add(ufo)
     fiddleverse.add(starTest)
-    fiddleverse.add(sphereTest)
-    fiddleverse.add(rectangleTest)
+    fiddleverse.add(rocketBody)
 
     fiddleverse.process()
     fiddleverse.light = [0, 0, -1]
@@ -187,8 +194,6 @@ const PitchedScene = props => {
      */
     let animationActive = false
     let previousTimestamp = null
-
-    let cameraSwitched = true
 
     const FRAMES_PER_SECOND = 60
     const MILLISECONDS_PER_FRAME = 1000 / FRAMES_PER_SECOND
@@ -230,7 +235,7 @@ const PitchedScene = props => {
       const rotateZFast = new RotationMatrix(2, 0, 0, 1)
 
       satelliteBody.setInstanceTransformation(rotateX)
-      satelliteBody.setInstanceTransformation(rotateY)
+      // satelliteBody.setInstanceTransformation(rotateY)
       satelliteBody.setInstanceTransformation(rotateZ)
 
       if (ufoMoving) {
@@ -242,7 +247,8 @@ const PitchedScene = props => {
       }
 
       if (sunMoving) {
-        sphereTest.setInstanceTransformation(rotateY)
+        starTest.setInstanceTransformation(rotateY)
+        sunBody.setInstanceTransformation(rotateZ)
       }
 
       if (currentRotation >= FULL_CIRCLE) {
@@ -250,7 +256,7 @@ const PitchedScene = props => {
       }
 
       if (shipMoving) {
-        rectangleTest.setInstanceTransformation(rotateZFast)
+        rocketBody.setInstanceTransformation(rotateZFast)
       }
 
       if (currentRotation >= FULL_CIRCLE) {
@@ -279,21 +285,13 @@ const PitchedScene = props => {
       switchCamera: () => {
         console.log('Switching camera')
 
-        if (cameraPosition == cameraPositions.length - 1) {
+        if (cameraPosition === cameraPositions.length - 1) {
           cameraPosition = 0
         } else {
           cameraPosition++
         }
 
         fiddleverse.cameraPosition = cameraPositions[cameraPosition]
-
-        // cameraSwitched = !cameraSwitched
-        // //Toggle cameraPosition to demonstrate camera controls
-        // if (cameraSwitched) {
-        //   fiddleverse.cameraPosition = [0, 0, -1]
-        // } else {
-        //   fiddleverse.cameraPosition = [0, -1, -1]
-        // }
 
         //Redraw scene so that we can see the change
         fiddleverse.drawScene(currentRotation)
@@ -332,7 +330,7 @@ const PitchedScene = props => {
 
   const handleSwitchCamera = event => fiddleverse.switchCamera()
 
-  const handleStartCube = event => fiddleverse.startCube()
+  // const handleStartCube = event => fiddleverse.startCube()
 
   const handleStartUFO = event => fiddleverse.startUFO()
 
