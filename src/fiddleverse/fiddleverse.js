@@ -1,5 +1,6 @@
 import { getGL, initVertexBuffer, initSimpleShaderProgram } from '../glsl-utilities'
 import CameraMatrix from '../matrix-library/cameraMatrix'
+import { FiddleMatrix } from '../matrix-library/matrix'
 import OrthoMatrix from '../matrix-library/orthographicMatrix'
 import PerspectiveMatrix from '../matrix-library/perspectiveMatrix'
 import TranslationMatrix from '../matrix-library/translationMatrix'
@@ -132,6 +133,8 @@ class Fiddleverse {
         this.lightSource = [1, 0, 0]
         this.camera = [new Vector(0, 0, 0), new Vector(0, 0, -1), new Vector(0, 1, 0)]
 
+        this.projectionMode = true //Projection mode boolean: true - ortho; false - perspective
+
     }
 
     get light() {
@@ -233,6 +236,17 @@ class Fiddleverse {
       })
     }
 
+    toggleWireframe() {
+      //console.log("toggling wireframe method")
+      this.cast.forEach(object => {
+        object.wireframe = !object.wireframe
+      })
+    }
+
+    toggleProjection() {
+      this.projectionMode = !this.projectionMode
+    }
+
     drawScene(currentRotation) {
         const gl = this.gl
         // Clear the display.
@@ -241,9 +255,11 @@ class Fiddleverse {
         let translation = new TranslationMatrix(...this.translationVector)
 
         let ortho = new OrthoMatrix(this.screenWidth, this.screenHeight, 100, -1000)
-        gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(ortho.glForm()))
+        let projection = new PerspectiveMatrix(this.screenWidth, this.screenHeight, 100, -1000)
+        //projection = new FiddleMatrix()
+        gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(this.projectionMode ? ortho.glForm() : projection.glForm()))
 
-        // let projection = new PerspectiveMatrix(8, 4, 10, 1000)
+        
         // gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(projection.glForm()))
         
         //NOTE: using the actual perspective code made it so nothing showed up on the canvas, so I'm just using an identity matrix for now

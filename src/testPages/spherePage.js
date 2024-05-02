@@ -124,7 +124,17 @@ const SphereTest = props => {
         fiddleverse.toggleGeometry()
         //Redraw scene so that we can see the change
         fiddleverse.drawScene(currentRotation)
-      }
+      },
+
+      toggleWireframe: () => {
+        fiddleverse.toggleWireframe()
+        fiddleverse.drawScene(currentRotation)
+      },
+
+      toggleProjection: () => {
+        fiddleverse.toggleProjection()
+        fiddleverse.drawScene(currentRotation)
+      },
     })
   }, [canvasRef, smoothOrNah])
 
@@ -134,6 +144,14 @@ const SphereTest = props => {
   const handleToggleGeometry = event => {
     fiddleverse.toggleGeometry()
     smoothOrNah = !smoothOrNah
+  }
+
+  const handleToggleWireframe = event => {
+    fiddleverse.toggleWireframe()
+  }
+
+  const handleToggleProjection = event => {
+    fiddleverse.toggleProjection()
   }
 
   return (
@@ -147,6 +165,12 @@ const SphereTest = props => {
 
       <button disabled={!fiddleverse} onClick={handleToggleGeometry}>
             Toggle Geometry
+      </button>
+      <button disabled={!fiddleverse} onClick={handleToggleWireframe}>
+            Toggle Wireframe
+      </button>
+      <button disabled={!fiddleverse} onClick={handleToggleProjection}>
+            Toggle Ortho/Perspective
       </button>
       
     </article>
