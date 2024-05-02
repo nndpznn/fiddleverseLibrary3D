@@ -71,6 +71,12 @@ class fiddle3D {
         }
         this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
         this.normalsBuffer = initVertexBuffer(this.gl, this.smoothValue ? computeVertexNormals(this) : computeTriangleNormals(this))
+
+        if (this.children.length > 0) {
+            this.children.forEach(child => {
+                child.wireframe = newWireframeValue
+            })
+        }
     }
 
     setInstanceTransformation(newMatrix) {

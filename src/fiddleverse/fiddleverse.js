@@ -255,7 +255,7 @@ class Fiddleverse {
         let translation = new TranslationMatrix(...this.translationVector)
 
         let ortho = new OrthoMatrix(this.screenWidth, this.screenHeight, 100, -1000)
-        let projection = new PerspectiveMatrix(this.screenWidth, this.screenHeight, 100, -1000)
+        let projection = new PerspectiveMatrix(this.screenWidth, this.screenHeight, 100, 10000)
         //projection = new FiddleMatrix()
         gl.uniformMatrix4fv(this.projectionMatrix, gl.FALSE, new Float32Array(this.projectionMode ? ortho.glForm() : projection.glForm()))
 

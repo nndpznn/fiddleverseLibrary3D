@@ -133,6 +133,13 @@ const SphereTest = props => {
 
       toggleProjection: () => {
         fiddleverse.toggleProjection()
+        if(!fiddleverse.projectionMode){
+          icosphereTest.setInstanceTransformation(new TranslationMatrix(0, 0, -100))
+          icosphereFrame.setInstanceTransformation(new TranslationMatrix(0, 0, -100))
+        } else{
+          icosphereTest.setInstanceTransformation(new TranslationMatrix(0, 0, 100))
+          icosphereFrame.setInstanceTransformation(new TranslationMatrix(0, 0, 100))
+        }
         fiddleverse.drawScene()
       },
     })

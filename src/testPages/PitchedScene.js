@@ -319,6 +319,10 @@ const PitchedScene = props => {
         ufoMoving = !ufoMoving
       },
 
+      toggleUFOCamo: () =>{
+        ufo.wireframe = !ufo.wireframe
+      },
+
       startSun: () => {
         sunMoving = !sunMoving
       },
@@ -359,6 +363,8 @@ const PitchedScene = props => {
 
   const handleStartUFO = event => fiddleverse.startUFO()
 
+  const handleUFOCamo = event => fiddleverse.toggleUFOCamo()
+
   const handleRemove = event => fiddleverse.removeSomething()
 
   const handleStartSun = event => fiddleverse.startSun()
@@ -389,6 +395,10 @@ const PitchedScene = props => {
 
       <button disabled={!fiddleverse} onClick={handleStartUFO}>
         Start/Stop UFO
+      </button>
+
+      <button disabled={!fiddleverse} onClick={handleUFOCamo}>
+        Engage UFO Camo
       </button>
 
       <button disabled={!fiddleverse} onClick={handleRemove}>
