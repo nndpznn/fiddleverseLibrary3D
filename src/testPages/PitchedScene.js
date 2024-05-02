@@ -46,6 +46,7 @@ const PitchedScene = props => {
     const yellowColor = { r: 0.95, g: 0.73, b: 0.05 }
     const redColor = { r: 255, g: 0, b: 0 }
     const whiteColor = { r: 255, g: 255, b: 255 }
+    const orangeColor = {r: 255, g: 15, b: 0}
 
     const cameraPositions = [
       [0, 0, -1],
@@ -158,17 +159,24 @@ const PitchedScene = props => {
     const octocylinderOutline = new octocylinderShape(gl, grayColor)
     octocylinderOutline.wireframe = true
 
+    const rocketBooster = new pyramidShape(gl, orangeColor)
+    rocketBooster.wireframe = false
+    rocketBooster.smooth = false
+
     rocketTop.setInstanceTransformation(new TranslationMatrix(0, 1.25, 0))
     rocketEngine.setInstanceTransformation(new TranslationMatrix(0, -0.75, 0))
+    rocketBooster.setInstanceTransformation(new TranslationMatrix(0, -0.85, 0))
 
     rocketBody.add(rocketTop)
     rocketBody.add(rocketEngine)
+    rocketBody.add(rocketBooster)
 
     rocketBody.setInstanceTransformation(new ScaleMatrix(0.4, 0.4, 0.4))
     rocketBody.setInstanceTransformation(new RotationMatrix(-90, 0, 0, 1))
     rocketBody.setInstanceTransformation(new TranslationMatrix(0, -1.25, 0))
 
     rocketBody.setInstanceTransformation(new TranslationMatrix(-4, 0, 0))
+    
     //
 
     // PROCESSING
@@ -199,6 +207,8 @@ const PitchedScene = props => {
 
     const DEGREES_PER_MILLISECOND = 0.5
     const FULL_CIRCLE = 360.0
+
+    let boosterScale = 1.025
 
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
@@ -256,6 +266,8 @@ const PitchedScene = props => {
 
       if (shipMoving) {
         rocketBody.setInstanceTransformation(new TranslationMatrix(0.05, 0, 0))
+        rocketBooster.setInstanceTransformation(new ScaleMatrix(boosterScale, 1.0, 1.0))
+        boosterScale = 1/boosterScale
       }
 
       if (currentRotation >= FULL_CIRCLE) {
