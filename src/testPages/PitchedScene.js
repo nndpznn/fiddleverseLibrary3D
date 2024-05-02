@@ -169,7 +169,7 @@ const PitchedScene = props => {
 
     rocketBody.add(rocketTop)
     rocketBody.add(rocketEngine)
-    rocketBody.add(rocketBooster)
+    rocketEngine.add(rocketBooster)
 
     rocketBody.setInstanceTransformation(new ScaleMatrix(0.4, 0.4, 0.4))
     rocketBody.setInstanceTransformation(new RotationMatrix(-90, 0, 0, 1))
@@ -268,6 +268,9 @@ const PitchedScene = props => {
         rocketBody.setInstanceTransformation(new TranslationMatrix(0.05, 0, 0))
         rocketBooster.setInstanceTransformation(new ScaleMatrix(boosterScale, 1.0, 1.0))
         boosterScale = 1/boosterScale
+        if(!rocketEngine.present){
+          rocketEngine.setInstanceTransformation(new TranslationMatrix(0.05, 0, 0))
+        }
       }
 
       if (currentRotation >= FULL_CIRCLE) {
@@ -325,6 +328,7 @@ const PitchedScene = props => {
       },
 
       addRemoveEngine: () => {
+        console.log("Toggling engine")
         if (rocketEngine.present) {
           rocketBody.remove(rocketEngine)
           fiddleverse.drawScene(currentRotation)

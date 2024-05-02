@@ -97,11 +97,13 @@ class fiddle3D {
 
     add(fiddle3D) {
         this.children.push(fiddle3D)
+        fiddle3D.present = true
         // fiddle3D.instanceTransformation = this.instanceTransformation.multiply(fiddle3D.instanceTransformation)
     }
 
     remove(fiddle3D) {
         this.children = this.children.filter(item => item !== fiddle3D)
+        fiddle3D.present = false
     }
 
     meshThing() {
