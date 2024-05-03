@@ -337,6 +337,12 @@ const PitchedScene = props => {
 
       toggleUFOCamo: () =>{
         ufo.wireframe = !ufo.wireframe
+        if(ufo.wireframe){
+          ufo.remove(ufoBeam)
+        }
+        else{
+          ufo.add(ufoBeam)
+        }
       },
 
       startSun: () => {
