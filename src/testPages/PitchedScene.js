@@ -265,6 +265,9 @@ const PitchedScene = props => {
 
       if (ufoMoving) {
         ufo.setInstanceTransformation(rotateYFast)
+        if(!ufoBeam.present){
+          ufoBeam.setInstanceTransformation(rotateYFast)
+        }
       }
 
       if (currentRotation >= FULL_CIRCLE) {
