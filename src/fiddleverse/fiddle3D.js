@@ -16,6 +16,7 @@ class fiddle3D {
 
         //Visual modifier values
         this.wireframeValue = true
+        this.lockedFrame = false
         this.smoothValue = false
         this.visualizeNormals = false // THIS PART RE-ASSIGNS COLORS TO THE VERTEX NORMALS. SET IT TO FALSE FOR NORMAL COLORS
 
@@ -55,23 +56,24 @@ class fiddle3D {
     }
 
     set wireframe(newWireframeValue) {
-        this.wireframeValue = newWireframeValue
-        this.rawVertices = newWireframeValue ? toRawLineArray(this) : toRawTriangleArray(this)
-        
-        this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
+        if(!this.lockedFrame){
+            this.wireframeValue = newWireframeValue
+            this.rawVertices = newWireframeValue ? toRawLineArray(this) : toRawTriangleArray(this)
+            
+            this.verticesBuffer = initVertexBuffer(this.gl, this.rawVertices)
 
-        this.colors = []
-        for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
-            this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
+            this.colors = []
+            for (let i = 0, max = this.rawVertices.length / 3; i < max; i += 1) {
+                this.colors = this.colors.concat(this.color.r, this.color.g, this.color.b)
+            }
+
+            
+            if(this.visualizeNormals){
+                this.colors = computeTriangleNormals(this)
+            }
+            this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
+            this.normalsBuffer = initVertexBuffer(this.gl, this.smoothValue ? computeVertexNormals(this) : computeTriangleNormals(this))
         }
-
-        
-        if(this.visualizeNormals){
-            this.colors = computeTriangleNormals(this)
-        }
-        this.colorsBuffer = initVertexBuffer(this.gl, this.colors)
-        this.normalsBuffer = initVertexBuffer(this.gl, this.smoothValue ? computeVertexNormals(this) : computeTriangleNormals(this))
-
         if (this.children.length > 0) {
             this.children.forEach(child => {
                 child.wireframe = newWireframeValue

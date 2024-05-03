@@ -46,7 +46,8 @@ const PitchedScene = props => {
     const yellowColor = { r: 0.95, g: 0.73, b: 0.05 }
     const redColor = { r: 255, g: 0, b: 0 }
     const whiteColor = { r: 255, g: 255, b: 255 }
-    const orangeColor = {r: 255, g: 15, b: 0}
+    const orangeColor = { r: 255, g: 15, b: 0 }
+    const greenColor = { r: 0, g: 255, b: 0 }
 
     const cameraPositions = [
       [0, 0, -1],
@@ -114,14 +115,20 @@ const PitchedScene = props => {
     pyramid2Test.wireframe = false
     pyramid2Test.smooth = false
 
+    const ufoBeam = new octocylinderShape(gl, greenColor)
+    ufoBeam.lockedFrame = true
+
     pyramid1Test.setInstanceTransformation(new RotationMatrix(90, 0, 0, 1))
     pyramid1Test.setInstanceTransformation(new TranslationMatrix(1, 0, 0))
     pyramid2Test.setInstanceTransformation(new RotationMatrix(-90, 0, 0, 1))
     pyramid2Test.setInstanceTransformation(new TranslationMatrix(3, 0, 0))
+    ufoBeam.setInstanceTransformation(new TranslationMatrix(2, -1.0, 0))
+    ufoBeam.setInstanceTransformation(new ScaleMatrix(1, 0.75, 0.75))
     ufo.setInstanceTransformation(moveRight)
 
     ufo.add(pyramid1Test)
     ufo.add(pyramid2Test)
+    ufo.add(ufoBeam)
 
     ufo.setInstanceTransformation(halfSize)
     ufo.setInstanceTransformation(new TranslationMatrix(2, 0, 0))
@@ -209,6 +216,8 @@ const PitchedScene = props => {
     const FULL_CIRCLE = 360.0
 
     let boosterScale = 1.025
+    let beamScale = .01
+    let currentBeamY = -1
 
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
@@ -246,6 +255,13 @@ const PitchedScene = props => {
       satelliteBody.setInstanceTransformation(rotateX)
       // satelliteBody.setInstanceTransformation(rotateY)
       satelliteBody.setInstanceTransformation(rotateZ)
+
+      ufoBeam.setInstanceTransformation(new TranslationMatrix(0, beamScale, 0))
+      currentBeamY += beamScale
+      if(currentBeamY >= -0.66 || currentBeamY <= -1){
+        beamScale = -beamScale
+      }
+      
 
       if (ufoMoving) {
         ufo.setInstanceTransformation(rotateYFast)
