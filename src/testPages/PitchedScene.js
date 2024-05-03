@@ -95,8 +95,34 @@ const PitchedScene = props => {
     wing2.setInstanceTransformation(rotateWing2Z)
     wing2.setInstanceTransformation(translateWing2)
 
+    const antenna = new octocylinderShape(gl, grayColor)
+    antenna.wireframe = false
+    const antennaPoint = new IcosphereThing(gl, grayColor)
+    antennaPoint.wireframe = false
+    const antennaSignal = new IcosphereThing(gl, redColor)
+    antennaSignal.lockedFrame = true
+    const antennaScale = new ScaleMatrix(0.15, 0.5, 0.15)
+    const antennaRotation = new RotationMatrix(90, 1, 0, 0)
+    const antennaTranslation = new TranslationMatrix(0, 0, 0.75)
+    const antennaPointTranslation = new TranslationMatrix(0, 0, 1.0)
+    const antennaPointScale = new ScaleMatrix(0.15, 0.15, 0.15)
+    const antennaSignalScale = new ScaleMatrix(0.1, 0.1, 0.1)
+    antenna.setInstanceTransformation(antennaScale)
+    antenna.setInstanceTransformation(antennaRotation)
+    antenna.setInstanceTransformation(antennaTranslation)
+    antennaPoint.setInstanceTransformation(antennaPointScale)
+    antennaPoint.setInstanceTransformation(antennaPointTranslation)
+    antennaSignal.setInstanceTransformation(antennaSignalScale)
+    antennaSignal.setInstanceTransformation(antennaPointTranslation)
+
+    
+
     satelliteBody.add(wing1)
     satelliteBody.add(wing2)
+    satelliteBody.add(antenna)
+    satelliteBody.add(antennaPoint)
+    antennaPoint.add(antennaSignal)
+
 
     satelliteBody.setInstanceTransformation(halfSize)
     satelliteBody.setInstanceTransformation(moveLeft)
@@ -216,8 +242,11 @@ const PitchedScene = props => {
     const FULL_CIRCLE = 360.0
 
     let boosterScale = 1.025
-    let beamScale = .01
+    let beamYScalar = .01
     let currentBeamY = -1
+
+    let signalScalar = 1.0 + 3.00/FRAMES_PER_SECOND
+    let currentSignalSize = 0.05
 
     const advanceScene = timestamp => {
       // Check if the user has turned things off.
@@ -252,15 +281,24 @@ const PitchedScene = props => {
       const rotateZ = new RotationMatrix(DEGREES_PER_MILLISECOND, 0, 0, 1)
       const rotateZFast = new RotationMatrix(2, 0, 0, 1)
 
+      
+      
       satelliteBody.setInstanceTransformation(rotateX)
       // satelliteBody.setInstanceTransformation(rotateY)
       satelliteBody.setInstanceTransformation(rotateZ)
 
-      ufoBeam.setInstanceTransformation(new TranslationMatrix(0, beamScale, 0))
-      currentBeamY += beamScale
-      if(currentBeamY >= -0.66 || currentBeamY <= -1){
-        beamScale = -beamScale
+      antennaSignal.setInstanceTransformation(new ScaleMatrix(signalScalar, signalScalar, signalScalar))
+      currentSignalSize *= signalScalar
+      if(currentSignalSize > 0.5 || currentSignalSize < 0.05){
+        signalScalar = 1/signalScalar
       }
+
+      ufoBeam.setInstanceTransformation(new TranslationMatrix(0, beamYScalar, 0))
+      currentBeamY += beamYScalar
+      if(currentBeamY >= -0.66 || currentBeamY <= -1){
+        beamYScalar = -beamYScalar
+      }
+      
       
 
       if (ufoMoving) {

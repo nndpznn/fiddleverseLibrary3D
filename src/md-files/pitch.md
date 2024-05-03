@@ -12,7 +12,7 @@ Complete with famous shapes such as:
 - For viewing pleasure and and the occasional existential crisis.
 
 ## Autonomous Animations
-- After clicking the "Master Start/Stop" button, (some objects) will begin to 
+- After clicking the "Master Start/Stop" button, (some objects) will begin to move on their own.  The satellite is completely unmanned, so it orbits the sun on its own.  On board the UFO, Nalyd the beam operator is taking a nap instead of doing his job, so he set the beam to "auto."
 
 ## Interaction with the Scene
-- You may choose from an array of buttons under the canvas. To start off, click "Master Start/Stop". From there, the buttons are fairly self-explanatory. 
+- You may choose from an array of buttons under the canvas. To start the animation/control, click "Master Start/Stop". From there, the buttons are fairly self-explanatory. 
